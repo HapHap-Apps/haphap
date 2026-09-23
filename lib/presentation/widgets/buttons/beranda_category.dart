@@ -19,20 +19,23 @@ class HapHapCategoryPill extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.sm,
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: AppRadii.xxl,
           border: Border.all(
             // --- FULL PAKAI APP COLORS ---
             color: isSelected ? AppColors.primary : AppColors.greyLight,
-            width: 0.25,
+            width: AppSizes.quarterStroke,
           ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 16,
+          style: AppTextStyle(
+            fontSize: AppTypography.bodyLarge,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             // --- FULL PAKAI APP COLORS ---
             color: isSelected ? AppColors.white : AppColors.greyDark,

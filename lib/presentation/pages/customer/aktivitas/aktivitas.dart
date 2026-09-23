@@ -59,7 +59,8 @@ class AktivitasPage extends StatefulWidget {
   State<AktivitasPage> createState() => _AktivitasPageState();
 }
 
-class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserver {
+class _AktivitasPageState extends State<AktivitasPage>
+    with WidgetsBindingObserver {
   late int _currentTabIndex;
 
   List<_OrderItem> _orders = [];
@@ -118,58 +119,84 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
         });
       }
     } on ApiException catch (e) {
-      if (mounted) setState(() { _error = e.message; _isLoading = false; });
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _isLoading = false;
+        });
+      }
     } catch (_) {
-      if (mounted) setState(() { _error = 'Gagal memuat aktivitas.'; _isLoading = false; });
+      if (mounted) {
+        setState(() {
+          _error = 'Gagal memuat aktivitas.';
+          _isLoading = false;
+        });
+      }
     }
   }
 
   List<_OrderItem> get _activeOrders => _orders
-      .where((o) =>
-          o.status == 'PENDING' ||
-          o.status == 'PROCESSING' ||
-          o.status == 'READY')
+      .where(
+        (o) =>
+            o.status == 'PENDING' ||
+            o.status == 'PROCESSING' ||
+            o.status == 'READY',
+      )
       .toList();
 
   List<_OrderItem> get _historyOrders => _orders
       .where((o) => o.status == 'CANCELLED' || o.status == 'COMPLETED')
       .toList();
 
-  String _formatPrice(int price) => 'Rp ${price.toString()
-      .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
+  String _formatPrice(int price) =>
+      'Rp ${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
 
   String _statusText(_OrderItem order) {
     switch (order.status) {
-      case 'PENDING':    return 'Menunggu Pembayaran';
-      case 'PROCESSING': return 'Pesanan lagi Dikonfirmasi';
+      case 'PENDING':
+        return 'Menunggu Pembayaran';
+      case 'PROCESSING':
+        return 'Pesanan lagi Dikonfirmasi';
       case 'READY':
-        return order.hasQrCode ? 'Tunjukkan QR ke Kasir' : 'Pesanan Sedang Disiapkan';
-      case 'COMPLETED':  return 'Pesanan Selesai';
-      default:           return order.status;
+        return order.hasQrCode
+            ? 'Tunjukkan QR ke Kasir'
+            : 'Pesanan Sedang Disiapkan';
+      case 'COMPLETED':
+        return 'Pesanan Selesai';
+      default:
+        return order.status;
     }
   }
 
   String _mainText(_OrderItem order) {
     switch (order.status) {
-      case 'PENDING':    return 'Bayar Sekarang!';
-      case 'PROCESSING': return 'Menunggu Konfirmasi!';
+      case 'PENDING':
+        return 'Bayar Sekarang!';
+      case 'PROCESSING':
+        return 'Menunggu Konfirmasi!';
       case 'READY':
         return order.hasQrCode ? 'Tunjukkan QRmu!' : 'Sedang disiapkan!';
-      case 'COMPLETED':  return 'Selamat Menikmati!';
-      default:           return '-';
+      case 'COMPLETED':
+        return 'Selamat Menikmati!';
+      default:
+        return '-';
     }
   }
 
   String _imagePath(_OrderItem order) {
     switch (order.status) {
-      case 'PENDING':    return 'assets/images/aktivitas_puy_waiting1.png';
-      case 'PROCESSING': return 'assets/images/aktivitas_puy_processing.png';
+      case 'PENDING':
+        return 'assets/images/aktivitas_puy_waiting1.png';
+      case 'PROCESSING':
+        return 'assets/images/aktivitas_puy_processing.png';
       case 'READY':
         return order.hasQrCode
             ? 'assets/images/aktivitas_puy_done.png'
             : 'assets/images/aktivitas_puy_processing.png';
-      case 'COMPLETED':  return 'assets/images/aktivitas_puy_done.png';
-      default:           return 'assets/images/aktivitas_puy_processing.png';
+      case 'COMPLETED':
+        return 'assets/images/aktivitas_puy_done.png';
+      default:
+        return 'assets/images/aktivitas_puy_processing.png';
     }
   }
 
@@ -182,17 +209,17 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             _buildHeader(context),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapTabBar(
                 currentIndex: _currentTabIndex,
                 onTap: (index) => setState(() => _currentTabIndex = index),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             Expanded(child: _buildTabContent()),
           ],
         ),
@@ -202,17 +229,16 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Row(
         children: [
           const Expanded(
             child: HapHapPageHeader(
               title: 'Aktivitas',
               showBackButton: false,
-              fontSize: 24,
+              fontSize: AppTypography.headlineSmall,
             ),
           ),
-
         ],
       ),
     );
@@ -220,21 +246,33 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
 
   Widget _buildTabContent() {
     switch (_currentTabIndex) {
-      case 0: return _buildProsesTab();
-      case 1: return _buildRiwayatTab();
-      case 2: return _buildLainnyaTab();
-      default: return const SizedBox();
+      case 0:
+        return _buildProsesTab();
+      case 1:
+        return _buildRiwayatTab();
+      case 2:
+        return _buildLainnyaTab();
+      default:
+        return const SizedBox();
     }
   }
 
   Widget _buildProsesTab() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (_error != null) {
       return Center(
-        child: Text(_error!, style: const TextStyle(color: Colors.red, fontSize: 14)),
+        child: Text(
+          _error!,
+          style: const AppTextStyle(
+            color: AppColors.error,
+            fontSize: AppTypography.bodyMedium,
+          ),
+        ),
       );
     }
 
@@ -243,12 +281,20 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/puypuy_laper_nih.png', width: 250,
-                errorBuilder: (_, __, ___) => const SizedBox(height: 100)),
-            const SizedBox(height: 16),
+            Image.asset(
+              'assets/images/puypuy_laper_nih.png',
+              width: AppSizes.illustrationWidth,
+              errorBuilder: (_, __, ___) =>
+                  const SizedBox(height: AppSpacing.bottomClearance),
+            ),
+            const SizedBox(height: AppSpacing.lg),
             const Text(
               'Puypuy laper nih... 🥺',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.black),
+              style: AppTextStyle(
+                fontSize: AppTypography.titleMedium,
+                fontWeight: FontWeight.w600,
+                color: AppColors.black,
+              ),
             ),
           ],
         ),
@@ -260,28 +306,34 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
       color: AppColors.primary,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
         child: Column(
           children: [
-            ..._activeOrders.map((order) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: GestureDetector(
-                onTap: () {
-                  if (order.status == 'PENDING') {
-                    context.push(AppRoutes.checkout, extra: order.orderId);
-                  } else if (order.status == 'PROCESSING' || order.status == 'READY') {
-                    context.push(AppRoutes.detailPesanan, extra: order.orderId);
-                  }
-                },
-                child: HapHapAktivitasCard(
-                  statusText: _statusText(order),
-                  mainText: _mainText(order),
-                  restaurantName: order.merchantName,
-                  imagePath: _imagePath(order),
+            ..._activeOrders.map(
+              (order) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                child: GestureDetector(
+                  onTap: () {
+                    if (order.status == 'PENDING') {
+                      context.push(AppRoutes.checkout, extra: order.orderId);
+                    } else if (order.status == 'PROCESSING' ||
+                        order.status == 'READY') {
+                      context.push(
+                        AppRoutes.detailPesanan,
+                        extra: order.orderId,
+                      );
+                    }
+                  },
+                  child: HapHapAktivitasCard(
+                    statusText: _statusText(order),
+                    mainText: _mainText(order),
+                    restaurantName: order.merchantName,
+                    imagePath: _imagePath(order),
+                  ),
                 ),
               ),
-            )),
-            const SizedBox(height: 100),
+            ),
+            const SizedBox(height: AppSpacing.bottomClearance),
           ],
         ),
       ),
@@ -290,13 +342,20 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
 
   Widget _buildRiwayatTab() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (_historyOrders.isEmpty) {
       return const Center(
-        child: Text('Belum ada riwayat pesanan.',
-            style: TextStyle(color: AppColors.greyDark, fontSize: 14)),
+        child: Text(
+          'Belum ada riwayat pesanan.',
+          style: AppTextStyle(
+            color: AppColors.greyDark,
+            fontSize: AppTypography.bodyMedium,
+          ),
+        ),
       );
     }
 
@@ -304,16 +363,20 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
       onRefresh: () => _fetchOrders(),
       color: AppColors.primary,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
         itemCount: _historyOrders.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.lg),
         itemBuilder: (_, i) {
           final order = _historyOrders[i];
-          final showRatingButton = order.status == 'COMPLETED' && !order.hasReview;
-          final buttonText = showRatingButton ? 'Beri Rating' : (order.status == 'CANCELLED' ? 'Pesan Lagi' : null);
-          
+          final showRatingButton =
+              order.status == 'COMPLETED' && !order.hasReview;
+          final buttonText = showRatingButton
+              ? 'Beri Rating'
+              : (order.status == 'CANCELLED' ? 'Pesan Lagi' : null);
+
           return GestureDetector(
-            onTap: () => context.push(AppRoutes.detailPesanan, extra: order.orderId),
+            onTap: () =>
+                context.push(AppRoutes.detailPesanan, extra: order.orderId),
             child: HapHapRiwayatCard(
               imageUrl: order.merchantAvatar ?? '',
               dateStatusText:
@@ -321,23 +384,23 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
               restaurantName: order.merchantName,
               price: _formatPrice(order.totalAmount),
               buttonText: buttonText,
-              onButtonPressed: buttonText != null 
-                ? () {
-                    if (showRatingButton) {
-                      context.push(
-                        AppRoutes.beriRating,
-                        extra: {
-                          'orderId': order.orderId,
-                          'merchantId': order.merchantId,
-                          'merchantName': order.merchantName,
-                          'merchantAvatar': order.merchantAvatar ?? '',
-                        },
-                      );
-                    } else {
-                      // TODO: implement reorder
+              onButtonPressed: buttonText != null
+                  ? () {
+                      if (showRatingButton) {
+                        context.push(
+                          AppRoutes.beriRating,
+                          extra: {
+                            'orderId': order.orderId,
+                            'merchantId': order.merchantId,
+                            'merchantName': order.merchantName,
+                            'merchantAvatar': order.merchantAvatar ?? '',
+                          },
+                        );
+                      } else {
+                        // TODO: implement reorder
+                      }
                     }
-                  } 
-                : null,
+                  : null,
             ),
           );
         },
@@ -347,7 +410,7 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
 
   Widget _buildLainnyaTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Column(
         children: const [
           HapHapAktivitasLainnyaCard(
@@ -355,7 +418,7 @@ class _AktivitasPageState extends State<AktivitasPage> with WidgetsBindingObserv
             subtitle: 'Ayo buruan pesan sebelum kehabisan!',
             imagePath: 'assets/images/logo_haphap.png',
           ),
-          SizedBox(height: 100),
+          SizedBox(height: AppSpacing.bottomClearance),
         ],
       ),
     );

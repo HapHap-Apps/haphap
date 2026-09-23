@@ -23,64 +23,63 @@ class HapHapStatistikPribadiCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 128, 
-      clipBehavior: Clip.hardEdge, 
+      constraints: const BoxConstraints(minHeight: AppSizes.mediaLarge),
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: AppRadii.lg,
+        boxShadow: AppShadows.card,
       ),
       child: Stack(
         children: [
           Positioned(
-            right: -4, 
-            bottom: 0, 
+            right: -4,
+            bottom: 0,
             child: Image.asset(
               imagePath,
-              height: 115, 
+              height: AppSizes.decorativeMedia,
               fit: BoxFit.contain,
             ),
           ),
-          
+
           Padding(
-            padding: const EdgeInsets.only(left: 24, top: 24, bottom: 24, right: 120),
+            padding: const EdgeInsets.only(
+              left: AppSpacing.xxl,
+              top: AppSpacing.xxl,
+              bottom: AppSpacing.xxl,
+              right: AppSpacing.largeSection,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 12, 
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.greyDark, 
+                    color: AppColors.greyDark,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                
+
                 RichText(
                   text: TextSpan(
                     children: [
                       if (valuePrefix.isNotEmpty)
                         TextSpan(
                           text: valuePrefix,
-                          style: TextStyle(
-                            fontSize: 16,
+                          style: AppTextStyle(
+                            fontSize: AppTypography.bodyLarge,
                             fontWeight: FontWeight.bold,
                             color: valueColor,
                           ),
                         ),
                       TextSpan(
                         text: value,
-                        style: TextStyle(
-                          fontSize: 24,
+                        style: AppTextStyle(
+                          fontSize: AppTypography.headlineSmall,
                           fontWeight: FontWeight.bold,
                           color: valueColor,
                         ),
@@ -88,13 +87,13 @@ class HapHapStatistikPribadiCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 Text(
                   dateText,
-                  style: const TextStyle(
-                    fontSize: 12, 
-                    color: Color(0xFFAAAAAA),
-                  ), 
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
+                    color: AppColors.grey,
+                  ),
                 ),
               ],
             ),

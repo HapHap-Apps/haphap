@@ -40,106 +40,160 @@ class HapHapMenuCard extends StatelessWidget {
         );
       },
       behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: 402,
-        height: 144,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFF1F1F1), width: 1),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final imageExtent = AppLayout.responsiveExtent(
+            constraints.maxWidth,
+            fraction: AppLayout.menuImageFraction,
+            min: AppSizes.avatarMedium,
+            max: AppSizes.mediaSmall,
+          );
+
+          return Container(
+            width: double.infinity,
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.menuCardHeight,
             ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: _buildImage(isOutOfStock),
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: AppRadii.lg,
+              border: Border.all(
+                color: AppColors.surfaceBorder,
+                width: AppSizes.hairline,
+              ),
+              boxShadow: AppShadows.card,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: AppRadii.lg,
+                  child: _buildImage(isOutOfStock, imageExtent),
+                ),
+                const SizedBox(width: AppSpacing.lg),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              title,
+                              style: const AppTextStyle(
+                                fontSize: AppTypography.bodyMedium,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          const SizedBox(width: AppSpacing.sm),
+                          _buildStockIndicator(isOutOfStock),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      _buildStockIndicator(isOutOfStock),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 14, color: AppColors.greyDark),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
-                        price,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
+                        description,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
+                          color: AppColors.greyDark,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      _buildActionButtons(isOutOfStock),
+                      const SizedBox(height: AppSpacing.md),
+                      LayoutBuilder(
+                        builder: (context, actionConstraints) {
+                          final priceText = Text(
+                            price,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const AppTextStyle(
+                              fontSize: AppTypography.bodyMedium,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.black,
+                            ),
+                          );
+                          final actions = _buildActionButtons(isOutOfStock);
+
+                          if (actionConstraints.maxWidth <
+                              AppLayout.compactActionRow) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                priceText,
+                                const SizedBox(height: AppSpacing.sm),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: actions,
+                                ),
+                              ],
+                            );
+                          }
+
+                          return Row(
+                            children: [
+                              Expanded(child: priceText),
+                              const SizedBox(width: AppSpacing.sm),
+                              actions,
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildImage(bool isOutOfStock) {
-    final isValidUrl = imageUrl.isNotEmpty &&
+  Widget _buildImage(bool isOutOfStock, double extent) {
+    final isValidUrl =
+        imageUrl.isNotEmpty &&
         (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
 
     Widget imageWidget = isValidUrl
         ? Image.network(
             imageUrl,
-            width: 112,
-            height: 112,
+            width: extent,
+            height: extent,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => _imagePlaceholder(),
+            errorBuilder: (_, __, ___) => _imagePlaceholder(extent),
           )
-        : _imagePlaceholder();
+        : _imagePlaceholder(extent);
 
     if (isOutOfStock) {
       return ColorFiltered(
         colorFilter: const ColorFilter.matrix(<double>[
-          0.2126, 0.7152, 0.0722, 0, 0,
-          0.2126, 0.7152, 0.0722, 0, 0,
-          0.2126, 0.7152, 0.0722, 0, 0,
-          0,      0,      0,      1, 0,
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0.2126,
+          0.7152,
+          0.0722,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
         ]),
         child: imageWidget,
       );
@@ -147,12 +201,16 @@ class HapHapMenuCard extends StatelessWidget {
     return imageWidget;
   }
 
-  Widget _imagePlaceholder() {
+  Widget _imagePlaceholder(double extent) {
     return Container(
-      width: 112,
-      height: 112,
-      color: const Color(0xFFF1F1F1),
-      child: const Icon(Icons.fastfood, color: AppColors.greyDark, size: 32),
+      width: extent,
+      height: extent,
+      color: AppColors.surfaceBorder,
+      child: const Icon(
+        Icons.fastfood,
+        color: AppColors.greyDark,
+        size: AppSizes.iconLg,
+      ),
     );
   }
 
@@ -161,20 +219,20 @@ class HapHapMenuCard extends StatelessWidget {
       return const Text(
         'Out of\nStock',
         textAlign: TextAlign.right,
-        style: TextStyle(
-          fontSize: 12,
+        style: AppTextStyle(
+          fontSize: AppTypography.labelMedium,
           fontWeight: FontWeight.bold,
           color: AppColors.error,
           decoration: TextDecoration.underline,
           decorationColor: AppColors.error,
-          height: 1.2,
+          height: AppTypography.lineHeightTight,
         ),
       );
     } else if (stockCount <= 5) {
       return Text(
         '$stockCount left',
-        style: const TextStyle(
-          fontSize: 12,
+        style: const AppTextStyle(
+          fontSize: AppTypography.labelMedium,
           fontWeight: FontWeight.bold,
           color: AppColors.primary,
           decoration: TextDecoration.underline,
@@ -184,8 +242,8 @@ class HapHapMenuCard extends StatelessWidget {
     }
     return Text(
       '$stockCount left',
-      style: const TextStyle(
-        fontSize: 12,
+      style: const AppTextStyle(
+        fontSize: AppTypography.labelMedium,
         fontWeight: FontWeight.bold,
         color: AppColors.greyDark,
         decoration: TextDecoration.underline,
@@ -195,20 +253,20 @@ class HapHapMenuCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(bool isOutOfStock) {
-    if (isOutOfStock) return const SizedBox(height: 24);
+    if (isOutOfStock) return const SizedBox(height: AppSpacing.xxl);
 
     Widget circleButton(IconData icon, VoidCallback onTap) {
       return GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Container(
-          width: 24,
-          height: 24,
+          width: AppSizes.iconMd,
+          height: AppSizes.iconMd,
           decoration: const BoxDecoration(
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppColors.white, size: 16),
+          child: Icon(icon, color: AppColors.white, size: AppSizes.iconXs),
         ),
       );
     }
@@ -219,16 +277,16 @@ class HapHapMenuCard extends StatelessWidget {
       return Row(
         children: [
           circleButton(Icons.remove, onRemove),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           Text(
             '$cartCount',
-            style: const TextStyle(
-              fontSize: 14,
+            style: const AppTextStyle(
+              fontSize: AppTypography.bodyMedium,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           circleButton(Icons.add, onAdd),
         ],
       );

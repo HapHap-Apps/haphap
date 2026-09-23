@@ -42,8 +42,18 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -108,22 +118,27 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
 
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.xxl,
+                AppSpacing.xxl,
+                AppSpacing.xxl,
+                AppSpacing.none,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSectionTitle('Informasi Pemohon'),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   _buildInfoCard([
                     _InfoRow(icon: Icons.person_outline, text: app.userName),
                     _InfoRow(icon: Icons.email_outlined, text: app.userEmail),
                     _InfoRow(icon: Icons.phone_outlined, text: app.userPhone),
                   ]),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   _buildSectionTitle('Detail Operasional'),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   _buildInfoCard([
                     _InfoRow(
                       icon: Icons.access_time,
@@ -133,10 +148,7 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                       icon: Icons.location_on_outlined,
                       text: app.address,
                     ),
-                    _InfoRow(
-                      icon: Icons.phone_outlined,
-                      text: app.phone,
-                    ),
+                    _InfoRow(icon: Icons.phone_outlined, text: app.phone),
                     if (app.description != null && app.description!.isNotEmpty)
                       _InfoRow(
                         icon: Icons.notes_outlined,
@@ -144,10 +156,10 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                       ),
                   ]),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   _buildSectionTitle('Informasi Bank'),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   _buildInfoCard([
                     _InfoRow(
                       icon: Icons.account_balance_outlined,
@@ -157,44 +169,42 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                       icon: Icons.credit_card_outlined,
                       text: app.bankAccount,
                     ),
-                    _InfoRow(
-                      icon: Icons.badge_outlined,
-                      text: app.bankHolder,
-                    ),
+                    _InfoRow(icon: Icons.badge_outlined, text: app.bankHolder),
                   ]),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   _buildSectionTitle('Dokumen'),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   _buildDocumentTile(app.document),
 
                   if (app.status == 'REJECTED' &&
                       app.rejectNote != null &&
                       app.rejectNote!.isNotEmpty) ...[
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.xxl),
                     _buildSectionTitle('Catatan Penolakan'),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: 0.06),
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.error.withValues(alpha: 0.06),
+                        borderRadius: AppRadii.md,
                         border: Border.all(
-                            color: Colors.red.withValues(alpha: 0.25)),
+                          color: AppColors.error.withValues(alpha: 0.25),
+                        ),
                       ),
                       child: Text(
                         app.rejectNote!,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
+                          color: AppColors.error,
                         ),
                       ),
                     ),
                   ],
 
-                  const SizedBox(height: 120),
+                  const SizedBox(height: AppSpacing.largeSection),
                 ],
               ),
             ),
@@ -214,8 +224,8 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
       decoration: const BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
+          bottomLeft: AppRadii.sheetRadius,
+          bottomRight: AppRadii.sheetRadius,
         ),
       ),
       child: SafeArea(
@@ -224,38 +234,43 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8),
+              padding: const EdgeInsets.only(
+                top: AppSpacing.sm,
+                left: AppSpacing.sm,
+              ),
               child: IconButton(
                 onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back,
-                    color: AppColors.white, size: 28),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: AppColors.white,
+                  size: AppSizes.iconLargeMinus,
+                ),
               ),
             ),
 
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.sm,
+                AppSpacing.lg,
+                AppSpacing.xxl,
+              ),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  borderRadius: AppRadii.lg,
+                  boxShadow: AppShadows.card,
                 ),
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 70,
-                      height: 70,
+                      width: AppSizes.avatarCompact,
+                      height: AppSizes.avatarCompact,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadii.md,
                         image: hasAvatar
                             ? DecorationImage(
                                 image: NetworkImage(app.avatar!),
@@ -270,8 +285,8 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                                 app.merchantName.isNotEmpty
                                     ? app.merchantName[0].toUpperCase()
                                     : 'M',
-                                style: const TextStyle(
-                                  fontSize: 28,
+                                style: const AppTextStyle(
+                                  fontSize: AppTypography.headlineMedium,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primary,
                                 ),
@@ -279,7 +294,7 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                             ),
                     ),
 
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppSpacing.md),
 
                     Expanded(
                       child: Column(
@@ -287,48 +302,51 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
                         children: [
                           Text(
                             app.merchantName,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: const AppTextStyle(
+                              fontSize: AppTypography.bodyLarge,
                               fontWeight: FontWeight.bold,
                               color: AppColors.black,
                             ),
                           ),
                           if (app.merchantOwner.isNotEmpty) ...[
-                            const SizedBox(height: 2),
+                            const SizedBox(height: AppSpacing.xxs),
                             Text(
                               app.merchantOwner,
-                              style: const TextStyle(
-                                fontSize: 13,
+                              style: const AppTextStyle(
+                                fontSize: AppTypography.labelMedium,
                                 color: AppColors.greyDark,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           Text(
                             'Diajukan: ${_formatDate(app.createdAt)}',
-                            style: const TextStyle(
-                              fontSize: 12,
+                            style: const AppTextStyle(
+                              fontSize: AppTypography.labelMedium,
                               color: AppColors.greyDark,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppSpacing.sm),
                           Wrap(
                             spacing: 8,
                             runSpacing: 4,
                             children: app.categories.map((cat) {
                               return Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
+                                  horizontal: AppSpacing.md,
+                                  vertical: AppSpacing.xs,
+                                ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: AppColors.greyLight),
-                                  borderRadius: BorderRadius.circular(32),
+                                    color: AppColors.greyLight,
+                                  ),
+                                  borderRadius: AppRadii.sheet,
                                 ),
                                 child: Text(
                                   _categoryLabel(cat),
-                                  style: const TextStyle(
-                                    fontSize: 12,
+                                  style: const AppTextStyle(
+                                    fontSize: AppTypography.labelMedium,
                                     color: AppColors.black,
                                   ),
                                 ),
@@ -351,8 +369,8 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 18,
+      style: const AppTextStyle(
+        fontSize: AppTypography.titleMedium,
         fontWeight: FontWeight.bold,
         color: AppColors.black,
       ),
@@ -364,30 +382,26 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: AppRadii.lg,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         children: rows.map((row) {
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(row.icon, size: 20, color: AppColors.primary),
-                const SizedBox(width: 12),
+                Icon(row.icon, size: AppSizes.iconSm, color: AppColors.primary),
+                const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Text(
                     row.text,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
                       color: AppColors.black,
                     ),
                   ),
@@ -407,49 +421,46 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadii.lg,
+          boxShadow: AppShadows.card,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.lg,
+        ),
         child: Row(
           children: [
             Container(
-              width: 44,
-              height: 44,
+              width: AppSizes.compactTouchTarget,
+              height: AppSizes.compactTouchTarget,
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppRadii.md,
               ),
               child: const Icon(
                 Icons.description_outlined,
                 color: AppColors.primary,
-                size: 24,
+                size: AppSizes.iconMd,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.md),
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Dokumen Pengajuan',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
                       color: AppColors.black,
                     ),
                   ),
-                  SizedBox(height: 2),
+                  SizedBox(height: AppSpacing.xxs),
                   Text(
                     'Ketuk untuk membuka dokumen',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.labelMedium,
                       color: AppColors.greyDark,
                     ),
                   ),
@@ -458,7 +469,7 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
             ),
             const Icon(
               Icons.open_in_new_rounded,
-              size: 20,
+              size: AppSizes.iconSm,
               color: AppColors.primary,
             ),
           ],
@@ -469,16 +480,15 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
 
   Widget _buildActionButtons() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xxl,
+        AppSpacing.lg,
+        AppSpacing.xxl,
+        AppSpacing.xxxl,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        boxShadow: AppShadows.surfaceTop,
       ),
       child: Row(
         children: [
@@ -490,7 +500,7 @@ class _DetailPengajuanAdminPageState extends State<DetailPengajuanAdminPage> {
               onPressed: _isProcessing ? null : _showRejectDialog,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
             child: HapHapButton(
               text: 'Terima',

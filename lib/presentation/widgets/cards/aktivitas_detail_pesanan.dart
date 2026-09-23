@@ -30,22 +30,16 @@ class HapHapDetailPesananCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 354,
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.lg,
         border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,30 +52,38 @@ class HapHapDetailPesananCard extends StatelessWidget {
                 child: restaurantLogoUrl.isNotEmpty
                     ? Image.network(
                         restaurantLogoUrl,
-                        width: 32,
-                        height: 32,
+                        width: AppSizes.iconLg,
+                        height: AppSizes.iconLg,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
-                            width: 32,
-                            height: 32,
-                            color: const Color(0xFFF5F5F5),
-                            child: const Icon(Icons.storefront, color: AppColors.greyDark, size: 16),
+                            width: AppSizes.iconLg,
+                            height: AppSizes.iconLg,
+                            color: AppColors.surfaceMuted,
+                            child: const Icon(
+                              Icons.storefront,
+                              color: AppColors.greyDark,
+                              size: AppSizes.iconXs,
+                            ),
                           );
                         },
                       )
                     : Container(
-                        width: 32,
-                        height: 32,
-                        color: const Color(0xFFF5F5F5),
-                        child: const Icon(Icons.storefront, color: AppColors.greyDark, size: 16),
+                        width: AppSizes.iconLg,
+                        height: AppSizes.iconLg,
+                        color: AppColors.surfaceMuted,
+                        child: const Icon(
+                          Icons.storefront,
+                          color: AppColors.greyDark,
+                          size: AppSizes.iconXs,
+                        ),
                       ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(
                 restaurantName,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: const AppTextStyle(
+                  fontSize: AppTypography.bodyLarge,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
@@ -89,13 +91,17 @@ class HapHapDetailPesananCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16), 
+          const SizedBox(height: AppSpacing.lg),
 
           ...List.generate(items.length, (index) {
             final item = items[index];
-            
+
             return Padding(
-              padding: EdgeInsets.only(bottom: index == items.length - 1 ? 0 : 16),
+              padding: EdgeInsets.only(
+                bottom: index == items.length - AppSpacing.hairline
+                    ? AppSpacing.none
+                    : AppSpacing.lg,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,41 +112,41 @@ class HapHapDetailPesananCard extends StatelessWidget {
                       children: [
                         Text(
                           item.name,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
                             fontWeight: FontWeight.bold,
                             color: AppColors.black,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: AppSpacing.xs),
                         Text(
                           item.description,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
                             color: AppColors.greyDark,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
-                  const SizedBox(width: 16), 
-                  
+
+                  const SizedBox(width: AppSpacing.lg),
+
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         item.price,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.labelMedium,
                           color: AppColors.black,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: AppSpacing.xs),
                       Text(
                         'x${item.quantity}',
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.labelMedium,
                           color: AppColors.greyDark,
                         ),
                       ),

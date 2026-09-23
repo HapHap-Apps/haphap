@@ -22,39 +22,39 @@ class HapHapDropdownField extends StatelessWidget {
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       isScrollControlled: true,
       builder: (context) {
         return Container(
           decoration: const BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(24),
+              topLeft: AppRadii.xxlRadius,
+              topRight: AppRadii.xxlRadius,
             ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               Container(
-                width: 40,
-                height: 4,
+                width: AppSizes.iconXl,
+                height: AppSizes.progressIndicator,
                 decoration: BoxDecoration(
                   color: AppColors.greyLight,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: AppRadii.xs,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               Text(
                 'Pilih $labelText',
-                style: const TextStyle(
-                  fontSize: 18,
+                style: const AppTextStyle(
+                  fontSize: AppTypography.titleMedium,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -69,13 +69,13 @@ class HapHapDropdownField extends StatelessWidget {
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 16,
+                          horizontal: AppSpacing.xxl,
+                          vertical: AppSpacing.lg,
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? AppColors.primary.withValues(alpha: 0.1)
-                              : Colors.transparent,
+                              : AppColors.transparent,
                           border: Border(
                             bottom: BorderSide(
                               color: AppColors.greyLight.withValues(alpha: 0.5),
@@ -87,8 +87,8 @@ class HapHapDropdownField extends StatelessWidget {
                           children: [
                             Text(
                               option,
-                              style: TextStyle(
-                                fontSize: 16,
+                              style: AppTextStyle(
+                                fontSize: AppTypography.bodyLarge,
                                 fontWeight: isSelected
                                     ? FontWeight.bold
                                     : FontWeight.normal,
@@ -98,10 +98,7 @@ class HapHapDropdownField extends StatelessWidget {
                               ),
                             ),
                             if (isSelected)
-                              const Icon(
-                                Icons.check,
-                                color: AppColors.primary,
-                              ),
+                              const Icon(Icons.check, color: AppColors.primary),
                           ],
                         ),
                       ),
@@ -109,7 +106,7 @@ class HapHapDropdownField extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
             ],
           ),
         );
@@ -125,18 +122,17 @@ class HapHapDropdownField extends StatelessWidget {
         RichText(
           text: TextSpan(
             text: labelText,
-            style: const TextStyle(
-              fontSize: 14,
+            style: const AppTextStyle(
+              fontSize: AppTypography.bodyMedium,
               fontWeight: FontWeight.w500,
               color: AppColors.greyDark,
-              fontFamily: 'Plus Jakarta Sans',
             ),
             children: [
               if (isRequired)
                 const TextSpan(
                   text: ' *',
-                  style: TextStyle(
-                    color: Colors.red,
+                  style: AppTextStyle(
+                    color: AppColors.error,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -146,10 +142,13 @@ class HapHapDropdownField extends StatelessWidget {
         InkWell(
           onTap: () => _showBottomSheet(context),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: AppColors.greyLight, width: 1),
+                bottom: BorderSide(
+                  color: AppColors.greyLight,
+                  width: AppSizes.hairline,
+                ),
               ),
             ),
             child: Row(
@@ -157,10 +156,14 @@ class HapHapDropdownField extends StatelessWidget {
               children: [
                 Text(
                   value ?? hintText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: value != null ? FontWeight.w600 : FontWeight.normal,
-                    color: value != null ? AppColors.black : AppColors.greyLight,
+                  style: AppTextStyle(
+                    fontSize: AppTypography.bodyLarge,
+                    fontWeight: value != null
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                    color: value != null
+                        ? AppColors.black
+                        : AppColors.greyLight,
                   ),
                 ),
                 const Icon(

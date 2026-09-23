@@ -7,15 +7,15 @@ import 'package:haphap_fe/data/services/application_service.dart';
 import 'package:haphap_fe/presentation/widgets/cards/admin_application_card.dart';
 
 class _AdminBerandaLayout {
-  static const double heroTopPadding = 40.0;
-  static const double heroHorizontalPadding = 24.0;
-  static const double titleToGrid = 24.0;
-  static const double gridCardSpacing = 16.0;
-  static const double gridCardHeight = 110.0;
-  static const double heroPaddingBottom = 32.0;
-  static const double sectionHorizontalPadding = 24.0;
-  static const double sectionTitleToContent = 16.0;
-  static const double bottomScrollPadding = 80.0;
+  static const double heroTopPadding = AppSpacing.huge;
+  static const double heroHorizontalPadding = AppSpacing.xxl;
+  static const double titleToGrid = AppSpacing.xxl;
+  static const double gridCardSpacing = AppSpacing.lg;
+  static const double gridCardHeight = AppSizes.adminGridCardHeight;
+  static const double heroPaddingBottom = AppSpacing.xxxl;
+  static const double sectionHorizontalPadding = AppSpacing.xxl;
+  static const double sectionTitleToContent = AppSpacing.lg;
+  static const double bottomScrollPadding = AppSpacing.screenBottom;
 }
 
 class BerandaAdminPage extends StatefulWidget {
@@ -66,8 +66,18 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agu',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -81,24 +91,25 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
               child: CircularProgressIndicator(color: AppColors.primary),
             )
           : _error != null
-              ? Center(child: Text(_error!))
-              : RefreshIndicator(
-                  onRefresh: _fetchApplications,
-                  color: AppColors.primary,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildHeroSection(),
-                        const SizedBox(height: 24),
-                        _buildPengajuanTerbaruSection(),
-                        const SizedBox(
-                            height: _AdminBerandaLayout.bottomScrollPadding),
-                      ],
+          ? Center(child: Text(_error!))
+          : RefreshIndicator(
+              onRefresh: _fetchApplications,
+              color: AppColors.primary,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeroSection(),
+                    const SizedBox(height: AppSpacing.xxl),
+                    _buildPengajuanTerbaruSection(),
+                    const SizedBox(
+                      height: _AdminBerandaLayout.bottomScrollPadding,
                     ),
-                  ),
+                  ],
                 ),
+              ),
+            ),
     );
   }
 
@@ -108,8 +119,8 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
       decoration: const BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(40),
-          bottomRight: Radius.circular(40),
+          bottomLeft: AppRadii.heroRadius,
+          bottomRight: AppRadii.heroRadius,
         ),
       ),
       child: SafeArea(
@@ -126,11 +137,11 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
             children: [
               const Text(
                 'Ringkasan Sistem',
-                style: TextStyle(
-                  fontSize: 24,
+                style: AppTextStyle(
+                  fontSize: AppTypography.headlineSmall,
                   fontWeight: FontWeight.bold,
                   color: AppColors.white,
-                  height: 1.3,
+                  height: AppTypography.lineHeightNormal,
                 ),
               ),
 
@@ -145,8 +156,7 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
                       valueColor: AppColors.black,
                     ),
                   ),
-                  const SizedBox(
-                      width: _AdminBerandaLayout.gridCardSpacing),
+                  const SizedBox(width: _AdminBerandaLayout.gridCardSpacing),
                   Expanded(
                     child: _buildStatCard(
                       label: 'Menunggu Validasi',
@@ -165,16 +175,15 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
                     child: _buildStatCard(
                       label: 'Diterima',
                       value: _approvedCount.toString(),
-                      valueColor: Colors.green,
+                      valueColor: AppColors.success,
                     ),
                   ),
-                  const SizedBox(
-                      width: _AdminBerandaLayout.gridCardSpacing),
+                  const SizedBox(width: _AdminBerandaLayout.gridCardSpacing),
                   Expanded(
                     child: _buildStatCard(
                       label: 'Ditolak',
                       value: _rejectedCount.toString(),
-                      valueColor: Colors.red,
+                      valueColor: AppColors.error,
                     ),
                   ),
                 ],
@@ -195,32 +204,26 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
       height: _AdminBerandaLayout.gridCardHeight,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: AppRadii.lg,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             value,
-            style: TextStyle(
-              fontSize: 32,
+            style: AppTextStyle(
+              fontSize: AppTypography.displaySmall,
               fontWeight: FontWeight.bold,
               color: valueColor,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
+            style: const AppTextStyle(
+              fontSize: AppTypography.labelMedium,
               color: AppColors.greyDark,
             ),
           ),
@@ -242,8 +245,8 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
             children: [
               const Text(
                 'Pengajuan Terbaru',
-                style: TextStyle(
-                  fontSize: 18,
+                style: AppTextStyle(
+                  fontSize: AppTypography.titleMedium,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
@@ -252,8 +255,8 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
                 onTap: () => context.go(AppRoutes.adminPengajuan),
                 child: const Text(
                   'Lihat Semua',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyle(
+                    fontSize: AppTypography.bodyMedium,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
                   ),
@@ -266,10 +269,10 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
 
           if (_latestApplications.isEmpty)
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
               child: Text(
                 'Belum ada pengajuan.',
-                style: TextStyle(color: AppColors.greyDark),
+                style: AppTextStyle(color: AppColors.greyDark),
               ),
             )
           else
@@ -277,7 +280,8 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _latestApplications.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: AppSpacing.md),
               itemBuilder: (context, index) {
                 final app = _latestApplications[index];
                 return AdminApplicationCard(
@@ -286,10 +290,8 @@ class _BerandaAdminPageState extends State<BerandaAdminPage> {
                   dateText: _formatDate(app.createdAt),
                   status: app.status,
                   avatarUrl: app.avatar,
-                  onTap: () => context.push(
-                    AppRoutes.adminDetailPengajuan,
-                    extra: app,
-                  ),
+                  onTap: () =>
+                      context.push(AppRoutes.adminDetailPengajuan, extra: app),
                 );
               },
             ),

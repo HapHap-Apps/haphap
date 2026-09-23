@@ -20,70 +20,69 @@ class HapHapAktivitasCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 354,
-      height: 128,
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: AppSizes.mediaLarge),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.lg,
         border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.xxl,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     statusText,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.labelMedium,
                       color: AppColors.greyDark,
                     ),
                   ),
+                  const SizedBox(height: AppSpacing.sm),
                   Text(
                     mainText,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.titleLarge,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: AppSpacing.sm),
                   Row(
                     children: [
                       SizedBox(
-                        width: 16,
-                        height: 16,
+                        width: AppSizes.iconXs,
+                        height: AppSizes.iconXs,
                         child: SvgPicture.asset(
-                          AppIcons.restaurant, 
+                          AppIcons.restaurant,
                           colorFilter: const ColorFilter.mode(
                             AppColors.primary,
                             BlendMode.srcIn,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8), 
+                      const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
                           restaurantName,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.primary, 
+                            color: AppColors.primary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -98,14 +97,14 @@ class HapHapAktivitasCard extends StatelessWidget {
 
           ClipRRect(
             borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
+              topRight: AppRadii.lgRadius,
+              bottomRight: AppRadii.lgRadius,
             ),
             child: Image.asset(
               imagePath,
-              width: 140, 
-              height: 128,
-              fit: BoxFit.cover, 
+              width: AppSizes.compactButtonWidth,
+              height: AppSizes.mediaLarge,
+              fit: BoxFit.cover,
               alignment: Alignment.centerRight,
             ),
           ),

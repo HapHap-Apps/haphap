@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:haphap_fe/core/theme/app_colors.dart'; 
+import 'package:haphap_fe/core/theme/app_colors.dart';
 
 class HapHapOnboardingNextButton extends StatelessWidget {
   final double? progress;
   final VoidCallback onPressed;
-  final double size; 
+  final double size;
 
   const HapHapOnboardingNextButton({
     super.key,
     required this.progress,
     required this.onPressed,
-    this.size = 128.0, 
+    this.size = AppSizes.mediaLarge,
   });
 
   @override
   Widget build(BuildContext context) {
-    final double strokeThickness = size * 0.09; 
-    final double innerSize = size * 0.65; 
-    final double iconSize = size * 0.3; 
+    final double strokeThickness = size * 0.09;
+    final double innerSize = size * 0.65;
+    final double iconSize = size * 0.3;
 
     return SizedBox(
-      width: size, 
+      width: size,
       height: size,
       child: Stack(
         alignment: Alignment.center,
@@ -31,25 +31,25 @@ class HapHapOnboardingNextButton extends StatelessWidget {
             child: CircularProgressIndicator(
               value: progress,
               strokeWidth: strokeThickness,
-              backgroundColor: Colors.grey.shade300,
+              backgroundColor: AppColors.grey300,
               valueColor: AlwaysStoppedAnimation<Color>(
-                progress == null ? Colors.grey.shade500 : AppColors.primary,
+                progress == null ? AppColors.grey500 : AppColors.primary,
               ),
-              strokeCap: StrokeCap.round, 
+              strokeCap: StrokeCap.round,
             ),
           ),
-          
+
           SizedBox(
-            width: innerSize, 
+            width: innerSize,
             height: innerSize,
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
-                shape: const CircleBorder(), 
+                shape: const CircleBorder(),
                 padding: EdgeInsets.zero,
-                elevation: 0, 
+                elevation: AppElevations.none,
               ),
               child: Icon(Icons.arrow_forward, size: iconSize),
             ),
@@ -62,7 +62,7 @@ class HapHapOnboardingNextButton extends StatelessWidget {
 
 class HapHapSkipButton extends StatelessWidget {
   final VoidCallback onPressed;
-  final bool isWhiteVariant; 
+  final bool isWhiteVariant;
 
   const HapHapSkipButton({
     super.key,
@@ -77,22 +77,25 @@ class HapHapSkipButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        overlayColor: WidgetStateProperty.all(Colors.transparent), 
-        foregroundColor: WidgetStateProperty.all(color), 
+        overlayColor: WidgetStateProperty.all(AppColors.transparent),
+        foregroundColor: WidgetStateProperty.all(color),
         padding: WidgetStateProperty.all(
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+          const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
         ),
         textStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.pressed)) {
-            return TextStyle(
-              fontSize: 16,
+            return AppTextStyle(
+              fontSize: AppTypography.bodyLarge,
               fontWeight: FontWeight.w600,
-              decoration: TextDecoration.underline, 
+              decoration: TextDecoration.underline,
               decorationColor: color,
             );
           }
-          return const TextStyle(
-            fontSize: 16,
+          return const AppTextStyle(
+            fontSize: AppTypography.bodyLarge,
             fontWeight: FontWeight.w600,
           );
         }),
@@ -100,9 +103,9 @@ class HapHapSkipButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Lewati'), 
-          const SizedBox(width: 8), 
-          Icon(Icons.arrow_forward, size: 20, color: color),
+          const Text('Lewati'),
+          const SizedBox(width: AppSpacing.sm),
+          Icon(Icons.arrow_forward, size: AppSizes.iconSm, color: color),
         ],
       ),
     );

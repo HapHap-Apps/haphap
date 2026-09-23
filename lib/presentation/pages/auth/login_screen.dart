@@ -32,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Email tidak boleh kosong.';
+    if (value == null || value.trim().isEmpty) {
+      return 'Email tidak boleh kosong.';
+    }
     final emailRegex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,}$');
     if (!emailRegex.hasMatch(value.trim())) return 'Format email tidak valid.';
     return null;
@@ -68,13 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      await TokenManager.saveToken(token);
+      final role = response.data?.role ?? 'USER';
+      await TokenManager.saveSession(
+        token: token,
+        role: role,
+        remember: _rememberMe,
+      );
 
       if (!mounted) return;
 
       AppSnackbar.showSuccess(context, 'Login berhasil! Selamat datang.');
 
-      final role = response.data?.role;
       if (role == 'ADMIN') {
         context.go(AppRoutes.adminBeranda);
       } else if (role == 'MERCHANT') {
@@ -82,13 +88,15 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         context.go(AppRoutes.beranda);
       }
-
     } on ApiException catch (e) {
       if (!mounted) return;
       AppSnackbar.showError(context, e.message);
     } catch (e) {
       if (!mounted) return;
-      AppSnackbar.showError(context, 'Terjadi kesalahan saat menghubungi server.');
+      AppSnackbar.showError(
+        context,
+        'Terjadi kesalahan saat menghubungi server.',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -115,18 +123,26 @@ class _LoginScreenState extends State<LoginScreen> {
       if (accessToken == null || accessToken.isEmpty) {
         AppSnackbar.showError(
           context,
-          response['message'] as String? ?? 'Token tidak ditemukan dari server.',
+          response['message'] as String? ??
+              'Token tidak ditemukan dari server.',
         );
         return;
       }
 
-      await TokenManager.saveToken(accessToken);
+      final role = response['data']?['role'] as String? ?? 'USER';
+      await TokenManager.saveSession(
+        token: accessToken,
+        role: role,
+        remember: _rememberMe,
+      );
 
       if (!mounted) return;
 
-      AppSnackbar.showSuccess(context, 'Login Google berhasil! Selamat datang.');
+      AppSnackbar.showSuccess(
+        context,
+        'Login Google berhasil! Selamat datang.',
+      );
 
-      final role = response['data']?['role'] as String?;
       if (role == 'ADMIN') {
         context.go(AppRoutes.adminBeranda);
       } else if (role == 'MERCHANT') {
@@ -134,13 +150,18 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         context.go(AppRoutes.beranda);
       }
-
     } on ApiException catch (e) {
+      if (!mounted) return;
+      AppSnackbar.showError(context, e.message);
+    } on GoogleAuthException catch (e) {
       if (!mounted) return;
       AppSnackbar.showError(context, e.message);
     } catch (e) {
       if (!mounted) return;
-      AppSnackbar.showError(context, 'Terjadi kesalahan saat login dengan Google.');
+      AppSnackbar.showError(
+        context,
+        'Terjadi kesalahan saat login dengan Google.',
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -150,208 +171,207 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
-          child: IntrinsicHeight(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 70, left: 24, right: 24),
+      body: SafeArea(
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: AppSpacing.loose,
+                  left: AppLayout.pagePadding(context),
+                  right: AppLayout.pagePadding(context),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Waktunya Ngunyah!',
+                      style: AppTextStyle(
+                        fontSize: AppTypography.displaySmall,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    const Text(
+                      'Masuk ke akun HapHapmu sekarang dan jadi pahlawan buat bumi dan perut laparmu.',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle(
+                        fontSize: AppTypography.bodyLarge,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.loose)),
+
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Container(
+                key: const Key('login_bottom_panel'),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: AppRadii.sheetRadius,
+                  ),
+                ),
+                padding: EdgeInsets.fromLTRB(
+                  AppLayout.pagePadding(context),
+                  AppSpacing.xxxl,
+                  AppLayout.pagePadding(context),
+                  AppSpacing.none,
+                ),
+                child: Form(
+                  key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Waktunya Ngunyah!',
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.white,
+                      HapHapTextField(
+                        labelText: 'Email',
+                        hintText: 'Masukkan email',
+                        controller: _emailController,
+                        isPassword: false,
+                        isRequired: true,
+                        validator: _validateEmail,
+                      ),
+
+                      const SizedBox(height: AppSpacing.xxxl),
+
+                      HapHapTextField(
+                        labelText: 'Password',
+                        hintText: 'Masukkan password',
+                        controller: _passwordController,
+                        isPassword: true,
+                        isRequired: true,
+                        validator: _validatePassword,
+                      ),
+
+                      const SizedBox(height: AppSpacing.lg),
+
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: AppSizes.iconMd,
+                            height: AppSizes.iconMd,
+                            child: Checkbox(
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() => _rememberMe = value ?? false);
+                              },
+                              activeColor: AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppRadii.xs,
+                              ),
+                              side: const BorderSide(color: AppColors.grey),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          const Text(
+                            'Ingat Saya',
+                            style: AppTextStyle(
+                              fontSize: AppTypography.bodyMedium,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: AppSpacing.xxxl),
+
+                      HapHapButton(
+                        text: 'Masuk',
+                        isExpanded: true,
+                        isLoading: _isLoading,
+                        onPressed: _handleLogin,
+                      ),
+
+                      const SizedBox(height: AppSpacing.xxxl),
+
+                      Row(
+                        children: [
+                          Expanded(child: Divider(color: AppColors.greyLight)),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.sm,
+                              ),
+                              child: Text(
+                                'Atau Lanjut Dengan',
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle(
+                                  fontSize: AppTypography.bodyMedium,
+                                  color: AppColors.greyDark,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(child: Divider(color: AppColors.greyLight)),
+                        ],
+                      ),
+
+                      const SizedBox(height: AppSpacing.xxl),
+
+                      Center(
+                        child: Container(
+                          width: AppSizes.avatarSmall,
+                          height: AppSizes.avatarSmall,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.white,
+                            boxShadow: AppShadows.card,
+                          ),
+                          child: IconButton(
+                            onPressed: _isLoading ? null : _handleGoogleLogin,
+                            icon: Image.asset(
+                              'assets/images/google_logo.png',
+                              width: AppSizes.iconXl,
+                              height: AppSizes.iconXl,
+                            ),
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Masuk ke akun HapHapmu sekarang dan jadi pahlawan buat bumi dan perut laparmu.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.white,
+
+                      const SizedBox(height: AppSpacing.xxl),
+
+                      Center(
+                        child: GestureDetector(
+                          onTap: () => context.push(AppRoutes.register),
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Baru di HapHap? ',
+                              style: AppTextStyle(
+                                fontSize: AppTypography.bodyMedium,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Daftar sekarang',
+                                  style: AppTextStyle(color: AppColors.primary),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
+                      ),
+
+                      const SafeArea(
+                        top: false,
+                        child: SizedBox(height: AppSpacing.md),
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 59),
-
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(32),
-                      ),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(24, 32, 24, 0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          HapHapTextField(
-                            labelText: 'Email',
-                            hintText: 'Masukkan email',
-                            controller: _emailController,
-                            isPassword: false,
-                            isRequired: true,
-                            validator: _validateEmail,
-                          ),
-
-                          const SizedBox(height: 32),
-
-                          HapHapTextField(
-                            labelText: 'Password',
-                            hintText: 'Masukkan password',
-                            controller: _passwordController,
-                            isPassword: true,
-                            isRequired: true,
-                            validator: _validatePassword,
-                          ),
-
-                          const SizedBox(height: 16),
-
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: Checkbox(
-                                  value: _rememberMe,
-                                  onChanged: (value) {
-                                    setState(() => _rememberMe = value ?? false);
-                                  },
-                                  activeColor: AppColors.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  side: const BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                'Ingat Saya',
-                                style: TextStyle(
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  fontSize: 14,
-                                  color: AppColors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 32),
-
-                          HapHapButton(
-                            text: 'Masuk',
-                            isExpanded: true,
-                            isLoading: _isLoading,
-                            onPressed: _handleLogin,
-                          ),
-
-                          const SizedBox(height: 32),
-
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: AppColors.greyLight)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  'Atau Lanjut Dengan',
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontSize: 14,
-                                    color: AppColors.greyDark,
-                                  ),
-                                ),
-                              ),
-                              Expanded(child: Divider(color: AppColors.greyLight)),
-                            ],
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          Center(
-                            child: Container(
-                              width: 64,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                onPressed: _isLoading ? null : _handleGoogleLogin,
-                                icon: Image.asset(
-                                  'assets/images/google_logo.png',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          Center(
-                            child: GestureDetector(
-                              onTap: () => context.push(AppRoutes.register),
-                              child: RichText(
-                                text: const TextSpan(
-                                  text: 'Baru di HapHap? ',
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.black,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: 'Daftar sekarang',
-                                      style: TextStyle(
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SafeArea(
-                            top: false,
-                            child: SizedBox(height: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -10,7 +10,6 @@ import 'package:haphap_fe/presentation/widgets/cards/akun_profile_card.dart';
 import 'package:haphap_fe/presentation/widgets/buttons/button.dart';
 import 'package:haphap_fe/core/network/api_client.dart';
 import 'package:haphap_fe/core/network/token_manager.dart';
-import 'package:haphap_fe/presentation/pages/merchant/merchant_edit_profil.dart';
 
 class AkunMerchantPage extends StatefulWidget {
   const AkunMerchantPage({super.key});
@@ -83,7 +82,8 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Tidak dapat memuat data profil. Periksa koneksi internet kamu.';
+        _errorMessage =
+            'Tidak dapat memuat data profil. Periksa koneksi internet kamu.';
       });
     }
   }
@@ -97,42 +97,44 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary, 
+      backgroundColor: AppColors.primary,
       body: SafeArea(
         bottom: false,
-        child: _isLoading 
-            ? const Center(child: CircularProgressIndicator(color: AppColors.white))
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.white),
+              )
             : _errorMessage != null
-                ? _buildErrorState()
-                : _buildContent(context),
+            ? _buildErrorState()
+            : _buildContent(context),
       ),
     );
   }
-  
+
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _isUnauthorized ? Icons.lock_outline : Icons.error_outline,
-              size: 48,
+              size: AppSizes.touchTarget,
               color: AppColors.white.withValues(alpha: 0.7),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               _errorMessage ?? 'Terjadi kesalahan.',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTextStyle(
                 color: AppColors.white.withValues(alpha: 0.9),
-                fontSize: 14,
+                fontSize: AppTypography.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             SizedBox(
-              width: 160,
+              width: AppSizes.narrowPanel,
               child: HapHapButton(
                 text: _isUnauthorized ? 'Login Ulang' : 'Coba Lagi',
                 onPressed: () {
@@ -154,45 +156,45 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        
+        const SizedBox(height: AppSpacing.lg),
+
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapPageHeader(
             title: 'Profile Toko',
-            showBackButton: false, 
-            titleColor: AppColors.white, 
-            fontSize: 24,
+            showBackButton: false,
+            titleColor: AppColors.white,
+            fontSize: AppTypography.headlineSmall,
           ),
         ),
-        
-        const SizedBox(height: 16),
+
+        const SizedBox(height: AppSpacing.lg),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapProfileCard(
             name: _merchant?.merchantName ?? 'Toko',
             email: _merchant?.description ?? '-',
             phoneNumber: _merchant?.phone ?? '-',
-            imageUrl: _merchant?.avatar, 
+            imageUrl: _merchant?.avatar,
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         Expanded(
           child: Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-              color: AppColors.white, 
+              color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32), 
-                topRight: Radius.circular(32), 
+                topLeft: AppRadii.sheetRadius,
+                topRight: AppRadii.sheetRadius,
               ),
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 24.0), 
+                padding: const EdgeInsets.only(top: AppSpacing.xxl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -211,7 +213,7 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
                         },
                       ),
                       _MenuItemData(
-                        icon: Icons.info, 
+                        icon: Icons.info,
                         title: 'Statistik',
                         onTap: () {
                           context.push(AppRoutes.merchantStatistik);
@@ -219,7 +221,7 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
                       ),
                     ]),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xxxl),
 
                     _buildSectionTitle('Selebihnya dari HapHap'),
                     _buildMenuCard([
@@ -228,17 +230,17 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
                         title: 'Kembali Sebagai Customer',
                         onTap: () {
                           debugPrint('Switch to Customer mode');
-                          context.go(AppRoutes.beranda); 
+                          context.go(AppRoutes.beranda);
                         },
                       ),
                     ]),
 
-
-
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xxxl),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl,
+                      ),
                       child: HapHapButton(
                         text: 'Keluar',
                         isExpanded: true,
@@ -247,7 +249,7 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
                       ),
                     ),
 
-                    const SizedBox(height: 100), 
+                    const SizedBox(height: AppSpacing.bottomClearance),
                   ],
                 ),
               ),
@@ -260,11 +262,15 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 12.0),
+      padding: const EdgeInsets.only(
+        left: AppSpacing.xxl,
+        right: AppSpacing.xxl,
+        bottom: AppSpacing.md,
+      ),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
+        style: const AppTextStyle(
+          fontSize: AppTypography.bodyLarge,
           fontWeight: FontWeight.bold,
           color: AppColors.black,
         ),
@@ -274,42 +280,47 @@ class _AkunMerchantPageState extends State<AkunMerchantPage>
 
   Widget _buildMenuCard(List<_MenuItemData> items) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadii.lg,
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           children: items.map((item) {
             return InkWell(
               onTap: item.onTap,
-              borderRadius: BorderRadius.circular(16), 
+              borderRadius: AppRadii.lg,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.lg,
+                ),
                 child: Row(
                   children: [
-                    Icon(item.icon, size: 20, color: const Color(0xFF505050)), 
-                    const SizedBox(width: 16),
+                    Icon(
+                      item.icon,
+                      size: AppSizes.iconSm,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: AppSpacing.lg),
                     Expanded(
                       child: Text(
                         item.title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyLarge,
                           fontWeight: FontWeight.w500,
                           color: AppColors.black,
                         ),
                       ),
                     ),
 
-                    const Icon(Icons.chevron_right, size: 24, color: AppColors.greyDark),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: AppSizes.iconMd,
+                      color: AppColors.greyDark,
+                    ),
                   ],
                 ),
               ),
@@ -326,9 +337,5 @@ class _MenuItemData {
   final String title;
   final VoidCallback onTap;
 
-  _MenuItemData({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
+  _MenuItemData({required this.icon, required this.title, required this.onTap});
 }

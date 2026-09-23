@@ -16,36 +16,33 @@ class HapHapAktivitasLainnyaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 354,
-      height: 128,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: AppSizes.mediaLarge),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.xl,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.lg,
         border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             imagePath,
-            width: 72, 
-            height: 72,
+            width: AppSizes.decorativeImage,
+            height: AppSizes.decorativeImage,
             fit: BoxFit.contain,
           ),
-          
-          const SizedBox(width: 24), 
-          
+
+          const SizedBox(width: AppSpacing.xxl),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,22 +50,22 @@ class HapHapAktivitasLainnyaCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.bodyLarge,
                     fontWeight: FontWeight.bold,
                     color: AppColors.black,
-                    height: 1.3, 
+                    height: AppTypography.lineHeightNormal,
                   ),
                 ),
-                
-                const SizedBox(height: 16), 
-                
+
+                const SizedBox(height: AppSpacing.lg),
+
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     color: AppColors.greyDark,
-                    height: 1.4,
+                    height: AppTypography.lineHeightRelaxed,
                   ),
                 ),
               ],

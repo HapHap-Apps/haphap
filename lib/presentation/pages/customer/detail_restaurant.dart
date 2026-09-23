@@ -54,11 +54,13 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
     }
   }
 
-  int get _cartTotalItems =>
-      _cart.values.fold(0, (sum, qty) => sum + qty);
+  int get _cartTotalItems => _cart.values.fold(0, (sum, qty) => sum + qty);
 
   List<SurplusItemModel> get _activeSurplusItems =>
-      _merchant?.surplusItems.where((item) => item.isActive && item.stock > 0).toList() ?? [];
+      _merchant?.surplusItems
+          .where((item) => item.isActive && item.stock > 0)
+          .toList() ??
+      [];
 
   int get _cartTotalPrice {
     if (_merchant == null) return 0;
@@ -98,8 +100,7 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
   }
 
   bool _isValidUrl(String? url) =>
-      url != null &&
-      (url.startsWith('http://') || url.startsWith('https://'));
+      url != null && (url.startsWith('http://') || url.startsWith('https://'));
 
   void _goToCheckout() {
     if (_merchant == null) return;
@@ -121,16 +122,17 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
       backgroundColor: AppColors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: AppColors.transparent,
+        elevation: AppElevations.none,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => context.pop(),
         ),
       ),
       body: _buildBody(),
-      bottomNavigationBar:
-          _cartTotalItems > 0 ? _buildFloatingCart() : const SizedBox.shrink(),
+      bottomNavigationBar: _cartTotalItems > 0
+          ? _buildFloatingCart()
+          : const SizedBox.shrink(),
     );
   }
 
@@ -144,10 +146,13 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
     if (_error != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSpacing.xxl),
           child: Text(
             _error!,
-            style: const TextStyle(color: Colors.red, fontSize: 14),
+            style: const AppTextStyle(
+              color: AppColors.error,
+              fontSize: AppTypography.bodyMedium,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -162,43 +167,59 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeroSection(merchant),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
           _buildDaftarMenuSection(merchant),
-          const SizedBox(height: 120),
+          const SizedBox(height: AppSpacing.largeSection),
         ],
       ),
     );
   }
 
   Widget _buildHeroSection(MerchantDetailModel merchant) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.topCenter,
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 220,
-          child: _isValidUrl(merchant.avatar)
-              ? Image.network(
-                  merchant.avatar!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      Container(color: AppColors.primary),
-                )
-              : Container(color: AppColors.primary),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 160, left: 24, right: 24),
-          child: HapHapRestaurantCard(
-            imageUrl: merchant.avatar ?? '',
-            distanceTime: merchant.address ?? '',
-            restaurantName: merchant.merchantName,
-            ratingText: merchant.rating != null
-                ? '${merchant.rating!.toStringAsFixed(1)} rating'
-                : 'Belum ada rating',
-          ),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final heroHeight = AppLayout.responsiveExtent(
+          constraints.maxWidth,
+          fraction: AppLayout.heroHeightFraction,
+          min: AppSizes.heroMinHeight,
+          max: AppSizes.heroHeight,
+        );
+        final cardTop = heroHeight - AppSpacing.loose;
+
+        return Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.topCenter,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: heroHeight,
+              child: _isValidUrl(merchant.avatar)
+                  ? Image.network(
+                      merchant.avatar!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Container(color: AppColors.primary),
+                    )
+                  : Container(color: AppColors.primary),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: cardTop,
+                left: AppLayout.pagePadding(context),
+                right: AppLayout.pagePadding(context),
+              ),
+              child: HapHapRestaurantCard(
+                imageUrl: merchant.avatar ?? '',
+                distanceTime: merchant.address ?? '',
+                restaurantName: merchant.merchantName,
+                ratingText: merchant.rating != null
+                    ? '${merchant.rating!.toStringAsFixed(1)} rating'
+                    : 'Belum ada rating',
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -207,28 +228,37 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppLayout.pagePadding(context),
+          ),
           child: Text(
             'Menu ${merchant.merchantName}',
-            style: const TextStyle(
-              fontSize: 16,
+            style: const AppTextStyle(
+              fontSize: AppTypography.bodyLarge,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
         if (_activeSurplusItems.isEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppLayout.pagePadding(context),
+            ),
             child: Text(
               'Belum ada surplus item tersedia.',
-              style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+              style: AppTextStyle(
+                color: AppColors.greyDark,
+                fontSize: AppTypography.bodyMedium,
+              ),
             ),
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppLayout.pagePadding(context),
+            ),
             child: Column(
               children: _activeSurplusItems.map((item) {
                 final cartCount = _cart[item.surplusItemId] ?? 0;
@@ -244,7 +274,7 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
                       onAdd: () => _addToCart(item),
                       onRemove: () => _removeFromCart(item),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.lg),
                   ],
                 );
               }).toList(),
@@ -258,47 +288,54 @@ class _DetailRestoranPageState extends State<DetailRestoranPage> {
     final bottomSafeArea = MediaQuery.paddingOf(context).bottom;
 
     return Container(
-      height: 81 + bottomSafeArea,
-      padding: EdgeInsets.only(left: 20, right: 20, bottom: bottomSafeArea),
+      height: AppSizes.bottomActionHeight + bottomSafeArea,
+      padding: EdgeInsets.only(
+        left: AppSpacing.xl,
+        right: AppSpacing.xl,
+        bottom: bottomSafeArea,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        borderRadius: AppRadii.largeTop,
+        boxShadow: AppShadows.surfaceTop,
       ),
       child: Center(
         child: InkWell(
           onTap: _goToCheckout,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: AppRadii.xxl,
           child: Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height: AppSizes.touchTarget,
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
             decoration: BoxDecoration(
               color: AppColors.primary,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: AppRadii.xxl,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Keranjang - $_cartTotalItems Hidangan',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
+                Expanded(
+                  child: Text(
+                    'Keranjang - $_cartTotalItems Hidangan',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyLarge,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
-                Text(
-                  'Rp $_cartTotalPrice',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
+                const SizedBox(width: AppSpacing.md),
+                Flexible(
+                  child: Text(
+                    'Rp $_cartTotalPrice',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyLarge,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ],

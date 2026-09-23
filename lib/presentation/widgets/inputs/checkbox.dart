@@ -3,7 +3,7 @@ import 'package:haphap_fe/core/theme/app_colors.dart';
 
 class HapHapCheckbox extends StatelessWidget {
   final String label;
-  final bool value; 
+  final bool value;
   final ValueChanged<bool?> onChanged;
 
   const HapHapCheckbox({
@@ -19,40 +19,40 @@ class HapHapCheckbox extends StatelessWidget {
       onTap: () {
         onChanged(!value);
       },
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+      splashColor: AppColors.transparent,
+      highlightColor: AppColors.transparent,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 20,
-            height: 20,
+            width: AppSizes.iconSm,
+            height: AppSizes.iconSm,
             decoration: BoxDecoration(
-              color: value ? AppColors.primary : Colors.transparent,
-              borderRadius: BorderRadius.circular(6), 
+              color: value ? AppColors.primary : AppColors.transparent,
+              borderRadius: AppRadii.sm,
               border: Border.all(
-                color: AppColors.primary, 
-                width: 1.5,
+                color: AppColors.primary,
+                width: AppSizes.thinStroke,
               ),
             ),
             child: value
                 ? const Icon(
                     Icons.check,
-                    size: 14,
+                    size: AppSizes.iconCompact,
                     color: AppColors.white,
                   )
-                : null, 
+                : null,
           ),
-          
-          const SizedBox(width: 8), 
-          
+
+          const SizedBox(width: AppSpacing.sm),
+
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
+            style: const AppTextStyle(
+              fontSize: AppTypography.bodyMedium,
               fontWeight: FontWeight.w500,
-              color: AppColors.greyDark, 
+              color: AppColors.greyDark,
             ),
           ),
         ],

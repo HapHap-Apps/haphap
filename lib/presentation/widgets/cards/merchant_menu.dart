@@ -24,71 +24,84 @@ class HapHapMerchantMenuCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF1F1F1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: AppRadii.lg,
+        border: Border.all(color: AppColors.surfaceBorder),
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
           ColorFiltered(
             colorFilter: isSoldOut
                 ? const ColorFilter.matrix(<double>[
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0, 0, 0, 1, 0,
+                    0.2126,
+                    0.7152,
+                    0.0722,
+                    0,
+                    0,
+                    0.2126,
+                    0.7152,
+                    0.0722,
+                    0,
+                    0,
+                    0.2126,
+                    0.7152,
+                    0.0722,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
                   ])
-                : const ColorFilter.mode(Colors.transparent, BlendMode.multiply),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: imageUrl.isNotEmpty 
-                ? Image.network( 
-                    imageUrl,
-                    width: 90,
-                    height: 90,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.restaurant,
-                          color: AppColors.greyDark,
-                          size: 36,
-                        ),
-                      );
-                    },
-                  )
-                : Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.restaurant,
-                      color: AppColors.greyDark,
-                      size: 36,
-                    ),
+                : const ColorFilter.mode(
+                    AppColors.transparent,
+                    BlendMode.multiply,
                   ),
+            child: ClipRRect(
+              borderRadius: AppRadii.md,
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
+                      width: AppSizes.thumbnailCompact,
+                      height: AppSizes.thumbnailCompact,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: AppSizes.thumbnailCompact,
+                          height: AppSizes.thumbnailCompact,
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceMuted,
+                            borderRadius: AppRadii.md,
+                          ),
+                          child: const Icon(
+                            Icons.restaurant,
+                            color: AppColors.greyDark,
+                            size: AppSizes.iconLargePlus,
+                          ),
+                        );
+                      },
+                    )
+                  : Container(
+                      width: AppSizes.thumbnailCompact,
+                      height: AppSizes.thumbnailCompact,
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceMuted,
+                        borderRadius: AppRadii.md,
+                      ),
+                      child: const Icon(
+                        Icons.restaurant,
+                        color: AppColors.greyDark,
+                        size: AppSizes.iconLargePlus,
+                      ),
+                    ),
             ),
           ),
-          const SizedBox(width: 16),
-          
+          const SizedBox(width: AppSpacing.lg),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,8 +111,8 @@ class HapHapMerchantMenuCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
                           fontWeight: FontWeight.bold,
                           color: AppColors.black,
                         ),
@@ -111,46 +124,46 @@ class HapHapMerchantMenuCard extends StatelessWidget {
                       GestureDetector(
                         onTap: onDeactivate,
                         child: const Padding(
-                          padding: EdgeInsets.only(left: 4),
+                          padding: EdgeInsets.only(left: AppSpacing.xs),
                           child: Icon(
                             Icons.close,
-                            size: 18,
+                            size: AppSizes.iconSmallPlus,
                             color: AppColors.greyDark,
                           ),
                         ),
                       ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   description,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     color: AppColors.greyDark,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       price,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.bodyMedium,
                         fontWeight: FontWeight.bold,
                         color: AppColors.black,
                       ),
                     ),
                     Text(
                       stockText,
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: AppTextStyle(
+                        fontSize: AppTypography.bodyMedium,
                         fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline, 
+                        decoration: TextDecoration.underline,
                         decorationColor: AppColors.primary,
-                        color: isSoldOut ? Colors.red : AppColors.primary, 
+                        color: isSoldOut ? AppColors.error : AppColors.primary,
                       ),
                     ),
                   ],

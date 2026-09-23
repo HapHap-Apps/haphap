@@ -33,10 +33,10 @@ class _HapHapEditMenuDialogState extends State<HapHapEditMenuDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName);
-    
+
     String cleanPrice = widget.initialPrice.replaceAll(RegExp(r'[^0-9]'), '');
     _priceController = TextEditingController(text: cleanPrice);
-    
+
     _descController = TextEditingController(text: widget.initialDesc);
   }
 
@@ -63,7 +63,7 @@ class _HapHapEditMenuDialogState extends State<HapHapEditMenuDialog> {
           controller: controller,
           keyboardType: keyboardType,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }
@@ -71,27 +71,44 @@ class _HapHapEditMenuDialogState extends State<HapHapEditMenuDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(AppSpacing.xxl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Edit Menu',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.black),
+                style: AppTextStyle(
+                  fontSize: AppTypography.titleLarge,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.black,
+                ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
 
-              _buildInputField(label: 'Nama Menu', hint: 'Masukkan nama menu', controller: _nameController),
-              _buildInputField(label: 'Harga', hint: 'Masukkan harga', controller: _priceController, keyboardType: TextInputType.number),
-              _buildInputField(label: 'Deskripsi', hint: 'Masukkan deskripsi (opsional)', controller: _descController),
+              _buildInputField(
+                label: 'Nama Menu',
+                hint: 'Masukkan nama menu',
+                controller: _nameController,
+              ),
+              _buildInputField(
+                label: 'Harga',
+                hint: 'Masukkan harga',
+                controller: _priceController,
+                keyboardType: TextInputType.number,
+              ),
+              _buildInputField(
+                label: 'Deskripsi',
+                hint: 'Masukkan deskripsi (opsional)',
+                controller: _descController,
+              ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               Center(
                 child: HapHapButton(
                   text: 'Simpan Perubahan',
@@ -101,7 +118,7 @@ class _HapHapEditMenuDialogState extends State<HapHapEditMenuDialog> {
                     setState(() => _isSaving = true);
                     try {
                       final updateData = <String, dynamic>{};
-                      
+
                       if (_nameController.text.isNotEmpty) {
                         updateData['name'] = _nameController.text;
                       }
@@ -113,14 +130,20 @@ class _HapHapEditMenuDialogState extends State<HapHapEditMenuDialog> {
                         updateData['originalPrice'] = price;
                       }
 
-                      await MenuService.updateMenu(widget.menuItemId, updateData);
-                      if (!mounted) return;
+                      await MenuService.updateMenu(
+                        widget.menuItemId,
+                        updateData,
+                      );
+                      if (!context.mounted) return;
                       setState(() => _isSaving = false);
 
-                      AppSnackbar.showSuccess(context, 'Menu berhasil diperbarui!');
+                      AppSnackbar.showSuccess(
+                        context,
+                        'Menu berhasil diperbarui!',
+                      );
                       Navigator.pop(context, true);
                     } catch (e) {
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       setState(() => _isSaving = false);
                       AppSnackbar.showError(context, 'Gagal edit menu: $e');
                     }

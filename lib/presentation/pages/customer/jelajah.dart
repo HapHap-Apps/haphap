@@ -15,10 +15,7 @@ import 'package:haphap_fe/presentation/widgets/cards/restaurant_card.dart';
 class JelajahPage extends StatefulWidget {
   final String? initialCategory;
 
-  const JelajahPage({
-    super.key,
-    this.initialCategory,
-  });
+  const JelajahPage({super.key, this.initialCategory});
 
   @override
   State<JelajahPage> createState() => _JelajahPageState();
@@ -26,14 +23,14 @@ class JelajahPage extends StatefulWidget {
 
 class _JelajahPageState extends State<JelajahPage> {
   final TextEditingController _searchController = TextEditingController();
-  
+
   int _selectedCategoryIndex = 0;
-  
+
   final List<String> _categories = [
-    'All', 
+    'All',
     'Bakery',
-    'Restoran', 
-    'Kafe', 
+    'Restoran',
+    'Kafe',
     'Grocery',
     'Jajanan',
     'Dessert',
@@ -74,7 +71,7 @@ class _JelajahPageState extends State<JelajahPage> {
         (e) => e.value == widget.initialCategory,
         orElse: () => const MapEntry('All', ''),
       );
-      
+
       final index = _categories.indexOf(entry.key);
       if (index != -1) {
         setState(() {
@@ -124,7 +121,7 @@ class _JelajahPageState extends State<JelajahPage> {
     if (_selectedCategoryIndex > 0) {
       final selectedCategoryLabel = _categories[_selectedCategoryIndex];
       final backendEnum = _categoryEnumMap[selectedCategoryLabel];
-      
+
       if (backendEnum != null) {
         result = result.where((merchant) {
           return merchant.categories.contains(backendEnum);
@@ -145,31 +142,31 @@ class _JelajahPageState extends State<JelajahPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white, 
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
-            
+            const SizedBox(height: AppSpacing.lg),
+
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapSearchBar(
                 hintText: 'Masukkan pencarian',
-                prefixIconPath: AppIcons.magnifying_glass,
+                prefixIconPath: AppIcons.magnifyingGlass,
                 controller: _searchController,
               ),
             ),
-            
-            const SizedBox(height: 16), 
-            
+
+            const SizedBox(height: AppSpacing.lg),
+
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: Row(
                 children: List.generate(_categories.length, (index) {
                   return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: const EdgeInsets.only(right: AppSpacing.sm),
                     child: HapHapCategoryPill(
                       label: _categories[index],
                       isSelected: _selectedCategoryIndex == index,
@@ -183,12 +180,10 @@ class _JelajahPageState extends State<JelajahPage> {
                 }),
               ),
             ),
-            
-            const SizedBox(height: 16), 
 
-            Expanded(
-              child: _buildMerchantList(),
-            ),
+            const SizedBox(height: AppSpacing.lg),
+
+            Expanded(child: _buildMerchantList()),
           ],
         ),
       ),
@@ -205,18 +200,25 @@ class _JelajahPageState extends State<JelajahPage> {
     if (_error != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.wifi_off_rounded, size: 48, color: AppColors.greyLight),
-              const SizedBox(height: 16),
+              const Icon(
+                Icons.wifi_off_rounded,
+                size: AppSizes.touchTarget,
+                color: AppColors.greyLight,
+              ),
+              const SizedBox(height: AppSpacing.lg),
               Text(
                 _error!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.greyDark, fontSize: 14),
+                style: const AppTextStyle(
+                  color: AppColors.greyDark,
+                  fontSize: AppTypography.bodyMedium,
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               HapHapButton(
                 text: 'Coba Lagi',
                 isText: true,
@@ -238,18 +240,26 @@ class _JelajahPageState extends State<JelajahPage> {
     if (filtered.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.storefront_outlined, size: 48, color: AppColors.greyLight),
-              const SizedBox(height: 16),
+              const Icon(
+                Icons.storefront_outlined,
+                size: AppSizes.touchTarget,
+                color: AppColors.greyLight,
+              ),
+              const SizedBox(height: AppSpacing.lg),
               Text(
-                _searchController.text.trim().isNotEmpty || _selectedCategoryIndex > 0
+                _searchController.text.trim().isNotEmpty ||
+                        _selectedCategoryIndex > 0
                     ? 'Tidak ada merchant yang sesuai dengan pencarian kamu.'
                     : 'Belum ada merchant yang tersedia saat ini.',
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.greyDark, fontSize: 14),
+                style: const AppTextStyle(
+                  color: AppColors.greyDark,
+                  fontSize: AppTypography.bodyMedium,
+                ),
               ),
             ],
           ),
@@ -258,16 +268,16 @@ class _JelajahPageState extends State<JelajahPage> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       itemCount: filtered.length + 1,
       itemBuilder: (context, index) {
         if (index == filtered.length) {
-          return const SizedBox(height: 40);
+          return const SizedBox(height: AppSpacing.huge);
         }
 
         final merchant = filtered[index];
         return Padding(
-          padding: const EdgeInsets.only(bottom: 24.0), 
+          padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
           child: GestureDetector(
             onTap: () {
               context.push(

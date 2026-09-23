@@ -29,43 +29,44 @@ class HapHapButton extends StatelessWidget {
     if (isExpanded) return double.infinity;
     switch (size) {
       case HapHapButtonSize.tiny:
-        return 96.0;
+        return AppSizes.tinyButtonWidth;
       case HapHapButtonSize.small:
-        return 169.0;
+        return AppSizes.statsCard;
       case HapHapButtonSize.medium:
-        return 322.0;
+        return AppSizes.mediumButtonWidth;
       case HapHapButtonSize.large:
-        return 354.0;
+        return AppSizes.designContentWidth;
     }
   }
 
-  double get _buttonHeight => isExpanded ? 52.0 : 32.0;
+  double get _buttonHeight =>
+      isExpanded ? AppSizes.expandedButtonHeight : AppSizes.iconLg;
 
   double get _fontSize {
-    if (isExpanded || size == HapHapButtonSize.large) return 16.0;
-    return 12.0;
+    if (isExpanded || size == HapHapButtonSize.large) {
+      return AppTypography.bodyLarge;
+    }
+    return AppTypography.labelMedium;
   }
 
   Color get _solidColor => isDanger ? AppColors.error : AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(32),
-    );
+    final shape = RoundedRectangleBorder(borderRadius: AppRadii.sheet);
 
     final Widget child = isLoading
         ? SizedBox(
-            width: isExpanded ? 22 : 16,
-            height: isExpanded ? 22 : 16,
+            width: isExpanded ? AppSizes.iconMediumPlus : AppSizes.iconXs,
+            height: isExpanded ? AppSizes.iconMediumPlus : AppSizes.iconXs,
             child: CircularProgressIndicator(
-              strokeWidth: 2.5,
+              strokeWidth: AppSizes.mediumStroke,
               color: isOutline ? _solidColor : AppColors.white,
             ),
           )
         : Text(
             text,
-            style: TextStyle(
+            style: AppTextStyle(
               fontSize: _fontSize,
               fontWeight: FontWeight.w600,
             ),
@@ -83,32 +84,40 @@ class HapHapButton extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      width: _buttonWidth,
-      height: _buttonHeight,
-      child: isOutline
-          ? OutlinedButton(
-              onPressed: isLoading ? null : onPressed,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary, width: 1.5),
-                shape: shape,
-                padding: EdgeInsets.zero,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: isExpanded ? double.infinity : _buttonWidth,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        height: _buttonHeight,
+        child: isOutline
+            ? OutlinedButton(
+                onPressed: isLoading ? null : onPressed,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(
+                    color: AppColors.primary,
+                    width: AppSizes.thinStroke,
+                  ),
+                  shape: shape,
+                  padding: EdgeInsets.zero,
+                ),
+                child: child,
+              )
+            : ElevatedButton(
+                onPressed: isLoading ? null : onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _solidColor,
+                  foregroundColor: AppColors.white,
+                  disabledBackgroundColor: _solidColor.withValues(alpha: 0.6),
+                  elevation: AppElevations.none,
+                  shape: shape,
+                  padding: EdgeInsets.zero,
+                ),
+                child: child,
               ),
-              child: child,
-            )
-          : ElevatedButton(
-              onPressed: isLoading ? null : onPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _solidColor,
-                foregroundColor: AppColors.white,
-                disabledBackgroundColor: _solidColor.withValues(alpha: 0.6),
-                elevation: 0,
-                shape: shape,
-                padding: EdgeInsets.zero,
-              ),
-              child: child,
-            ),
+      ),
     );
   }
 }

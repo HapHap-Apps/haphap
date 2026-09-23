@@ -59,12 +59,14 @@ class _AkunPageState extends State<AkunPage> {
       context: context,
       barrierDismissible: false,
       useRootNavigator: true,
-      builder: (_) => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+      builder: (_) => const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      ),
     );
 
     try {
       final freshProfile = await UserService.getMe();
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       setState(() {
         _profile = freshProfile;
@@ -78,7 +80,7 @@ class _AkunPageState extends State<AkunPage> {
 
       final myApps = await ApplicationService.findMyApplications();
 
-      if (!mounted) return;
+      if (!context.mounted) return;
       Navigator.of(context, rootNavigator: true).pop();
 
       final hasPending = myApps.any((app) => app.status == 'PENDING');
@@ -87,12 +89,15 @@ class _AkunPageState extends State<AkunPage> {
       if (hasApproved) {
         context.go(AppRoutes.merchantBeranda);
       } else if (hasPending) {
-        AppSnackbar.showInfo(context, 'Pengajuan pendaftaran merchant Anda sedang diproses oleh Admin.');
+        AppSnackbar.showInfo(
+          context,
+          'Pengajuan pendaftaran merchant Anda sedang diproses oleh Admin.',
+        );
       } else {
         context.push(AppRoutes.merchantRegister);
       }
     } catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       Navigator.of(context, rootNavigator: true).pop();
       AppSnackbar.showError(context, 'Terjadi kesalahan: $e');
     }
@@ -105,15 +110,17 @@ class _AkunPageState extends State<AkunPage> {
       body: SafeArea(
         bottom: false,
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.white))
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.white),
+              )
             : _errorMessage != null
-                ? Center(
-                    child: Text(
-                      'Error: $_errorMessage',
-                      style: const TextStyle(color: AppColors.white),
-                    ),
-                  )
-                : _buildContent(context),
+            ? Center(
+                child: Text(
+                  'Error: $_errorMessage',
+                  style: const AppTextStyle(color: AppColors.white),
+                ),
+              )
+            : _buildContent(context),
       ),
     );
   }
@@ -122,22 +129,22 @@ class _AkunPageState extends State<AkunPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapPageHeader(
             title: 'Profil',
             showBackButton: false,
             titleColor: AppColors.white,
-            fontSize: 24,
+            fontSize: AppTypography.headlineSmall,
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapProfileCard(
             name: _profile?.name ?? 'User',
             email: _profile?.email ?? '-',
@@ -146,7 +153,7 @@ class _AkunPageState extends State<AkunPage> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         Expanded(
           child: Container(
@@ -154,13 +161,13 @@ class _AkunPageState extends State<AkunPage> {
             decoration: const BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                topRight: Radius.circular(32),
+                topLeft: AppRadii.sheetRadius,
+                topRight: AppRadii.sheetRadius,
               ),
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 24.0),
+                padding: const EdgeInsets.only(top: AppSpacing.xxl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -184,14 +191,21 @@ class _AkunPageState extends State<AkunPage> {
                         icon: Icons.info,
                         title: 'Statistik',
                         badge: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: AppSpacing.sm,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.success,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: AppRadii.lg,
                           ),
                           child: Text(
                             _formatHemat(_profile?.totalSaved ?? 0),
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.white),
+                            style: const AppTextStyle(
+                              fontSize: AppTypography.labelMedium,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.white,
+                            ),
                           ),
                         ),
                         onTap: () {
@@ -200,7 +214,7 @@ class _AkunPageState extends State<AkunPage> {
                       ),
                     ]),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xxxl),
 
                     _buildSectionTitle('Selebihnya dari HapHap'),
                     _buildMenuCard([
@@ -211,12 +225,12 @@ class _AkunPageState extends State<AkunPage> {
                       ),
                     ]),
 
-
-
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xxxl),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl,
+                      ),
                       child: HapHapButton(
                         text: 'Keluar',
                         isExpanded: true,
@@ -227,7 +241,7 @@ class _AkunPageState extends State<AkunPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 100),
+                    const SizedBox(height: AppSpacing.bottomClearance),
                   ],
                 ),
               ),
@@ -240,11 +254,15 @@ class _AkunPageState extends State<AkunPage> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 12.0),
+      padding: const EdgeInsets.only(
+        left: AppSpacing.xxl,
+        right: AppSpacing.xxl,
+        bottom: AppSpacing.md,
+      ),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
+        style: const AppTextStyle(
+          fontSize: AppTypography.bodyLarge,
           fontWeight: FontWeight.bold,
           color: AppColors.black,
         ),
@@ -254,35 +272,36 @@ class _AkunPageState extends State<AkunPage> {
 
   Widget _buildMenuCard(List<_MenuItemData> items) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: 0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadii.lg,
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           children: items.map((item) {
             return InkWell(
               onTap: item.onTap,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppRadii.lg,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.lg,
+                ),
                 child: Row(
                   children: [
-                    Icon(item.icon, size: 20, color: AppColors.greyDark),
-                    const SizedBox(width: 16),
+                    Icon(
+                      item.icon,
+                      size: AppSizes.iconSm,
+                      color: AppColors.greyDark,
+                    ),
+                    const SizedBox(width: AppSpacing.lg),
                     Expanded(
                       child: Text(
                         item.title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyLarge,
                           fontWeight: FontWeight.w500,
                           color: AppColors.black,
                         ),
@@ -290,9 +309,13 @@ class _AkunPageState extends State<AkunPage> {
                     ),
                     if (item.badge != null) ...[
                       item.badge!,
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                     ],
-                    const Icon(Icons.chevron_right, size: 24, color: AppColors.greyDark),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: AppSizes.iconMd,
+                      color: AppColors.greyDark,
+                    ),
                   ],
                 ),
               ),

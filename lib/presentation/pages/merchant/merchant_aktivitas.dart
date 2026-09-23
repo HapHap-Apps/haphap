@@ -25,7 +25,6 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
   String? _errorMessage;
   bool _isUnauthorized = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -67,7 +66,8 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Tidak dapat memuat data pesanan. Periksa koneksi internet kamu.';
+        _errorMessage =
+            'Tidak dapat memuat data pesanan. Periksa koneksi internet kamu.';
       });
     }
   }
@@ -94,16 +94,17 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'Tidak dapat memuat data pesanan. Periksa koneksi internet kamu.';
+        _errorMessage =
+            'Tidak dapat memuat data pesanan. Periksa koneksi internet kamu.';
       });
     }
   }
 
   String _formatPrice(int price) {
     return price.toString().replaceAllMapped(
-          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-          (m) => '${m[1]}.',
-        );
+      RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]}.',
+    );
   }
 
   @override
@@ -115,19 +116,24 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
-            
+            const SizedBox(height: AppSpacing.lg),
+
             _buildHeader(context),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: HapHapTabBar(
                   currentIndex: _currentTabIndex,
-                  tabs: const ['Baru', 'Sedang Disiapkan', 'Siap Diambil', 'Selesai'],
+                  tabs: const [
+                    'Baru',
+                    'Sedang Disiapkan',
+                    'Siap Diambil',
+                    'Selesai',
+                  ],
                   onTap: (index) {
                     setState(() {
                       _currentTabIndex = index;
@@ -137,7 +143,7 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             Expanded(child: _buildTabContent()),
           ],
@@ -148,18 +154,16 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Row(
         children: [
           const Expanded(
             child: HapHapPageHeader(
               title: 'Aktivitas',
               showBackButton: false,
-              fontSize: 24,
+              fontSize: AppTypography.headlineSmall,
             ),
           ),
-          
-
         ],
       ),
     );
@@ -167,7 +171,9 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
 
   Widget _buildTabContent() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
     if (_errorMessage != null) {
       return _buildErrorState();
@@ -178,15 +184,30 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
 
     switch (_currentTabIndex) {
       case 0:
-        filteredOrders = _orders.where((o) => o.status == 'PROCESSING').toList();
+        filteredOrders = _orders
+            .where((o) => o.status == 'PROCESSING')
+            .toList();
         currentStatus = MerchantOrderStatus.baru;
         break;
       case 1:
-        filteredOrders = _orders.where((o) => o.status == 'READY' && (o.qrCode == null || o.qrCode!.isEmpty)).toList();
+        filteredOrders = _orders
+            .where(
+              (o) =>
+                  o.status == 'READY' &&
+                  (o.qrCode == null || o.qrCode!.isEmpty),
+            )
+            .toList();
         currentStatus = MerchantOrderStatus.sedangDisiapkan;
         break;
       case 2:
-        filteredOrders = _orders.where((o) => o.status == 'READY' && o.qrCode != null && o.qrCode!.isNotEmpty).toList();
+        filteredOrders = _orders
+            .where(
+              (o) =>
+                  o.status == 'READY' &&
+                  o.qrCode != null &&
+                  o.qrCode!.isNotEmpty,
+            )
+            .toList();
         currentStatus = MerchantOrderStatus.siapDiambil;
         break;
       case 3:
@@ -204,27 +225,27 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _isUnauthorized ? Icons.lock_outline : Icons.error_outline,
-              size: 48,
+              size: AppSizes.touchTarget,
               color: AppColors.greyDark,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               _errorMessage ?? 'Terjadi kesalahan.',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: const AppTextStyle(
                 color: AppColors.greyDark,
-                fontSize: 14,
+                fontSize: AppTypography.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             SizedBox(
-              width: 160,
+              width: AppSizes.narrowPanel,
               child: HapHapButton(
                 text: _isUnauthorized ? 'Login Ulang' : 'Coba Lagi',
                 onPressed: () {
@@ -242,7 +263,10 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
     );
   }
 
-  Widget _buildListPesanan(List<OrderModel> pesananList, MerchantOrderStatus status) {
+  Widget _buildListPesanan(
+    List<OrderModel> pesananList,
+    MerchantOrderStatus status,
+  ) {
     if (pesananList.isEmpty) {
       return Center(
         child: Column(
@@ -250,13 +274,16 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
           children: [
             const Icon(
               Icons.receipt_long_outlined,
-              size: 48,
+              size: AppSizes.touchTarget,
               color: AppColors.greyDark,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             const Text(
               'Belum ada pesanan.',
-              style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+              style: AppTextStyle(
+                color: AppColors.greyDark,
+                fontSize: AppTypography.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -268,7 +295,10 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
       onRefresh: _onRefresh,
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xxl,
+          vertical: AppSpacing.sm,
+        ),
         itemCount: pesananList.length,
         itemBuilder: (context, index) {
           final order = pesananList[index];
@@ -285,7 +315,7 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
           }
 
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: AppSpacing.lg),
             child: HapHapMerchantOrderCard(
               status: cardStatus,
               customerName: order.customerName ?? 'Customer',
@@ -296,11 +326,14 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
                   ? () async {
                       try {
                         await OrderService.acceptOrder(order.orderId);
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         _fetchOrders();
                       } catch (_) {
-                        if (!mounted) return;
-                        AppSnackbar.showError(context, 'Gagal menerima pesanan. Coba lagi.');
+                        if (!context.mounted) return;
+                        AppSnackbar.showError(
+                          context,
+                          'Gagal menerima pesanan. Coba lagi.',
+                        );
                       }
                     }
                   : null,
@@ -308,11 +341,14 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
                   ? () async {
                       try {
                         await OrderService.rejectOrder(order.orderId);
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         _fetchOrders();
                       } catch (_) {
-                        if (!mounted) return;
-                        AppSnackbar.showError(context, 'Gagal menolak pesanan. Coba lagi.');
+                        if (!context.mounted) return;
+                        AppSnackbar.showError(
+                          context,
+                          'Gagal menolak pesanan. Coba lagi.',
+                        );
                       }
                     }
                   : null,
@@ -320,11 +356,14 @@ class _AktivitasMerchantPageState extends State<AktivitasMerchantPage> {
                   ? () async {
                       try {
                         await OrderService.readyOrder(order.orderId);
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         _fetchOrders();
                       } catch (_) {
-                        if (!mounted) return;
-                        AppSnackbar.showError(context, 'Gagal menandai siap ambil. Coba lagi.');
+                        if (!context.mounted) return;
+                        AppSnackbar.showError(
+                          context,
+                          'Gagal menandai siap ambil. Coba lagi.',
+                        );
                       }
                     }
                   : null,

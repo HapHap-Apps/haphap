@@ -73,7 +73,7 @@ class _HeroSection extends StatelessWidget {
                 child: const AbsorbPointer(
                   child: HapHapSearchBar(
                     hintText: _BerandaContent.searchHint,
-                    prefixIconPath: AppIcons.magnifying_glass,
+                    prefixIconPath: AppIcons.magnifyingGlass,
                   ),
                 ),
               ),
@@ -109,8 +109,8 @@ class _OrangeBackground extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
+          bottomLeft: AppRadii.sheetRadius,
+          bottomRight: AppRadii.sheetRadius,
         ),
       ),
     );
@@ -122,50 +122,72 @@ class _TaglineWithMascot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final mascotWidth = AppLayout.responsiveExtent(
+          constraints.maxWidth,
+          fraction: AppLayout.mascotWidthFraction,
+          min: AppSizes.compactButtonWidth,
+          max: AppSizes.mascotWidth,
+        );
+
+        return Stack(
+          clipBehavior: Clip.none,
           children: [
-            const Text(
-              _BerandaContent.tagline,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.white,
-                height: 1.3,
-              ),
-            ),
-            const SizedBox(height: _BerandaLayout.heroTaglineToDiskon),
-            GestureDetector(
-              onTap: () {
-                context.go('${AppRoutes.aktivitas}?tab=2');
-              },
-              child: Row(
-                children: const [
-                  Text(
-                    _BerandaContent.discountCta,
-                    style: TextStyle(fontSize: 14, color: AppColors.white),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  _BerandaContent.tagline,
+                  style: AppTextStyle(
+                    fontSize: AppTypography.titleLarge,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                    height: AppTypography.lineHeightNormal,
                   ),
-                  SizedBox(width: 4),
-                  Icon(Icons.chevron_right, color: AppColors.white, size: 16),
-                ],
+                ),
+                const SizedBox(height: _BerandaLayout.heroTaglineToDiskon),
+                GestureDetector(
+                  onTap: () {
+                    context.go('${AppRoutes.aktivitas}?tab=2');
+                  },
+                  child: const Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          _BerandaContent.discountCta,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle(
+                            fontSize: AppTypography.bodyMedium,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.xs),
+                      Icon(
+                        Icons.chevron_right,
+                        color: AppColors.white,
+                        size: AppSizes.iconXs,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              right: _BerandaLayout.mascotRight,
+              top: _BerandaLayout.mascotTop,
+              child: Image.asset(
+                _BerandaContent.mascotPath,
+                width: mascotWidth,
+                height: mascotWidth * AppLayout.mascotAspectRatio,
+                fit: BoxFit.contain,
               ),
             ),
           ],
-        ),
-        Positioned(
-          right: _BerandaLayout.mascotRight,
-          top: _BerandaLayout.mascotTop,
-          child: Image.asset(
-            _BerandaContent.mascotPath,
-            width: _BerandaLayout.mascotWidth,
-            height: _BerandaLayout.mascotHeight,
-            fit: BoxFit.contain,
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -229,7 +251,7 @@ class _StatsRowState extends State<_StatsRow> {
               title: _BerandaContent.statsSavingsTitle,
               prefixText: _BerandaContent.statsSavingsPrefix,
               mainValue: '...',
-              valueColor: Colors.green,
+              valueColor: AppColors.success,
               subtitle: '',
             ),
           ),
@@ -260,7 +282,7 @@ class _StatsRowState extends State<_StatsRow> {
             title: _BerandaContent.statsSavingsTitle,
             prefixText: _BerandaContent.statsSavingsPrefix,
             mainValue: savingsValue,
-            valueColor: Colors.green,
+            valueColor: AppColors.success,
             subtitle: _BerandaContent.statsSavingsSubtitle,
           ),
         ),
@@ -287,35 +309,52 @@ class _KategoriSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = AppLayout.pagePadding(context);
+    final categories = <(String, String, String)>[
+      (AppIcons.bakery, 'Bakery', 'ROTI'),
+      (AppIcons.restaurant, 'Restoran', 'RESTORAN'),
+      (AppIcons.cafe, 'Kafe', 'KAFE'),
+      (AppIcons.grocery, 'Grocery', 'KEBUTUHAN'),
+      (AppIcons.jajanan, 'Jajanan', 'JAJANAN'),
+      (AppIcons.dessert, 'Dessert', 'PENUTUP'),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: _BerandaLayout.sectionHorizontalPadding,
-          ),
-          child: _SectionTitle(text: 'Kategori'),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: const _SectionTitle(text: 'Kategori'),
         ),
         const SizedBox(height: _BerandaLayout.sectionTitleToContent),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(
-            horizontal: _BerandaLayout.sectionHorizontalPadding,
-          ),
-          child: Row(
-            children: [
-              HapHapCategoryButton(iconPath: AppIcons.bakery, label: 'Bakery', onTap: () => _navigateToJelajah(context, 'ROTI')),
-              const SizedBox(width: _BerandaLayout.categoryItemSpacing),
-              HapHapCategoryButton(iconPath: AppIcons.restaurant, label: 'Restoran', onTap: () => _navigateToJelajah(context, 'RESTORAN')),
-              const SizedBox(width: _BerandaLayout.categoryItemSpacing),
-              HapHapCategoryButton(iconPath: AppIcons.cafe, label: 'Kafe', onTap: () => _navigateToJelajah(context, 'KAFE')),
-              const SizedBox(width: _BerandaLayout.categoryItemSpacing),
-              HapHapCategoryButton(iconPath: AppIcons.grocery, label: 'Grocery', onTap: () => _navigateToJelajah(context, 'KEBUTUHAN')),
-              const SizedBox(width: _BerandaLayout.categoryItemSpacing),
-              HapHapCategoryButton(iconPath: AppIcons.jajanan, label: 'Jajanan', onTap: () => _navigateToJelajah(context, 'JAJANAN')),
-              const SizedBox(width: _BerandaLayout.categoryItemSpacing),
-              HapHapCategoryButton(iconPath: AppIcons.dessert, label: 'Dessert', onTap: () => _navigateToJelajah(context, 'PENUTUP')),
-            ],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final visibleCount =
+                  (constraints.maxWidth / AppSizes.categoryCellMinWidth)
+                      .floor()
+                      .clamp(1, categories.length);
+              final itemWidth = constraints.maxWidth / visibleCount;
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final category in categories)
+                      SizedBox(
+                        key: ValueKey('home_category_${category.$2}'),
+                        width: itemWidth,
+                        child: HapHapCategoryButton(
+                          iconPath: category.$1,
+                          label: category.$2,
+                          onTap: () => _navigateToJelajah(context, category.$3),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ],
@@ -384,7 +423,7 @@ class _SekitarKamuSectionState extends State<_SekitarKamuSection> {
   Widget _buildContent(BuildContext context) {
     if (_isLoading) {
       return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 32),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.xxxl),
         child: Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
@@ -395,11 +434,14 @@ class _SekitarKamuSectionState extends State<_SekitarKamuSection> {
       return Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: _BerandaLayout.sectionHorizontalPadding,
-          vertical: 16,
+          vertical: AppSpacing.lg,
         ),
         child: Text(
           _error!,
-          style: const TextStyle(color: Colors.red, fontSize: 14),
+          style: const AppTextStyle(
+            color: AppColors.error,
+            fontSize: AppTypography.bodyMedium,
+          ),
         ),
       );
     }
@@ -408,15 +450,17 @@ class _SekitarKamuSectionState extends State<_SekitarKamuSection> {
       return const Padding(
         padding: EdgeInsets.symmetric(
           horizontal: _BerandaLayout.sectionHorizontalPadding,
-          vertical: 16,
+          vertical: AppSpacing.lg,
         ),
         child: Text(
           'Belum ada merchant di sekitar kamu.',
-          style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+          style: AppTextStyle(
+            color: AppColors.greyDark,
+            fontSize: AppTypography.bodyMedium,
+          ),
         ),
       );
     }
-
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -463,8 +507,8 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        fontSize: 18,
+      style: const AppTextStyle(
+        fontSize: AppTypography.titleMedium,
         fontWeight: FontWeight.bold,
         color: AppColors.black,
       ),
@@ -473,26 +517,23 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _BerandaLayout {
-  static const double heroTopPadding = 72;
-  static const double heroHorizontalPadding = 24;
-  static const double heroSearchToTagline = 47;
-  static const double heroTaglineToDiskon = 16;
-  static const double heroDiskonToCards = 47;
-  static const double heroCardsToKategori = 32;
-  static const double heroOrangeBgBottomCut = 120;
+  static const double heroTopPadding = AppSpacing.heroTop;
+  static const double heroHorizontalPadding = AppSpacing.xxl;
+  static const double heroSearchToTagline = AppSpacing.section;
+  static const double heroTaglineToDiskon = AppSpacing.lg;
+  static const double heroDiskonToCards = AppSpacing.section;
+  static const double heroCardsToKategori = AppSpacing.xxxl;
+  static const double heroOrangeBgBottomCut = AppSpacing.largeSection;
 
-  static const double mascotWidth = 192;
-  static const double mascotHeight = 198;
-  static const double mascotRight = -30;
-  static const double mascotTop = -55;
+  static const double mascotRight = -AppSpacing.xxxl;
+  static const double mascotTop = -AppSizes.categoryButton;
 
-  static const double statCardSpacing = 16;
-  static const double sectionHorizontalPadding = 24;
-  static const double categoryItemSpacing = 20;
-  static const double restaurantCardSpacing = 16;
-  static const double sectionTitleToContent = 16;
-  static const double kategoriToSekitar = 32;
-  static const double bottomScrollPadding = 80;
+  static const double statCardSpacing = AppSpacing.lg;
+  static const double sectionHorizontalPadding = AppSpacing.xxl;
+  static const double restaurantCardSpacing = AppSpacing.lg;
+  static const double sectionTitleToContent = AppSpacing.lg;
+  static const double kategoriToSekitar = AppSpacing.xxxl;
+  static const double bottomScrollPadding = AppSpacing.screenBottom;
 }
 
 class _BerandaContent {

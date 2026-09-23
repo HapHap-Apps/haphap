@@ -26,18 +26,20 @@ class AppSnackbar {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(
-            fontFamily: 'Plus Jakarta Sans',
-            fontSize: 14,
+          style: const AppTextStyle(
+            fontSize: AppTypography.bodyMedium,
             color: AppColors.white,
           ),
         ),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+        margin: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.none,
+          AppSpacing.lg,
+          AppSpacing.xxl,
         ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadii.md),
         duration: const Duration(seconds: 3),
       ),
     );

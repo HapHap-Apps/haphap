@@ -10,7 +10,7 @@ class HapHapTabBar extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.onTap,
-    this.tabs = const ['Proses', 'Riwayat', 'Lainnya'], 
+    this.tabs = const ['Proses', 'Riwayat', 'Lainnya'],
   });
 
   @override
@@ -21,7 +21,7 @@ class HapHapTabBar extends StatelessWidget {
         return Row(
           children: [
             _buildTabItem(index, tabs[index]),
-            if (index < tabs.length - 1) const SizedBox(width: 32),
+            if (index < tabs.length - 1) const SizedBox(width: AppSpacing.xxxl),
           ],
         );
       }),
@@ -42,21 +42,21 @@ class HapHapTabBar extends StatelessWidget {
             Center(
               child: Text(
                 title,
-                style: TextStyle(
-                  fontSize: 16,
+                style: AppTextStyle(
+                  fontSize: AppTypography.bodyLarge,
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                   color: isActive ? AppColors.black : AppColors.greyDark,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-            
+            const SizedBox(height: AppSpacing.sm),
+
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              height: 4,
+              height: AppSizes.progressIndicator,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(4),
+                color: isActive ? AppColors.primary : AppColors.transparent,
+                borderRadius: AppRadii.xs,
               ),
             ),
           ],

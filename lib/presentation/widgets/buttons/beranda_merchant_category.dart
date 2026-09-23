@@ -3,10 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:haphap_fe/core/theme/app_colors.dart';
 
 class HapHapCategoryButton extends StatelessWidget {
-  final String iconPath; 
+  final String iconPath;
   final String label;
   final VoidCallback onTap;
-  final Color? iconColor; 
+  final Color? iconColor;
 
   const HapHapCategoryButton({
     super.key,
@@ -21,48 +21,42 @@ class HapHapCategoryButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Column(
-        mainAxisSize: MainAxisSize.min, 
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: AppSizes.categoryButton,
+            height: AppSizes.categoryButton,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12), 
+              borderRadius: AppRadii.md,
               border: Border.all(
-                color: const Color(0xFFF1F1F1), 
-                width: 1,
+                color: AppColors.surfaceBorder,
+                width: AppSizes.hairline,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: AppShadows.card,
             ),
             child: Center(
               child: SizedBox(
-                width: 20,
-                height: 20,
+                width: AppSizes.iconSm,
+                height: AppSizes.iconSm,
                 child: SvgPicture.asset(
                   iconPath,
-                  colorFilter: iconColor != null 
+                  colorFilter: iconColor != null
                       ? ColorFilter.mode(iconColor!, BlendMode.srcIn)
                       : null,
                 ),
               ),
             ),
           ),
-          
-          const SizedBox(height: 8), 
-          
+
+          const SizedBox(height: AppSpacing.sm),
+
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: const AppTextStyle(
+              fontSize: AppTypography.labelMedium,
               fontWeight: FontWeight.w500,
-              color: AppColors.greyDark, 
+              color: AppColors.greyDark,
             ),
           ),
         ],

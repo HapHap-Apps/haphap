@@ -70,7 +70,8 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Tidak dapat memuat data menu. Periksa koneksi internet kamu.';
+        _errorMessage =
+            'Tidak dapat memuat data menu. Periksa koneksi internet kamu.';
       });
     }
   }
@@ -98,7 +99,8 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'Tidak dapat memuat data menu. Periksa koneksi internet kamu.';
+        _errorMessage =
+            'Tidak dapat memuat data menu. Periksa koneksi internet kamu.';
       });
     }
   }
@@ -107,14 +109,14 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
     showDialog(
       context: context,
       builder: (context) => const HapHapAddMenuDialog(),
-    ).then((_) => _fetchItems()); 
+    ).then((_) => _fetchItems());
   }
 
   String _formatPrice(int price) {
     return price.toString().replaceAllMapped(
-          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-          (m) => '${m[1]}.',
-        );
+      RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]}.',
+    );
   }
 
   List<MenuItemModel> get _filteredItems {
@@ -135,20 +137,20 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapPageHeader(
                 title: 'Menu',
                 showBackButton: false,
-                fontSize: 24,  
+                fontSize: AppTypography.headlineSmall,
               ),
             ),
-            
-            const SizedBox(height: 16), 
+
+            const SizedBox(height: AppSpacing.lg),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapSearchBar(
                 hintText: 'Masukkan nama menu',
                 prefixIconPath: 'assets/icons/magnifying_glass.svg',
@@ -159,29 +161,33 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
                 },
               ),
             ),
-            
-            const SizedBox(height: 20),
-            
-            Expanded(
-              child: _buildContent(),
-            ),
+
+            const SizedBox(height: AppSpacing.xl),
+
+            Expanded(child: _buildContent()),
           ],
         ),
       ),
-      
+
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddMenuDialog,
-        backgroundColor: AppColors.primary, 
+        backgroundColor: AppColors.primary,
         shape: const CircleBorder(),
-        elevation: 4,
-        child: const Icon(Icons.add, color: AppColors.white, size: 32),
+        elevation: AppElevations.card,
+        child: const Icon(
+          Icons.add,
+          color: AppColors.white,
+          size: AppSizes.iconLg,
+        ),
       ),
     );
   }
 
   Widget _buildContent() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (_errorMessage != null) {
@@ -199,12 +205,19 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.search_off, size: 48, color: AppColors.greyDark),
-            const SizedBox(height: 12),
+            const Icon(
+              Icons.search_off,
+              size: AppSizes.touchTarget,
+              color: AppColors.greyDark,
+            ),
+            const SizedBox(height: AppSpacing.md),
             Text(
               'Tidak ditemukan menu "$_searchQuery"',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.greyDark, fontSize: 14),
+              style: const AppTextStyle(
+                color: AppColors.greyDark,
+                fontSize: AppTypography.bodyMedium,
+              ),
             ),
           ],
         ),
@@ -216,15 +229,19 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
       onRefresh: _onRefresh,
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(left: 24, right: 24, bottom: 100), 
-        itemCount: filtered.length, 
-        
-        separatorBuilder: (context, index) => const Divider(
-          height: 32, 
-          thickness: 1,
-          color: Color(0xFFF1F1F1),
+        padding: const EdgeInsets.only(
+          left: AppSpacing.xxl,
+          right: AppSpacing.xxl,
+          bottom: AppSpacing.bottomClearance,
         ),
-        
+        itemCount: filtered.length,
+
+        separatorBuilder: (context, index) => const Divider(
+          height: AppSizes.iconLg,
+          thickness: 1,
+          color: AppColors.surfaceBorder,
+        ),
+
         itemBuilder: (context, index) {
           final item = filtered[index];
           final menuTitle = item.name;
@@ -238,7 +255,7 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
             imageUrl: (item.image != null && item.image!.isNotEmpty)
                 ? item.image!
                 : '',
-            
+
             onEdit: () {
               showDialog(
                 context: context,
@@ -250,7 +267,7 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
                 ),
               ).then((_) => _fetchItems());
             },
-            
+
             onDelete: () {
               showDialog(
                 context: context,
@@ -269,27 +286,27 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _isUnauthorized ? Icons.lock_outline : Icons.error_outline,
-              size: 48,
+              size: AppSizes.touchTarget,
               color: AppColors.greyDark,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               _errorMessage ?? 'Terjadi kesalahan.',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: const AppTextStyle(
                 color: AppColors.greyDark,
-                fontSize: 14,
+                fontSize: AppTypography.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             SizedBox(
-              width: 160,
+              width: AppSizes.narrowPanel,
               child: HapHapButton(
                 text: _isUnauthorized ? 'Login Ulang' : 'Coba Lagi',
                 onPressed: () {
@@ -314,14 +331,17 @@ class _MenuMerchantPageState extends State<MenuMerchantPage> {
         children: const [
           Icon(
             Icons.restaurant_menu_outlined,
-            size: 48,
+            size: AppSizes.touchTarget,
             color: AppColors.greyDark,
           ),
-          SizedBox(height: 12),
+          SizedBox(height: AppSpacing.md),
           Text(
             'Belum ada menu.\nTambahkan menu pertamamu!',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+            style: AppTextStyle(
+              color: AppColors.greyDark,
+              fontSize: AppTypography.bodyMedium,
+            ),
           ),
         ],
       ),

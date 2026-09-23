@@ -22,9 +22,9 @@ class AdminApplicationCard extends StatelessWidget {
   Color get _badgeColor {
     switch (status) {
       case 'APPROVED':
-        return Colors.green;
+        return AppColors.success;
       case 'REJECTED':
-        return Colors.red;
+        return AppColors.error;
       case 'PENDING':
       default:
         return AppColors.primary;
@@ -50,21 +50,15 @@ class AdminApplicationCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadii.lg,
+          boxShadow: AppShadows.card,
         ),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Row(
           children: [
             _buildAvatar(),
 
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.md),
 
             Expanded(
               child: Column(
@@ -72,19 +66,19 @@ class AdminApplicationCard extends StatelessWidget {
                 children: [
                   Text(
                     merchantName,
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w700,
                       color: AppColors.black,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     '$applicantName · $dateText',
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.labelMedium,
                       color: AppColors.greyDark,
                     ),
                     maxLines: 1,
@@ -94,18 +88,21 @@ class AdminApplicationCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.sm),
 
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
               decoration: BoxDecoration(
                 color: _badgeColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppRadii.sm,
               ),
               child: Text(
                 _badgeText,
-                style: TextStyle(
-                  fontSize: 11,
+                style: AppTextStyle(
+                  fontSize: AppTypography.labelMedium,
                   fontWeight: FontWeight.bold,
                   color: _badgeColor,
                 ),
@@ -121,10 +118,10 @@ class AdminApplicationCard extends StatelessWidget {
     final hasAvatar = avatarUrl != null && avatarUrl!.isNotEmpty;
 
     return Container(
-      width: 60,
-      height: 60,
+      width: AppSizes.navItemWidth,
+      height: AppSizes.navItemWidth,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadii.md,
         image: hasAvatar
             ? DecorationImage(
                 image: NetworkImage(avatarUrl!),
@@ -137,8 +134,8 @@ class AdminApplicationCard extends StatelessWidget {
           : Center(
               child: Text(
                 merchantName.isNotEmpty ? merchantName[0].toUpperCase() : 'M',
-                style: const TextStyle(
-                  fontSize: 24,
+                style: const AppTextStyle(
+                  fontSize: AppTypography.headlineSmall,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
                 ),

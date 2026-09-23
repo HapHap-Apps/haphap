@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:haphap_fe/core/theme/app_colors.dart';
 
 class HapHapStatusPesananCard extends StatelessWidget {
-  final String dateStatusText; 
-  final String mainTitle;      
-  final String imagePath;      
+  final String dateStatusText;
+  final String mainTitle;
+  final String imagePath;
 
   const HapHapStatusPesananCard({
     super.key,
@@ -16,48 +16,42 @@ class HapHapStatusPesananCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 354,
-      height: 128,
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: AppSizes.mediaLarge),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.lg,
         border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center, 
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     dateStatusText,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.labelMedium,
                       color: AppColors.greyDark,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
-                  const SizedBox(height: 8), 
-                  
+
+                  const SizedBox(height: AppSpacing.sm),
+
                   Text(
                     mainTitle,
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.titleLarge,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
@@ -71,14 +65,14 @@ class HapHapStatusPesananCard extends StatelessWidget {
 
           ClipRRect(
             borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
+              topRight: AppRadii.lgRadius,
+              bottomRight: AppRadii.lgRadius,
             ),
             child: Image.asset(
               imagePath,
-              width: 128, 
-              height: 128,
-              fit: BoxFit.cover, 
+              width: AppSizes.mediaLarge,
+              height: AppSizes.mediaLarge,
+              fit: BoxFit.cover,
             ),
           ),
         ],

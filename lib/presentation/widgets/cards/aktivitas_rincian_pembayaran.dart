@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:haphap_fe/core/theme/app_colors.dart';
 
-
 class HapHapRincianPembayaran extends StatelessWidget {
   final String paymentMethod;
   final String totalPrice;
   final String orderNumber;
   final String paymentTime;
   final String completionTime;
-
 
   const HapHapRincianPembayaran({
     super.key,
@@ -17,7 +15,6 @@ class HapHapRincianPembayaran extends StatelessWidget {
     required this.orderNumber,
     required this.paymentTime,
     required this.completionTime,
-
   });
 
   @override
@@ -25,11 +22,13 @@ class HapHapRincianPembayaran extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Container(
-          width: 354,
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          width: double.infinity,
+          height: AppSizes.avatarCompact,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.lg,
+          ),
           decoration: _cardDecoration(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,18 +39,18 @@ class HapHapRincianPembayaran extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 12), 
+        const SizedBox(height: AppSpacing.md),
 
         Container(
-          width: 354,
-          padding: const EdgeInsets.all(16),
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppSpacing.lg),
           decoration: _cardDecoration(),
           child: Column(
             children: [
               _buildRowItem('No. Pesanan', orderNumber),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               _buildRowItem('Waktu Pembayaran', paymentTime),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               _buildRowItem('Waktu Pesanan Selesai', completionTime),
             ],
           ),
@@ -63,18 +62,12 @@ class HapHapRincianPembayaran extends StatelessWidget {
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppRadii.lg,
       border: Border.all(
-        color: const Color(0xFFF1F1F1),
-        width: 1,
+        color: AppColors.surfaceBorder,
+        width: AppSizes.hairline,
       ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.05),
-          blurRadius: 8,
-          offset: const Offset(0, 4),
-        ),
-      ],
+      boxShadow: AppShadows.card,
     );
   }
 
@@ -84,18 +77,18 @@ class HapHapRincianPembayaran extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.black,      
-            fontWeight: FontWeight.w600, 
+          style: const AppTextStyle(
+            fontSize: AppTypography.labelMedium,
+            color: AppColors.black,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.greyDark,   
-            fontWeight: FontWeight.w400, 
+          style: const AppTextStyle(
+            fontSize: AppTypography.labelMedium,
+            color: AppColors.greyDark,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

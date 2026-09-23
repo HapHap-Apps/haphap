@@ -5,45 +5,36 @@ import 'package:haphap_fe/core/theme/app_colors.dart';
 class HapHapQRCodeCard extends StatelessWidget {
   final String qrToken;
 
-  const HapHapQRCodeCard({
-    super.key,
-    required this.qrToken,
-  });
+  const HapHapQRCodeCard({super.key, required this.qrToken});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 230,
+      width: AppSizes.qrCardWidth,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              borderRadius: AppRadii.lg,
+              boxShadow: AppShadows.card,
             ),
             child: QrImageView(
               data: qrToken,
               version: QrVersions.auto,
-              size: 145,
-              backgroundColor: Colors.white,
+              size: AppSizes.qrCardSize,
+              backgroundColor: AppColors.white,
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
 
           const Text(
             'Tunjukkan ke kasir',
-            style: TextStyle(
-              fontSize: 12,
+            style: AppTextStyle(
+              fontSize: AppTypography.labelMedium,
               color: AppColors.greyDark,
             ),
             textAlign: TextAlign.center,

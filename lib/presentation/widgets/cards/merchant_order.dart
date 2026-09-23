@@ -3,7 +3,14 @@ import 'package:haphap_fe/core/theme/app_colors.dart';
 import 'package:haphap_fe/presentation/widgets/buttons/button.dart';
 import 'package:haphap_fe/data/models/order_model.dart';
 
-enum MerchantOrderStatus { menungguBayar, baru, sedangDisiapkan, siapDiambil, selesai, dibatalkan }
+enum MerchantOrderStatus {
+  menungguBayar,
+  baru,
+  sedangDisiapkan,
+  siapDiambil,
+  selesai,
+  dibatalkan,
+}
 
 class HapHapMerchantOrderCard extends StatelessWidget {
   final MerchantOrderStatus status;
@@ -32,149 +39,205 @@ class HapHapMerchantOrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String badgeText = '';
-    Color badgeColor = Colors.transparent;
-    Color badgeBgColor = Colors.transparent;
+    Color badgeColor = AppColors.transparent;
+    Color badgeBgColor = AppColors.transparent;
 
     switch (status) {
       case MerchantOrderStatus.menungguBayar:
         badgeText = 'MENUNGGU BAYAR';
-        badgeColor = const Color(0xFFF2994A);
-        badgeBgColor = const Color(0xFFFFF6ED);
+        badgeColor = AppColors.warningDark;
+        badgeBgColor = AppColors.primarySurface;
         break;
       case MerchantOrderStatus.baru:
         badgeText = 'BARU';
-        badgeColor = Colors.red;
-        badgeBgColor = const Color(0xFFFFEBEB);
+        badgeColor = AppColors.error;
+        badgeBgColor = AppColors.errorSurface;
         break;
       case MerchantOrderStatus.sedangDisiapkan:
         badgeText = 'SEDANG DISIAPKAN';
-        badgeColor = const Color(0xFFF2994A); 
-        badgeBgColor = const Color(0xFFFFF6ED);
+        badgeColor = AppColors.warningDark;
+        badgeBgColor = AppColors.primarySurface;
         break;
       case MerchantOrderStatus.siapDiambil:
         badgeText = 'SIAP DIAMBIL';
-        badgeColor = const Color(0xFF2D9CDB);
-        badgeBgColor = const Color(0xFFE8F4FD);
+        badgeColor = AppColors.info;
+        badgeBgColor = AppColors.infoSurface;
         break;
       case MerchantOrderStatus.selesai:
         badgeText = 'SELESAI';
-        badgeColor = Colors.green;
-        badgeBgColor = const Color(0xFFE8F5E9);
+        badgeColor = AppColors.success;
+        badgeBgColor = AppColors.successSurface;
         break;
       case MerchantOrderStatus.dibatalkan:
         badgeText = 'DIBATALKAN';
-        badgeColor = Colors.red;
-        badgeBgColor = const Color(0xFFFFEBEB);
+        badgeColor = AppColors.error;
+        badgeBgColor = AppColors.errorSurface;
         break;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF1F1F1), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: AppRadii.lg,
+        border: Border.all(
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
+        ),
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                    vertical: AppSpacing.xs,
+                  ),
                   decoration: BoxDecoration(
                     color: badgeBgColor,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppRadii.md,
                   ),
                   child: Text(
                     badgeText,
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: badgeColor),
+                    style: AppTextStyle(
+                      fontSize: AppTypography.labelSmall,
+                      fontWeight: FontWeight.bold,
+                      color: badgeColor,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.md),
                 Row(
                   children: [
-                    const Icon(Icons.person_outline, size: 16, color: AppColors.primary),
-                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.person_outline,
+                      size: AppSizes.iconXs,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
                         customerName,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.black),
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Text(
-                      orderId.length > 8 ? '#${orderId.substring(0, 8)}' : orderId,
-                      style: const TextStyle(fontSize: 12, color: AppColors.greyLight),
+                      orderId.length > 8
+                          ? '#${orderId.substring(0, 8)}'
+                          : orderId,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.labelMedium,
+                        color: AppColors.greyLight,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          const Divider(color: Color(0xFFF1F1F1), height: 1, thickness: 1),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
+          const Divider(
+            color: AppColors.surfaceBorder,
+            height: AppSizes.hairline,
+            thickness: 1,
+          ),
+          const SizedBox(height: AppSpacing.lg),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             child: Column(
-              children: items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  children: [
-                    Text(
-                      '${item.quantity}x',
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+              children: items
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                      child: Row(
+                        children: [
+                          Text(
+                            '${item.quantity}x',
+                            style: const AppTextStyle(
+                              fontSize: AppTypography.labelMedium,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: const AppTextStyle(
+                                fontSize: AppTypography.labelMedium,
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(item.name, style: const TextStyle(fontSize: 12, color: AppColors.black)),
-                    ),
-                  ],
-                ),
-              )).toList(),
+                  )
+                  .toList(),
             ),
           ),
-          const SizedBox(height: 8), 
-          const Divider(color: Color(0xFFF1F1F1), height: 1, thickness: 1),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.sm),
+          const Divider(
+            color: AppColors.surfaceBorder,
+            height: AppSizes.hairline,
+            thickness: 1,
+          ),
+          const SizedBox(height: AppSpacing.lg),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total Pesanan', style: TextStyle(fontSize: 12, color: AppColors.greyDark)),
-                Text(totalPrice, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.black)),
+                const Text(
+                  'Total Pesanan',
+                  style: AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
+                    color: AppColors.greyDark,
+                  ),
+                ),
+                Text(
+                  totalPrice,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.bodyMedium,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
+                  ),
+                ),
               ],
             ),
           ),
 
           if (status == MerchantOrderStatus.baru) ...[
-            const SizedBox(height: 16),
-            const Divider(color: Color(0xFFF1F1F1), height: 1, thickness: 1),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
+            const Divider(
+              color: AppColors.surfaceBorder,
+              height: AppSizes.hairline,
+              thickness: 1,
+            ),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Row(
                 children: [
                   Expanded(
                     child: HapHapButton(
                       text: 'Tolak',
-                      isOutline: true, 
+                      isOutline: true,
                       onPressed: onReject ?? () {},
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: HapHapButton(
                       text: 'Terima',
@@ -185,15 +248,19 @@ class HapHapMerchantOrderCard extends StatelessWidget {
               ),
             ),
           ] else if (status == MerchantOrderStatus.sedangDisiapkan) ...[
-            const SizedBox(height: 16),
-            const Divider(color: Color(0xFFF1F1F1), height: 1, thickness: 1),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
+            const Divider(
+              color: AppColors.surfaceBorder,
+              height: AppSizes.hairline,
+              thickness: 1,
+            ),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
-                  width: 140,
+                  width: AppSizes.compactButtonWidth,
                   child: HapHapButton(
                     text: 'Siap Ambil',
                     isOutline: true,
@@ -203,11 +270,15 @@ class HapHapMerchantOrderCard extends StatelessWidget {
               ),
             ),
           ] else if (status == MerchantOrderStatus.siapDiambil) ...[
-            const SizedBox(height: 16),
-            const Divider(color: Color(0xFFF1F1F1), height: 1, thickness: 1),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
+            const Divider(
+              color: AppColors.surfaceBorder,
+              height: AppSizes.hairline,
+              thickness: 1,
+            ),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: SizedBox(
                 width: double.infinity,
                 child: HapHapButton(
@@ -216,7 +287,7 @@ class HapHapMerchantOrderCard extends StatelessWidget {
                 ),
               ),
             ),
-          ]
+          ],
         ],
       ),
     );

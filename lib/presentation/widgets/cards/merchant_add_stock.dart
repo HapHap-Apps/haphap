@@ -32,14 +32,14 @@ class HapHapMerchantAddStockCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showAddStockDialog(context),
       child: Container(
-        width: 354,
-        height: 120, 
+        width: double.infinity,
+        height: AppSizes.mediaMedium,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadii.lg,
           border: Border.all(
-            color: AppColors.primary, 
-            width: 1,
+            color: AppColors.primary,
+            width: AppSizes.hairline,
           ),
         ),
         child: Stack(
@@ -51,13 +51,13 @@ class HapHapMerchantAddStockCard extends StatelessWidget {
                   Icon(
                     Icons.add,
                     color: AppColors.primary,
-                    size: 36,
+                    size: AppSizes.iconLargePlus,
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: AppSpacing.sm),
                   Text(
                     'Aktifkan menu kamu disini!',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
                     ),
@@ -71,7 +71,7 @@ class HapHapMerchantAddStockCard extends StatelessWidget {
               bottom: 0,
               child: Image.asset(
                 imagePath,
-                height: 90, 
+                height: AppSizes.thumbnailCompact,
                 fit: BoxFit.contain,
               ),
             ),
@@ -95,8 +95,9 @@ class _AddStockDialogState extends State<_AddStockDialog> {
   List<MenuItemModel> _menuItems = [];
   MenuItemModel? _selectedMenuItem;
   final TextEditingController _stockController = TextEditingController();
-  final TextEditingController _discountPriceController = TextEditingController();
-  
+  final TextEditingController _discountPriceController =
+      TextEditingController();
+
   bool _isLoadingMenus = true;
   bool _isSaving = false;
   String? _errorMessage;
@@ -141,12 +142,18 @@ class _AddStockDialogState extends State<_AddStockDialog> {
     final discountPrice = int.tryParse(_discountPriceController.text.trim());
 
     if (stock == null || stock < 1) {
-      AppSnackbar.showError(context, 'Masukkan jumlah stok yang valid (minimal 1).');
+      AppSnackbar.showError(
+        context,
+        'Masukkan jumlah stok yang valid (minimal 1).',
+      );
       return;
     }
 
     if (discountPrice == null || discountPrice < 1) {
-      AppSnackbar.showError(context, 'Masukkan harga diskon yang valid (minimal 1).');
+      AppSnackbar.showError(
+        context,
+        'Masukkan harga diskon yang valid (minimal 1).',
+      );
       return;
     }
 
@@ -162,7 +169,10 @@ class _AddStockDialogState extends State<_AddStockDialog> {
       if (!mounted) return;
       Navigator.pop(context);
 
-      AppSnackbar.showSuccess(context, '${_selectedMenuItem!.name} berhasil diaktifkan!');
+      AppSnackbar.showSuccess(
+        context,
+        '${_selectedMenuItem!.name} berhasil diaktifkan!',
+      );
       widget.onStockAdded?.call();
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -185,23 +195,21 @@ class _AddStockDialogState extends State<_AddStockDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: _isLoadingMenus
             ? const SizedBox(
-                height: 120,
+                height: AppSizes.mediaMedium,
                 child: Center(
                   child: CircularProgressIndicator(color: AppColors.primary),
                 ),
               )
             : _errorMessage != null
-                ? _buildErrorContent()
-                : _buildFormContent(),
+            ? _buildErrorContent()
+            : _buildFormContent(),
       ),
     );
   }
@@ -210,18 +218,22 @@ class _AddStockDialogState extends State<_AddStockDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.error_outline, size: 48, color: AppColors.greyDark),
-        const SizedBox(height: 12),
+        const Icon(
+          Icons.error_outline,
+          size: AppSizes.touchTarget,
+          color: AppColors.greyDark,
+        ),
+        const SizedBox(height: AppSpacing.md),
         Text(
           _errorMessage!,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.greyDark, fontSize: 14),
+          style: const AppTextStyle(
+            color: AppColors.greyDark,
+            fontSize: AppTypography.bodyMedium,
+          ),
         ),
-        const SizedBox(height: 16),
-        HapHapButton(
-          text: 'Tutup',
-          onPressed: () => Navigator.pop(context),
-        ),
+        const SizedBox(height: AppSpacing.lg),
+        HapHapButton(text: 'Tutup', onPressed: () => Navigator.pop(context)),
       ],
     );
   }
@@ -231,67 +243,80 @@ class _AddStockDialogState extends State<_AddStockDialog> {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.restaurant_menu_outlined, size: 48, color: AppColors.greyDark),
-          const SizedBox(height: 12),
+          const Icon(
+            Icons.restaurant_menu_outlined,
+            size: AppSizes.touchTarget,
+            color: AppColors.greyDark,
+          ),
+          const SizedBox(height: AppSpacing.md),
           const Text(
             'Belum ada menu.\nTambahkan menu terlebih dahulu di halaman Menu.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+            style: AppTextStyle(
+              color: AppColors.greyDark,
+              fontSize: AppTypography.bodyMedium,
+            ),
           ),
-          const SizedBox(height: 16),
-          HapHapButton(
-            text: 'Tutup',
-            onPressed: () => Navigator.pop(context),
-          ),
+          const SizedBox(height: AppSpacing.lg),
+          HapHapButton(text: 'Tutup', onPressed: () => Navigator.pop(context)),
         ],
       );
     }
 
     return Column(
-      mainAxisSize: MainAxisSize.min, 
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Aktifkan Menu',
-          style: TextStyle(
-            fontSize: 20, 
+          style: AppTextStyle(
+            fontSize: AppTypography.titleLarge,
             fontWeight: FontWeight.bold,
             color: AppColors.black,
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.xxl),
 
         const Text(
           'Pilih Menu',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyle(
+            fontSize: AppTypography.bodyMedium,
             fontWeight: FontWeight.w600,
             color: AppColors.black,
           ),
         ),
-        const SizedBox(height: 8),
-        
+        const SizedBox(height: AppSpacing.sm),
+
         Container(
-          height: 48, 
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          height: AppSizes.touchTarget,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(24), 
-            border: Border.all(color: AppColors.primary, width: 1),
+            borderRadius: AppRadii.xxl,
+            border: Border.all(
+              color: AppColors.primary,
+              width: AppSizes.hairline,
+            ),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: _selectedMenuItem?.menuItemId,
-              isExpanded: true, 
+              isExpanded: true,
               dropdownColor: AppColors.white,
-              focusColor: Colors.transparent,
-              icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.black),
+              focusColor: AppColors.transparent,
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.black,
+              ),
               items: _menuItems.map((MenuItemModel menu) {
                 return DropdownMenuItem<String>(
                   value: menu.menuItemId,
                   child: Text(
                     menu.name,
-                    style: const TextStyle(fontSize: 14, color: AppColors.black),
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
+                      color: AppColors.black,
+                    ),
                   ),
                 );
               }).toList(),
@@ -306,7 +331,7 @@ class _AddStockDialogState extends State<_AddStockDialog> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         HapHapTextField(
           labelText: 'Harga Diskon',
@@ -315,7 +340,7 @@ class _AddStockDialogState extends State<_AddStockDialog> {
           keyboardType: TextInputType.number,
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         HapHapTextField(
           labelText: 'Tambahkan Stok',
@@ -324,14 +349,14 @@ class _AddStockDialogState extends State<_AddStockDialog> {
           keyboardType: TextInputType.number,
         ),
 
-        const SizedBox(height: 32),
+        const SizedBox(height: AppSpacing.xxxl),
 
         Center(
           child: _isSaving
               ? const CircularProgressIndicator(color: AppColors.primary)
               : HapHapButton(
                   text: 'Simpan',
-                  size: HapHapButtonSize.large, 
+                  size: HapHapButtonSize.large,
                   onPressed: _onSave,
                 ),
         ),

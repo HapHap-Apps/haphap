@@ -29,37 +29,39 @@ class HapHapFileUploadField extends StatelessWidget {
         RichText(
           text: TextSpan(
             text: labelText,
-            style: const TextStyle(
-              fontSize: 14,
+            style: const AppTextStyle(
+              fontSize: AppTypography.bodyMedium,
               fontWeight: FontWeight.w500,
               color: AppColors.greyDark,
-              fontFamily: 'Plus Jakarta Sans',
             ),
             children: [
               if (isRequired)
                 const TextSpan(
                   text: ' *',
-                  style: TextStyle(
-                    color: Colors.red,
+                  style: AppTextStyle(
+                    color: AppColors.error,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         InkWell(
           onTap: selectedFileName == null ? onFileSelected : null,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadii.md,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppSpacing.xxl,
+              horizontal: AppSpacing.lg,
+            ),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadii.md,
               border: Border.all(
                 color: AppColors.primary.withValues(alpha: 0.3),
-                width: 1,
+                width: AppSizes.hairline,
               ),
             ),
             child: selectedFileName != null
@@ -69,12 +71,12 @@ class HapHapFileUploadField extends StatelessWidget {
                         Icons.insert_drive_file,
                         color: AppColors.primary,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Text(
                           selectedFileName!,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.bodyMedium,
                             fontWeight: FontWeight.w600,
                             color: AppColors.black,
                           ),
@@ -86,8 +88,8 @@ class HapHapFileUploadField extends StatelessWidget {
                         onPressed: onClear,
                         icon: const Icon(
                           Icons.close,
-                          color: Colors.red,
-                          size: 20,
+                          color: AppColors.error,
+                          size: AppSizes.iconSm,
                         ),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -97,7 +99,7 @@ class HapHapFileUploadField extends StatelessWidget {
                 : Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(AppSpacing.md),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
@@ -105,24 +107,24 @@ class HapHapFileUploadField extends StatelessWidget {
                         child: const Icon(
                           Icons.upload_file,
                           color: AppColors.primary,
-                          size: 28,
+                          size: AppSizes.iconLargeMinus,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSpacing.md),
                       const Text(
                         'Telusuri file',
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         'Format yang didukung: .pdf, .jpeg, .jpg, .png\nUkuran maksimal: 5MB',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
+                        style: AppTextStyle(
+                          fontSize: AppTypography.labelMedium,
                           color: AppColors.greyDark.withValues(alpha: 0.7),
                         ),
                       ),

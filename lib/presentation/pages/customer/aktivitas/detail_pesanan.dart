@@ -13,10 +13,7 @@ import 'package:haphap_fe/data/services/order_service.dart';
 class DetailPesananPage extends StatefulWidget {
   final String? orderId;
 
-  const DetailPesananPage({
-    super.key,
-    this.orderId,
-  });
+  const DetailPesananPage({super.key, this.orderId});
 
   @override
   State<DetailPesananPage> createState() => _DetailPesananPageState();
@@ -76,21 +73,26 @@ class _DetailPesananPageState extends State<DetailPesananPage> {
 
   String _formatPrice(int price) {
     return price.toString().replaceAllMapped(
-          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-          (m) => '${m[1]}.',
-        );
+      RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+      (m) => '${m[1]}.',
+    );
   }
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();
-    final isToday = date.year == now.year && date.month == now.month && date.day == now.day;
-    final isYesterday = date.year == now.year && date.month == now.month && date.day == now.day - 1;
-    
-    final timeStr = '${date.hour.toString().padLeft(2, '0')}.${date.minute.toString().padLeft(2, '0')}';
-    
+    final isToday =
+        date.year == now.year && date.month == now.month && date.day == now.day;
+    final isYesterday =
+        date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day - 1;
+
+    final timeStr =
+        '${date.hour.toString().padLeft(2, '0')}.${date.minute.toString().padLeft(2, '0')}';
+
     if (isToday) return 'Hari ini, $timeStr';
     if (isYesterday) return 'Kemarin, $timeStr';
-    
+
     return '${date.day}/${date.month}/${date.year}, $timeStr';
   }
 
@@ -103,18 +105,27 @@ class _DetailPesananPageState extends State<DetailPesananPage> {
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 59.0, bottom: 8.0),
+              padding: EdgeInsets.only(
+                left: AppSpacing.xxl,
+                right: AppSpacing.xxl,
+                top: AppSpacing.loose,
+                bottom: AppSpacing.sm,
+              ),
               child: HapHapPageHeader(title: 'Detail Pesanan'),
             ),
 
             Expanded(
               child: _isLoading
-                  ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    )
                   : _error != null
-                      ? Center(child: Text('Error: $_error'))
-                      : _order == null
-                          ? const Center(child: Text('Pesanan tidak ditemukan'))
-                          : _buildContent(),
+                  ? Center(child: Text('Error: $_error'))
+                  : _order == null
+                  ? const Center(child: Text('Pesanan tidak ditemukan'))
+                  : _buildContent(),
             ),
           ],
         ),
@@ -124,7 +135,7 @@ class _DetailPesananPageState extends State<DetailPesananPage> {
 
   Widget _buildContent() {
     final order = _order!;
-    
+
     String mainTitle;
     String imagePath;
     String dateStatus;
@@ -167,14 +178,15 @@ class _DetailPesananPageState extends State<DetailPesananPage> {
         dateStatus = '${_formatDate(order.createdAt)} · Diproses';
     }
 
-    final avatar = (order.merchant?.avatar != null && order.merchant!.avatar!.isNotEmpty) 
-        ? order.merchant!.avatar! 
+    final avatar =
+        (order.merchant?.avatar != null && order.merchant!.avatar!.isNotEmpty)
+        ? order.merchant!.avatar!
         : '';
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(AppSpacing.xxl),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, 
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           HapHapStatusPesananCard(
             dateStatusText: dateStatus,
@@ -182,59 +194,63 @@ class _DetailPesananPageState extends State<DetailPesananPage> {
             imagePath: imagePath,
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxxl),
 
           if (order.status == 'READY' && order.qrCode != null) ...[
-            Center(
-              child: HapHapQRCodeCard(
-                qrToken: order.qrCode!,
-              ),
-            ),
-            const SizedBox(height: 32),
+            Center(child: HapHapQRCodeCard(qrToken: order.qrCode!)),
+            const SizedBox(height: AppSpacing.xxxl),
           ],
 
           const Text(
             'Detail Pesanan',
-            style: TextStyle(
-              fontSize: 16,
+            style: AppTextStyle(
+              fontSize: AppTypography.bodyLarge,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           HapHapDetailPesananCard(
             restaurantName: order.merchant?.merchantName ?? 'Merchant',
             restaurantLogoUrl: avatar,
-            items: order.orderItems.map((item) => HapHapOrderItem(
-              name: item.name,
-              description: '',
-              price: 'Rp ${_formatPrice(item.discountPrice)}',
-              quantity: item.quantity,
-            )).toList(),
+            items: order.orderItems
+                .map(
+                  (item) => HapHapOrderItem(
+                    name: item.name,
+                    description: '',
+                    price: 'Rp ${_formatPrice(item.discountPrice)}',
+                    quantity: item.quantity,
+                  ),
+                )
+                .toList(),
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxxl),
 
           const Text(
             'Rincian Pembayaran',
-            style: TextStyle(
-              fontSize: 16,
+            style: AppTextStyle(
+              fontSize: AppTypography.bodyLarge,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
 
           HapHapRincianPembayaran(
             paymentMethod: order.isOnlinePayment ? 'QRIS' : 'Tunai di Kasir',
             totalPrice: 'Rp ${_formatPrice(order.totalAmount)}',
             orderNumber: order.orderId,
-            paymentTime: order.paidAt != null ? _formatDate(order.paidAt!) : '-',
-            completionTime: order.completedAt != null ? _formatDate(order.completedAt!) : '-',
+            paymentTime: order.paidAt != null
+                ? _formatDate(order.paidAt!)
+                : '-',
+            completionTime: order.completedAt != null
+                ? _formatDate(order.completedAt!)
+                : '-',
           ),
-          
-          const SizedBox(height: 32),
+
+          const SizedBox(height: AppSpacing.xxxl),
         ],
       ),
     );

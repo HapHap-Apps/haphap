@@ -20,64 +20,65 @@ class HapHapStatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 169, 
-      height: 169, 
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: AppSizes.statsCard),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadii.lg,
         border: Border.all(
-          color: const Color(0xFFF1F1F1), 
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0), 
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         child: SizedBox(
-          width: double.infinity, 
+          width: double.infinity,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16, 
+                style: const AppTextStyle(
+                  fontSize: AppTypography.bodyLarge,
                   fontWeight: FontWeight.w600,
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 9), 
+              const SizedBox(height: AppSpacing.sm),
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  style: TextStyle(color: valueColor, fontWeight: FontWeight.bold),
+                  style: AppTextStyle(
+                    color: valueColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: [
                     if (prefixText.isNotEmpty)
                       TextSpan(
-                        text: prefixText, 
-                        style: const TextStyle(fontSize: 20) 
+                        text: prefixText,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.titleLarge,
+                        ),
                       ),
                     TextSpan(
-                      text: mainValue, 
-                      style: const TextStyle(fontSize: 24) 
+                      text: mainValue,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.headlineSmall,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24), 
+              const SizedBox(height: AppSpacing.xxl),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 12, 
+                style: const AppTextStyle(
+                  fontSize: AppTypography.labelMedium,
                   color: AppColors.greyLight,
                 ),
               ),

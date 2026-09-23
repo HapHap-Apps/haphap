@@ -30,9 +30,9 @@ class _HapHapScanQRDialogState extends State<HapHapScanQRDialog> {
       await OrderService.scanOrder(widget.orderId, _qrController.text);
       if (!mounted) return;
       setState(() => _isLoading = false);
-      
+
       AppSnackbar.showSuccess(context, 'Pesanan berhasil diselesaikan!');
-      Navigator.pop(context, true); 
+      Navigator.pop(context, true);
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -53,31 +53,38 @@ class _HapHapScanQRDialogState extends State<HapHapScanQRDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Scan QR Pengambil',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.black),
+              style: AppTextStyle(
+                fontSize: AppTypography.titleLarge,
+                fontWeight: FontWeight.bold,
+                color: AppColors.black,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             const Text(
               'Masukkan kode unik QR dari pembeli untuk memverifikasi pengambilan pesanan.',
-              style: TextStyle(fontSize: 14, color: AppColors.greyDark),
+              style: AppTextStyle(
+                fontSize: AppTypography.bodyMedium,
+                color: AppColors.greyDark,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             HapHapTextField(
               labelText: 'Kode QR',
               hintText: 'Masukkan kode QR',
               controller: _qrController,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             SizedBox(
               width: double.infinity,
               child: HapHapButton(

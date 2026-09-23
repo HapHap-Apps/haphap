@@ -105,21 +105,25 @@ class _EditProfilPageState extends State<EditProfilPage> {
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              )
             : SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.lg),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                       child: HapHapPageHeader(title: 'Edit Profil'),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.xxl),
                     _buildProfilePicture(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.xxl),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl,
+                      ),
                       child: Column(
                         children: [
                           HapHapTextField(
@@ -128,14 +132,14 @@ class _EditProfilPageState extends State<EditProfilPage> {
                             controller: _namaController,
                             isRequired: true,
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: AppSpacing.xxxl),
                           HapHapTextField(
                             labelText: 'Nomor Telepon',
                             hintText: 'Masukkan nomor telepon',
                             controller: _teleponController,
                             isRequired: true,
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: AppSpacing.xxxl),
                           HapHapTextField(
                             labelText: 'Alamat Email',
                             hintText: 'Masukkan alamat email',
@@ -145,7 +149,7 @@ class _EditProfilPageState extends State<EditProfilPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: AppSpacing.bottomClearance),
                   ],
                 ),
               ),
@@ -161,12 +165,12 @@ class _EditProfilPageState extends State<EditProfilPage> {
         GestureDetector(
           onTap: _isSaving ? null : _pickAvatar,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(60),
+            borderRadius: AppRadii.pill,
             child: _avatarUrl != null && _avatarUrl!.isNotEmpty
                 ? Image.network(
                     _avatarUrl!,
-                    width: 100,
-                    height: 100,
+                    width: AppSizes.profileImage,
+                    height: AppSizes.profileImage,
                     fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => _buildPlaceholderAvatar(),
                   )
@@ -179,13 +183,20 @@ class _EditProfilPageState extends State<EditProfilPage> {
           child: GestureDetector(
             onTap: _isSaving ? null : _pickAvatar,
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(AppSpacing.sm),
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 3),
+                border: Border.all(
+                  color: AppColors.white,
+                  width: AppSizes.strongStroke,
+                ),
               ),
-              child: const Icon(Icons.camera_alt, color: AppColors.white, size: 16),
+              child: const Icon(
+                Icons.camera_alt,
+                color: AppColors.white,
+                size: AppSizes.iconXs,
+              ),
             ),
           ),
         ),
@@ -195,10 +206,14 @@ class _EditProfilPageState extends State<EditProfilPage> {
 
   Widget _buildPlaceholderAvatar() {
     return Container(
-      width: 100,
-      height: 100,
+      width: AppSizes.profileImage,
+      height: AppSizes.profileImage,
       color: AppColors.primary.withValues(alpha: 0.2),
-      child: const Icon(Icons.person, size: 50, color: AppColors.primary),
+      child: const Icon(
+        Icons.person,
+        size: AppSizes.emptyStateIcon,
+        color: AppColors.primary,
+      ),
     );
   }
 
@@ -207,10 +222,12 @@ class _EditProfilPageState extends State<EditProfilPage> {
 
     return Container(
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: 16,
-        bottom: bottomSafeArea > 0 ? bottomSafeArea : 24,
+        left: AppSpacing.xxl,
+        right: AppSpacing.xxl,
+        top: AppSpacing.lg,
+        bottom: bottomSafeArea > AppSpacing.none
+            ? bottomSafeArea
+            : AppSpacing.xxl,
       ),
       color: AppColors.white,
       child: HapHapButton(

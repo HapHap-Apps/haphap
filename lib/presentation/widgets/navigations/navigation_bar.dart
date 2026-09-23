@@ -5,133 +5,191 @@ import 'package:haphap_fe/core/constants/app_icons.dart';
 
 enum NavBarType { user, merchant, admin }
 
-class HapHapNavBar extends StatelessWidget {
+class HapHapNavigationScaffold extends StatelessWidget {
+  final Widget body;
   final int currentIndex;
-  final Function(int) onTap;
-  final NavBarType type; 
+  final ValueChanged<int> onTap;
+  final NavBarType type;
+
+  const HapHapNavigationScaffold({
+    super.key,
+    required this.body,
+    required this.currentIndex,
+    required this.onTap,
+    this.type = NavBarType.user,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      // The tab content has an interaction-safe viewport, while this white
+      // underlay lets rounded sheet surfaces continue behind the floating bar.
+      backgroundColor: AppColors.white,
+      body: Padding(
+        padding: EdgeInsets.only(
+          bottom: AppLayout.floatingNavBarClearance(context),
+        ),
+        child: MediaQuery.removePadding(
+          context: context,
+          removeBottom: true,
+          child: body,
+        ),
+      ),
+      bottomNavigationBar: HapHapNavBar(
+        currentIndex: currentIndex,
+        type: type,
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class HapHapNavBar extends StatefulWidget {
+  static const surfaceKey = ValueKey('floating_navigation_surface');
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final NavBarType type;
 
   const HapHapNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
-    this.type = NavBarType.user, 
+    this.type = NavBarType.user,
   });
 
   @override
+  State<HapHapNavBar> createState() => _HapHapNavBarState();
+}
+
+class _HapHapNavBarState extends State<HapHapNavBar> {
+  bool _tapLocked = false;
+
+  void _handleTap(int index) {
+    if (_tapLocked || index == widget.currentIndex) return;
+
+    _tapLocked = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _tapLocked = false;
+    });
+    WidgetsBinding.instance.ensureVisualUpdate();
+    widget.onTap(index);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 402,
-      height: 104,
-      padding: const EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 36),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.none,
+        AppSpacing.lg,
+        AppSpacing.md,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, 
-        crossAxisAlignment: CrossAxisAlignment.start, 
-        
-        children: type == NavBarType.user
-          ? _buildUserItems()
-          : type == NavBarType.merchant
-              ? _buildMerchantItems()
-              : _buildAdminItems(),
+      child: Container(
+        key: HapHapNavBar.surfaceKey,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: AppRadii.sheet,
+          boxShadow: AppShadows.surfaceTop,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final item in _items)
+                Expanded(child: _buildNavItem(item.$1, item.$2, item.$3)),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  List<Widget> _buildUserItems() {
-    return [
-      _buildNavItem(0, AppIcons.nav_beranda, 'Beranda'),
-      const SizedBox(width: 32), 
-      _buildNavItem(1, AppIcons.nav_jelajah, 'Jelajah'),
-      const SizedBox(width: 32),
-      _buildNavItem(2, AppIcons.nav_aktivitas, 'Aktivitas'),
-      const SizedBox(width: 32),
-      _buildNavItem(3, AppIcons.nav_akun, 'Akun'),
-    ];
-  }
-
-  List<Widget> _buildMerchantItems() {
-    return [
-      _buildNavItem(0, AppIcons.nav_beranda, 'Beranda'),
-      const SizedBox(width: 32),
-      _buildNavItem(1, AppIcons.nav_menu, 'Menu'),
-      const SizedBox(width: 32),
-      _buildNavItem(2, AppIcons.nav_aktivitas, 'Aktivitas'),
-      const SizedBox(width: 32),
-      _buildNavItem(3, AppIcons.nav_akun, 'Akun'),
-    ];
-  }
-
-  List<Widget> _buildAdminItems() {
-    return [
-      _buildNavItem(0, AppIcons.nav_beranda, 'Beranda'),
-      const SizedBox(width: 56),
-      _buildNavItem(1, AppIcons.nav_aktivitas, 'Pengajuan'),
-      const SizedBox(width: 56),
-      _buildNavItem(2, AppIcons.nav_akun, 'Akun'),
-    ];
-  }
+  List<(int, String, String)> get _items => switch (widget.type) {
+    NavBarType.user => [
+      (0, AppIcons.navBeranda, 'Beranda'),
+      (1, AppIcons.navJelajah, 'Jelajah'),
+      (2, AppIcons.navAktivitas, 'Aktivitas'),
+      (3, AppIcons.navAkun, 'Akun'),
+    ],
+    NavBarType.merchant => [
+      (0, AppIcons.navBeranda, 'Beranda'),
+      (1, AppIcons.navMenu, 'Menu'),
+      (2, AppIcons.navAktivitas, 'Aktivitas'),
+      (3, AppIcons.navAkun, 'Akun'),
+    ],
+    NavBarType.admin => [
+      (0, AppIcons.navBeranda, 'Beranda'),
+      (1, AppIcons.navAktivitas, 'Pengajuan'),
+      (2, AppIcons.navAkun, 'Akun'),
+    ],
+  };
 
   Widget _buildNavItem(int index, String iconPath, String label) {
-    bool isActive = currentIndex == index;
+    final isActive = widget.currentIndex == index;
 
-    return GestureDetector(
-      onTap: () => onTap(index),
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 60,
-        child: Column(
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 32,
-              height: 4,
-              decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : Colors.transparent,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(4),
-                  bottomRight: Radius.circular(4),
+    return Semantics(
+      key: ValueKey('nav_item_$label'),
+      selected: isActive,
+      button: true,
+      label: label,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _handleTap(index),
+        child: SizedBox(
+          height: AppSizes.navBarItemHeight,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: AppSizes.iconLg,
+                height: AppSizes.progressIndicator,
+                decoration: BoxDecoration(
+                  color: isActive ? AppColors.primary : AppColors.transparent,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: AppRadii.xsRadius,
+                    bottomRight: AppRadii.xsRadius,
+                  ),
                 ),
               ),
-            ),
-            
-            const SizedBox(height: 12), 
-            
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: SvgPicture.asset(
-                iconPath,
-                colorFilter: ColorFilter.mode(
-                  isActive ? AppColors.primary : AppColors.greyDark,
-                  BlendMode.srcIn,
+
+              const SizedBox(height: AppSpacing.md),
+
+              SizedBox(
+                width: AppSizes.iconSm,
+                height: AppSizes.iconSm,
+                child: SvgPicture.asset(
+                  iconPath,
+                  colorFilter: ColorFilter.mode(
+                    isActive ? AppColors.primary : AppColors.greyDark,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
-            ),
-            
-            const SizedBox(height: 8),
-            
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? AppColors.primary : AppColors.greyDark,
+
+              const SizedBox(height: AppSpacing.sm),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.labelMedium,
+                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                      color: isActive ? AppColors.primary : AppColors.greyDark,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

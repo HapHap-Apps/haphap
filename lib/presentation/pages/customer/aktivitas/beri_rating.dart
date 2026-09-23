@@ -52,7 +52,10 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
 
     final comment = _reviewController.text.trim();
     if (comment.isEmpty && _selectedFeedback.isEmpty) {
-      AppSnackbar.showError(context, 'Tulis ulasan atau pilih ulasan cepat terlebih dahulu.');
+      AppSnackbar.showError(
+        context,
+        'Tulis ulasan atau pilih ulasan cepat terlebih dahulu.',
+      );
       return;
     }
 
@@ -79,7 +82,10 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
       context.pop();
     } catch (e) {
       if (!mounted) return;
-      AppSnackbar.showError(context, 'Gagal mengirim ulasan. Silakan coba lagi.');
+      AppSnackbar.showError(
+        context,
+        'Gagal mengirim ulasan. Silakan coba lagi.',
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -97,53 +103,64 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.xxl,
+                vertical: AppSpacing.lg,
+              ),
               child: HapHapPageHeader(
                 title: 'Beri Rating',
-                fontSize: 24,
+                fontSize: AppTypography.headlineSmall,
               ),
             ),
-            
+
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Column(
                   children: [
-                    const SizedBox(height: 32),
-                    
+                    const SizedBox(height: AppSpacing.xxxl),
+
                     Container(
-                      width: 100,
-                      height: 100,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
+                      width: AppSizes.profileImage,
+                      height: AppSizes.profileImage,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
                       clipBehavior: Clip.antiAlias,
                       child: widget.merchantAvatar.isNotEmpty
                           ? Image.network(
                               widget.merchantAvatar,
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => const Center(
-                                child: Text('🤠', style: TextStyle(fontSize: 64)),
+                                child: Text(
+                                  '🤠',
+                                  style: AppTextStyle(
+                                    fontSize: AppTypography.hero,
+                                  ),
+                                ),
                               ),
                             )
                           : const Center(
-                              child: Text('🤠', style: TextStyle(fontSize: 64)),
+                              child: Text(
+                                '🤠',
+                                style: AppTextStyle(
+                                  fontSize: AppTypography.hero,
+                                ),
+                              ),
                             ),
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
+
+                    const SizedBox(height: AppSpacing.xl),
+
                     Text(
                       widget.merchantName,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.titleMedium,
                         fontWeight: FontWeight.bold,
                         color: AppColors.black,
                       ),
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
+
+                    const SizedBox(height: AppSpacing.xl),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(5, (index) {
@@ -154,19 +171,23 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
                             });
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.xs,
+                            ),
                             child: Icon(
                               index < _rating ? Icons.star : Icons.star_border,
-                              color: index < _rating ? Colors.amber : AppColors.greyLight,
-                              size: 45,
+                              color: index < _rating
+                                  ? AppColors.warning
+                                  : AppColors.greyLight,
+                              size: AppSizes.ratingStar,
                             ),
                           ),
                         );
                       }),
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
+
+                    const SizedBox(height: AppSpacing.xl),
+
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -184,45 +205,57 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
                             });
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.lg,
+                              vertical: AppSpacing.sm,
+                            ),
                             decoration: BoxDecoration(
-                              color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : AppColors.white,
-                              borderRadius: BorderRadius.circular(20),
+                              color: isSelected
+                                  ? AppColors.primary.withValues(alpha: 0.1)
+                                  : AppColors.white,
+                              borderRadius: AppRadii.xl,
                               border: Border.all(
-                                color: isSelected ? AppColors.primary : AppColors.greyLight,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.greyLight,
                               ),
                             ),
                             child: Text(
                               option,
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: AppTextStyle(
+                                fontSize: AppTypography.labelMedium,
                                 fontWeight: FontWeight.w600,
-                                color: isSelected ? AppColors.primary : AppColors.greyDark,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.greyDark,
                               ),
                             ),
                           ),
                         );
                       }).toList(),
                     ),
-                    
-                    const SizedBox(height: 32),
-                    
+
+                    const SizedBox(height: AppSpacing.xxxl),
+
                     Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primary, width: 1),
-                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.primary,
+                          width: AppSizes.hairline,
+                        ),
+                        borderRadius: AppRadii.lg,
                       ),
                       child: TextField(
                         controller: _reviewController,
                         maxLines: 5,
                         decoration: const InputDecoration(
                           hintText: 'Tambahkan ulasan',
-                          hintStyle: TextStyle(
+                          hintStyle: AppTextStyle(
                             color: AppColors.greyLight,
                             fontWeight: FontWeight.w400,
                           ),
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(16),
+                          contentPadding: EdgeInsets.all(AppSpacing.lg),
                         ),
                       ),
                     ),
@@ -230,9 +263,9 @@ class _BeriRatingPageState extends State<BeriRatingPage> {
                 ),
               ),
             ),
-            
+
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(AppSpacing.xxl),
               child: HapHapButton(
                 text: 'Simpan',
                 isExpanded: true,

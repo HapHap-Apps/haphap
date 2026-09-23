@@ -39,7 +39,7 @@ class _MerchantScanQRPageState extends State<MerchantScanQRPage> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: AppRadii.lg),
         title: Text(success ? '✅ Pesanan Terverifikasi' : '❌ Gagal'),
         content: Text(
           success ? 'Pesanan $orderId berhasil dikonfirmasi.' : 'Gagal: $error',
@@ -49,11 +49,11 @@ class _MerchantScanQRPageState extends State<MerchantScanQRPage> {
             text: success ? 'Selesai' : 'Coba Lagi',
             isText: true,
             onPressed: () {
-              Navigator.pop(context); 
+              Navigator.pop(context);
               if (success) {
                 Navigator.pop(context);
               } else {
-                setState(() => _isProcessing = false); 
+                setState(() => _isProcessing = false);
               }
             },
           ),
@@ -77,11 +77,14 @@ class _MerchantScanQRPageState extends State<MerchantScanQRPage> {
 
           Center(
             child: Container(
-              width: 240,
-              height: 240,
+              width: AppSizes.qrSize,
+              height: AppSizes.qrSize,
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.primary, width: 3),
-                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.primary,
+                  width: AppSizes.strongStroke,
+                ),
+                borderRadius: AppRadii.md,
               ),
             ),
           ),

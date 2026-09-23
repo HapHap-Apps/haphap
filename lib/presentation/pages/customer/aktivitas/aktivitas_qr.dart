@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:haphap_fe/core/theme/app_colors.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class HapHapQRCodeCard extends StatelessWidget {
@@ -17,17 +18,11 @@ class HapHapQRCodeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppColors.white,
+        borderRadius: AppRadii.lg,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -35,13 +30,16 @@ class HapHapQRCodeCard extends StatelessWidget {
           QrImageView(
             data: jsonEncode({'orderId': orderId, 'qrCode': qrToken}),
             version: QrVersions.auto,
-            size: 200,
-            backgroundColor: Colors.white,
+            size: AppSizes.largeQrSize,
+            backgroundColor: AppColors.white,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           const Text(
             'Tunjukkan ke kasir',
-            style: TextStyle(fontSize: 13, color: Colors.grey),
+            style: AppTextStyle(
+              fontSize: AppTypography.labelMedium,
+              color: AppColors.grey,
+            ),
           ),
         ],
       ),

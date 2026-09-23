@@ -37,32 +37,35 @@ class _AdminRejectDialogState extends State<AdminRejectDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Tolak Pengajuan',
-              style: TextStyle(
-                fontSize: 20,
+              style: AppTextStyle(
+                fontSize: AppTypography.titleLarge,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
 
             const Text(
               'Berikan alasan penolakan agar pemohon dapat memperbaiki pendaftarannya.',
-              style: TextStyle(fontSize: 14, color: AppColors.greyDark),
+              style: AppTextStyle(
+                fontSize: AppTypography.bodyMedium,
+                color: AppColors.greyDark,
+              ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
 
             HapHapTextField(
               labelText: 'Catatan Penolakan',
@@ -71,7 +74,7 @@ class _AdminRejectDialogState extends State<AdminRejectDialog> {
               maxLines: 4,
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
 
             HapHapButton(
               text: 'Kirim Penolakan',

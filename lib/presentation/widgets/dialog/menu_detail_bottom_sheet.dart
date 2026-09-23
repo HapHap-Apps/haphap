@@ -13,88 +13,121 @@ void showMenuDetailBottomSheet(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    backgroundColor: AppColors.transparent,
     builder: (context) {
-      return Container(
-        padding: const EdgeInsets.only(top: 24, left: 24, right: 24, bottom: 34),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
-                        width: double.infinity,
-                        height: 300,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: double.infinity,
-                            height: 300,
-                            color: const Color(0xFFF1F1F1),
-                            child: const Icon(Icons.fastfood, color: AppColors.greyDark, size: 64),
-                          );
-                        },
-                      )
-                    : Container(
-                        width: double.infinity,
-                        height: 300,
-                        color: const Color(0xFFF1F1F1),
-                        child: const Icon(Icons.fastfood, color: AppColors.greyDark, size: 64),
-                      ),
+      return SafeArea(
+        top: false,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight:
+                MediaQuery.sizeOf(context).height *
+                AppLayout.bottomSheetMaxHeightFactor,
+          ),
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: AppSpacing.xxl,
+              left: AppSpacing.xxl,
+              right: AppSpacing.xxl,
+              bottom: AppSpacing.xxxl,
+            ),
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: AppRadii.largeTop,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final imageHeight = AppLayout.responsiveExtent(
+                        constraints.maxWidth,
+                        fraction: AppLayout.sheetImageFraction,
+                        min: AppSizes.narrowPanel,
+                        max: AppSizes.sheetImageHeight,
+                      );
+                      return ClipRRect(
+                        borderRadius: AppRadii.lg,
+                        child: imageUrl.isNotEmpty
+                            ? Image.network(
+                                imageUrl,
+                                width: double.infinity,
+                                height: imageHeight,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: double.infinity,
+                                    height: imageHeight,
+                                    color: AppColors.surfaceBorder,
+                                    child: const Icon(
+                                      Icons.fastfood,
+                                      color: AppColors.greyDark,
+                                      size: AppSizes.avatarSmall,
+                                    ),
+                                  );
+                                },
+                              )
+                            : Container(
+                                width: double.infinity,
+                                height: imageHeight,
+                                color: AppColors.surfaceBorder,
+                                child: const Icon(
+                                  Icons.fastfood,
+                                  color: AppColors.greyDark,
+                                  size: AppSizes.avatarSmall,
+                                ),
+                              ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: AppSpacing.xxl),
+
+                  Text(
+                    title,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.titleLarge,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black,
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.sm),
+
+                  Text(
+                    description,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyMedium,
+                      color: AppColors.greyDark,
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.lg),
+
+                  Text(
+                    price,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.titleLarge,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black,
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.xxl),
+
+                  HapHapButton(
+                    text: 'Tambahkan ke Keranjang - $price',
+                    isExpanded: true,
+                    onPressed: () {
+                      onAddToCart();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
               ),
             ),
-            
-            const SizedBox(height: 24),
-            
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColors.black,
-              ),
-            ),
-            
-            const SizedBox(height: 8),
-            
-            Text(
-              description,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.greyDark,
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            Text(
-              price,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.black,
-              ),
-            ),
-            
-            const SizedBox(height: 24),
-            
-            HapHapButton(
-              text: 'Tambahkan ke Keranjang - $price',
-              isExpanded: true,
-              onPressed: () {
-                onAddToCart();
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
         ),
       );
     },

@@ -19,53 +19,49 @@ class HapHapProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageProvider = (imageUrl != null && imageUrl!.isNotEmpty)
         ? NetworkImage(imageUrl!) as ImageProvider
-        : NetworkImage('https://api.dicebear.com/9.x/adventurer/png?seed=${Uri.encodeComponent(name)}');
+        : NetworkImage(
+            'https://api.dicebear.com/9.x/adventurer/png?seed=${Uri.encodeComponent(name)}',
+          );
 
     return Container(
       width: double.infinity,
-      height: 128,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      constraints: const BoxConstraints(minHeight: AppSizes.mediaLarge),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.md,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20), 
+        borderRadius: AppRadii.xl,
         border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
+          color: AppColors.surfaceBorder,
+          width: AppSizes.hairline,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: AppSizes.avatarMedium,
+            height: AppSizes.avatarMedium,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
             ),
           ),
-          
-          const SizedBox(width: 16), 
-          
+
+          const SizedBox(width: AppSpacing.lg),
+
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name, 
-                  style: const TextStyle(
-                    fontSize: 16,
+                  name,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.bodyLarge,
                     fontWeight: FontWeight.w900,
                     color: AppColors.black,
                     letterSpacing: 0.5,
@@ -73,11 +69,11 @@ class HapHapProfileCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   email,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     color: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                   ),
@@ -86,8 +82,8 @@ class HapHapProfileCard extends StatelessWidget {
                 ),
                 Text(
                   phoneNumber,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     color: AppColors.greyDark,
                     fontWeight: FontWeight.w400,
                   ),

@@ -17,94 +17,123 @@ class HapHapRestaurantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 354,
-      height: 132,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF1F1F1), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final imageWidth = AppLayout.responsiveExtent(
+          constraints.maxWidth,
+          fraction: AppLayout.cardImageFraction,
+          min: AppSizes.thumbnailCompact,
+          max: AppSizes.mediaLarge,
+        );
+
+        return Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(
+            minHeight: AppSizes.restaurantCardHeight,
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: AppRadii.lg,
+            border: Border.all(
+              color: AppColors.surfaceBorder,
+              width: AppSizes.hairline,
             ),
-            child: _buildImage(),
+            boxShadow: AppShadows.card,
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    distanceTime,
-                    style: const TextStyle(fontSize: 12, color: AppColors.greyDark),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    restaurantName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: AppRadii.lgRadius,
+                  bottomLeft: AppRadii.lgRadius,
+                ),
+                child: _buildImage(imageWidth),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const SizedBox(width: 4),
                       Text(
-                        ratingText,
-                        style: const TextStyle(fontSize: 12, color: AppColors.greyDark),
+                        distanceTime,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.labelMedium,
+                          color: AppColors.greyDark,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
+                        restaurantName,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyLarge,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: AppColors.warning,
+                            size: AppSizes.iconXs,
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Flexible(
+                            child: Text(
+                              ratingText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const AppTextStyle(
+                                fontSize: AppTypography.labelMedium,
+                                color: AppColors.greyDark,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildImage() {
-    final isValidUrl = imageUrl.isNotEmpty &&
+  Widget _buildImage(double width) {
+    final isValidUrl =
+        imageUrl.isNotEmpty &&
         (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
 
     if (isValidUrl) {
       return Image.network(
         imageUrl,
-        width: 128,
-        height: 132,
+        width: width,
+        height: AppSizes.restaurantCardHeight,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _placeholder(),
+        errorBuilder: (_, __, ___) => _placeholder(width),
       );
     }
-    return _placeholder();
+    return _placeholder(width);
   }
 
-  Widget _placeholder() {
+  Widget _placeholder(double width) {
     return Container(
-      width: 128,
-      height: 132,
-      color: const Color(0xFFF1F1F1),
-      child: const Icon(Icons.storefront, color: AppColors.greyDark, size: 40),
+      width: width,
+      height: AppSizes.restaurantCardHeight,
+      color: AppColors.surfaceBorder,
+      child: const Icon(
+        Icons.storefront,
+        color: AppColors.greyDark,
+        size: AppSizes.iconXl,
+      ),
     );
   }
 }

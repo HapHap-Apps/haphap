@@ -14,27 +14,27 @@ import 'package:haphap_fe/data/models/merchant_model.dart';
 import 'package:haphap_fe/core/network/api_client.dart';
 
 class _BerandaMerchantLayout {
-  static const double heroTopPadding = 40;
-  static const double heroHorizontalPadding = 24;
-  static const double heroTaglineToCards = 32;
-  static const double heroRedBgBottomCut = 80;
+  static const double heroTopPadding = AppSpacing.huge;
+  static const double heroHorizontalPadding = AppSpacing.xxl;
+  static const double heroTaglineToCards = AppSpacing.xxxl;
+  static const double heroRedBgBottomCut = AppSpacing.screenBottom;
 
-  static const double statCardSpacing = 16;
+  static const double statCardSpacing = AppSpacing.lg;
 
-  static const double sectionHorizontalPadding = 24;
-  static const double sectionTitleToContent = 16;
-  static const double fiturToMenuAktif = 32;
-  static const double menuAktifSpacing = 16;
-  static const double categoryItemSpacing = 20;
+  static const double sectionHorizontalPadding = AppSpacing.xxl;
+  static const double sectionTitleToContent = AppSpacing.lg;
+  static const double fiturToMenuAktif = AppSpacing.xxxl;
+  static const double menuAktifSpacing = AppSpacing.lg;
+  static const double categoryItemSpacing = AppSpacing.xl;
 
-  static const double bottomScrollPadding = 80;
+  static const double bottomScrollPadding = AppSpacing.screenBottom;
 }
 
 class _BerandaMerchantContent {
   static const String statsIncomeTitle = 'Total Penghasilan';
   static const String statsIncomePrefix = 'Rp ';
   static const String statsIncomeSubtitle = 'Total pendapatan kamu';
-  
+
   static const String statsSavedTitle = 'Berhasil Selamatin';
   static const String statsSavedSubtitle = 'Total porsi diselamatkan';
 }
@@ -79,8 +79,6 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
       _totalRevenue = (merchantData['totalRevenue'] as num?)?.toInt() ?? 0;
       _totalPortion = (merchantData['totalPortion'] as num?)?.toInt() ?? 0;
 
-
-
       final surplusItems = await SurplusService.getMySurplus();
 
       if (!mounted) return;
@@ -118,7 +116,7 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: AppRadii.lg),
         title: const Text('Nonaktifkan Menu'),
         content: Text(
           'Apakah kamu yakin ingin menonaktifkan "${item.name}" dari daftar surplus aktif?',
@@ -144,7 +142,10 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
     try {
       await SurplusService.update(item.surplusItemId, {'isActive': false});
       if (!mounted) return;
-      AppSnackbar.showSuccess(context, '"${item.name}" berhasil dinonaktifkan.');
+      AppSnackbar.showSuccess(
+        context,
+        '"${item.name}" berhasil dinonaktifkan.',
+      );
       _fetchData();
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -153,25 +154,6 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
       if (!mounted) return;
       AppSnackbar.showError(context, 'Gagal menonaktifkan menu. Coba lagi.');
     }
-  }
-
-  String _formatDate(DateTime date) {
-    const months = [
-      '',
-      'Januari',
-      'Februari',
-      'Maret',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Agustus',
-      'September',
-      'Oktober',
-      'November',
-      'Desember',
-    ];
-    return '${date.day} ${months[date.month]} ${date.year}';
   }
 
   String _formatPrice(int price) {
@@ -198,27 +180,27 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
         body: SafeArea(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxxl),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     _isUnauthorized ? Icons.lock_outline : Icons.error_outline,
-                    size: 48,
+                    size: AppSizes.touchTarget,
                     color: AppColors.greyDark,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   Text(
                     _errorMessage ?? 'Terjadi kesalahan.',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: const AppTextStyle(
                       color: AppColors.greyDark,
-                      fontSize: 14,
+                      fontSize: AppTypography.bodyMedium,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
                   SizedBox(
-                    width: 160,
+                    width: AppSizes.narrowPanel,
                     child: HapHapButton(
                       text: _isUnauthorized ? 'Login Ulang' : 'Coba Lagi',
                       onPressed: () {
@@ -256,7 +238,7 @@ class _BerandaMerchantPageState extends State<BerandaMerchantPage> {
                 totalRevenue: _formatPrice(_totalRevenue),
                 totalPortion: '$_totalPortion Porsi',
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSpacing.xxxl),
               _FiturSection(),
               const SizedBox(height: _BerandaMerchantLayout.fiturToMenuAktif),
               _MenuAktifSection(
@@ -312,11 +294,11 @@ class _HeroSection extends StatelessWidget {
                 ),
                 child: Text(
                   'Welcome,\n$merchantName!',
-                  style: const TextStyle(
-                    fontSize: 24,
+                  style: const AppTextStyle(
+                    fontSize: AppTypography.headlineSmall,
                     fontWeight: FontWeight.bold,
                     color: AppColors.white,
-                    height: 1.3,
+                    height: AppTypography.lineHeightNormal,
                   ),
                 ),
               ),
@@ -349,8 +331,8 @@ class _RedBackground extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(40),
-          bottomRight: Radius.circular(40),
+          bottomLeft: AppRadii.heroRadius,
+          bottomRight: AppRadii.heroRadius,
         ),
       ),
     );
@@ -361,10 +343,7 @@ class _StatsRow extends StatelessWidget {
   final String totalRevenue;
   final String totalPortion;
 
-  const _StatsRow({
-    required this.totalRevenue,
-    required this.totalPortion,
-  });
+  const _StatsRow({required this.totalRevenue, required this.totalPortion});
 
   @override
   Widget build(BuildContext context) {
@@ -522,19 +501,22 @@ class _MenuAktifSection extends StatelessWidget {
   Widget _buildEmptyState() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 32),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxxl),
       child: Column(
         children: const [
           Icon(
             Icons.restaurant_menu_outlined,
-            size: 48,
+            size: AppSizes.touchTarget,
             color: AppColors.greyDark,
           ),
-          SizedBox(height: 12),
+          SizedBox(height: AppSpacing.md),
           Text(
             'Belum ada menu aktif hari ini.\nTambahkan stok untuk mulai berjualan!',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+            style: AppTextStyle(
+              color: AppColors.greyDark,
+              fontSize: AppTypography.bodyMedium,
+            ),
           ),
         ],
       ),
@@ -550,8 +532,8 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        fontSize: 20,
+      style: const AppTextStyle(
+        fontSize: AppTypography.titleLarge,
         fontWeight: FontWeight.bold,
         color: AppColors.black,
       ),

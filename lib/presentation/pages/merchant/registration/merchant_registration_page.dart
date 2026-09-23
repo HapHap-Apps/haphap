@@ -123,7 +123,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
           _showErrorSnackBar('Ukuran file maksimal 5 MB');
           return;
         }
-        
+
         setState(() {
           if (isDocument) {
             _documentFile = pickedFile;
@@ -199,10 +199,8 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: HapHapPageHeader(
-            title: 'Merchant',
-          ),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+          child: HapHapPageHeader(title: 'Merchant'),
         ),
       ),
       body: Column(
@@ -216,11 +214,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
             child: PageView(
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildStep1(),
-                _buildStep2(),
-                _buildStep3(),
-              ],
+              children: [_buildStep1(), _buildStep2(), _buildStep3()],
             ),
           ),
           _buildBottomNavigationBar(),
@@ -231,7 +225,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
 
   Widget _buildStep1() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(AppSpacing.xxl),
       child: Form(
         key: _step1FormKey,
         child: Column(
@@ -239,61 +233,66 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
           children: [
             const Text(
               'Informasi Bisnis',
-              style: TextStyle(
-                fontSize: 18,
+              style: AppTextStyle(
+                fontSize: AppTypography.titleMedium,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Nama Pemilik',
               hintText: 'Masukkan nama lengkap pemilik',
               controller: _ownerNameCtrl,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Nama Bisnis',
               hintText: 'Masukkan nama bisnis',
               controller: _businessNameCtrl,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Telepon Bisnis',
               hintText: 'Masukkan nomor telepon bisnis',
               controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Email Bisnis',
               hintText: 'Masukkan email bisnis',
               controller: _emailCtrl,
               keyboardType: TextInputType.emailAddress,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Alamat Bisnis',
               hintText: 'Masukkan alamat lengkap',
               controller: _addressCtrl,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Deskripsi',
               hintText: 'Masukkan deskripsi bisnis (opsional)',
               controller: _descriptionCtrl,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapDropdownField(
               labelText: 'Kategori Merchant',
               hintText: 'Masukkan kategori',
@@ -313,16 +312,16 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                 });
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             const Text(
               'Waktu Operasional',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTextStyle(
+                fontSize: AppTypography.bodyLarge,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               children: [
                 Expanded(
@@ -338,7 +337,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppSpacing.lg),
                 Expanded(
                   child: InkWell(
                     onTap: () => _selectTime(_closeTimeCtrl),
@@ -354,7 +353,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: AppSpacing.huge),
           ],
         ),
       ),
@@ -363,7 +362,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
 
   Widget _buildStep2() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(AppSpacing.xxl),
       child: Form(
         key: _step2FormKey,
         child: Column(
@@ -371,13 +370,13 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
           children: [
             const Text(
               'Informasi Rekening',
-              style: TextStyle(
-                fontSize: 18,
+              style: AppTextStyle(
+                fontSize: AppTypography.titleMedium,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapDropdownField(
               labelText: 'Nama Bank',
               hintText: 'Masukkan bank',
@@ -391,7 +390,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                 'CIMB',
                 'DANAMON',
                 'PERMATA',
-                'BTN'
+                'BTN',
               ],
               onSelected: (val) {
                 setState(() {
@@ -399,22 +398,24 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                 });
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Nomor Rekening',
               hintText: 'Masukkan nomor rekening',
               controller: _accountNumberCtrl,
               keyboardType: TextInputType.number,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             HapHapTextField(
               labelText: 'Nama Pemilik Rekening',
               hintText: 'Masukkan nama pemilik rekening',
               controller: _accountHolderCtrl,
               isRequired: true,
-              validator: (val) => val == null || val.isEmpty ? 'Wajib diisi' : null,
+              validator: (val) =>
+                  val == null || val.isEmpty ? 'Wajib diisi' : null,
             ),
           ],
         ),
@@ -424,27 +425,27 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
 
   Widget _buildStep3() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(AppSpacing.xxl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Upload Dokumen',
-            style: TextStyle(
-              fontSize: 18,
+            style: AppTextStyle(
+              fontSize: AppTypography.titleMedium,
               fontWeight: FontWeight.bold,
               color: AppColors.black,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           const Text(
             'Silakan unggah dokumen yang diperlukan untuk pendaftaran merchant.',
-            style: TextStyle(
-              fontSize: 14,
+            style: AppTextStyle(
+              fontSize: AppTypography.bodyMedium,
               color: AppColors.greyDark,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
           HapHapFileUploadField(
             labelText: 'Avatar / Logo Bisnis (Opsional)',
             selectedFileName: _avatarFile?.name,
@@ -455,7 +456,7 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
               });
             },
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xxl),
           HapHapFileUploadField(
             labelText: 'Dokumen (Proposal / Izin Bisnis)',
             isRequired: true,
@@ -474,16 +475,13 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
 
   Widget _buildBottomNavigationBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.lg,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        boxShadow: AppShadows.surfaceTop,
       ),
       child: Row(
         children: [
@@ -495,11 +493,13 @@ class _MerchantRegistrationPageState extends State<MerchantRegistrationPage> {
                 onPressed: () => _moveToStep(_currentStep - 1),
               ),
             ),
-          if (_currentStep > 0) const SizedBox(width: 16),
+          if (_currentStep > 0) const SizedBox(width: AppSpacing.lg),
           Expanded(
             flex: 2,
             child: HapHapButton(
-              text: _currentStep == 2 ? 'Kirim Pendaftaran' : 'Langkah Berikutnya',
+              text: _currentStep == 2
+                  ? 'Kirim Pendaftaran'
+                  : 'Langkah Berikutnya',
               isLoading: _isLoading,
               onPressed: _currentStep == 2 ? _submitApplication : _nextStep,
             ),

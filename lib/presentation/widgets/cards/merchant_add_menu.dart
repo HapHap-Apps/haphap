@@ -36,8 +36,8 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
     try {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.gallery,
-        maxWidth: 1024,
-        maxHeight: 1024,
+        maxWidth: AppSizes.uploadMaxDimension,
+        maxHeight: AppSizes.uploadMaxDimension,
         imageQuality: 80,
       );
       if (image != null) {
@@ -47,7 +47,10 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
       }
     } catch (e) {
       if (!mounted) return;
-      AppSnackbar.showError(context, 'Tidak dapat mengakses galeri. Periksa izin aplikasi di pengaturan.');
+      AppSnackbar.showError(
+        context,
+        'Tidak dapat mengakses galeri. Periksa izin aplikasi di pengaturan.',
+      );
     }
   }
 
@@ -107,7 +110,7 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
           controller: controller,
           keyboardType: keyboardType,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }
@@ -118,47 +121,50 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
       children: [
         const Text(
           'Gambar',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyle(
+            fontSize: AppTypography.bodyMedium,
             fontWeight: FontWeight.w600,
             color: AppColors.black,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         GestureDetector(
           onTap: _pickImage,
           child: Container(
             width: double.infinity,
-            height: 120,
+            height: AppSizes.mediaMedium,
             decoration: BoxDecoration(
-              color: const Color(0xFFFAFAFA),
-              borderRadius: BorderRadius.circular(16),
+              color: AppColors.surfaceSubtle,
+              borderRadius: AppRadii.lg,
               border: Border.all(
                 color: AppColors.primary,
-                width: 1,
+                width: AppSizes.hairline,
                 style: BorderStyle.solid,
               ),
             ),
             child: _selectedImage != null
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: AppRadii.lg,
                     child: Image.file(
                       File(_selectedImage!.path),
                       width: double.infinity,
-                      height: 120,
+                      height: AppSizes.mediaMedium,
                       fit: BoxFit.cover,
                     ),
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.add_photo_alternate_outlined,
-                          size: 32, color: AppColors.primary),
-                      SizedBox(height: 8),
+                      Icon(
+                        Icons.add_photo_alternate_outlined,
+                        size: AppSizes.iconLg,
+                        color: AppColors.primary,
+                      ),
+                      SizedBox(height: AppSpacing.sm),
                       Text(
                         'Pilih Gambar',
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
                           color: AppColors.primary,
                           fontWeight: FontWeight.w500,
                         ),
@@ -167,7 +173,7 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
                   ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
       ],
     );
   }
@@ -175,27 +181,25 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(AppSpacing.xxl),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Tambah Menu',
-                style: TextStyle(
-                  fontSize: 20,
+                style: AppTextStyle(
+                  fontSize: AppTypography.titleLarge,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
 
               _buildInputField(
                 label: 'Nama Menu',
@@ -215,7 +219,7 @@ class _HapHapAddMenuDialogState extends State<HapHapAddMenuDialog> {
               ),
               _buildImagePicker(),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               Center(
                 child: HapHapButton(

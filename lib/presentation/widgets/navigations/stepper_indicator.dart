@@ -16,7 +16,10 @@ class HapHapStepperIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.lg,
+      ),
       child: Column(
         children: [
           Row(
@@ -28,8 +31,10 @@ class HapHapStepperIndicator extends StatelessWidget {
                 final isCompleted = currentStep > stepIndex;
                 return Expanded(
                   child: Container(
-                    height: 2,
-                    color: isCompleted ? AppColors.primary : AppColors.greyLight,
+                    height: AppSizes.indicator,
+                    color: isCompleted
+                        ? AppColors.primary
+                        : AppColors.greyLight,
                   ),
                 );
               }
@@ -38,8 +43,8 @@ class HapHapStepperIndicator extends StatelessWidget {
               final isActive = currentStep == stepIndex;
 
               return Container(
-                width: 32,
-                height: 32,
+                width: AppSizes.iconLg,
+                height: AppSizes.iconLg,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isActive || isCompleted
@@ -49,7 +54,7 @@ class HapHapStepperIndicator extends StatelessWidget {
                     color: isActive || isCompleted
                         ? AppColors.primary
                         : AppColors.greyLight,
-                    width: 2,
+                    width: AppSizes.indicator,
                   ),
                 ),
                 child: Center(
@@ -57,11 +62,11 @@ class HapHapStepperIndicator extends StatelessWidget {
                       ? const Icon(
                           Icons.check,
                           color: AppColors.white,
-                          size: 18,
+                          size: AppSizes.iconSmallPlus,
                         )
                       : Text(
                           '${stepIndex + 1}',
-                          style: TextStyle(
+                          style: AppTextStyle(
                             color: isActive
                                 ? AppColors.white
                                 : AppColors.greyLight,
@@ -72,7 +77,7 @@ class HapHapStepperIndicator extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(totalSteps, (index) {
@@ -81,8 +86,8 @@ class HapHapStepperIndicator extends StatelessWidget {
                 child: Text(
                   labels[index],
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTextStyle(
+                    fontSize: AppTypography.labelMedium,
                     color: isActive ? AppColors.black : AppColors.greyDark,
                     fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                   ),

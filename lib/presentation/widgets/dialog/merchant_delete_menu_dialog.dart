@@ -29,7 +29,10 @@ class _HapHapDeleteMenuDialogState extends State<HapHapDeleteMenuDialog> {
       await MenuService.deleteMenu(widget.menuItemId);
       if (!mounted) return;
 
-      AppSnackbar.showSuccess(context, '"${widget.menuName}" berhasil dihapus.');
+      AppSnackbar.showSuccess(
+        context,
+        '"${widget.menuName}" berhasil dihapus.',
+      );
       Navigator.pop(context, true);
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -45,43 +48,56 @@ class _HapHapDeleteMenuDialogState extends State<HapHapDeleteMenuDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadii.xxl),
       backgroundColor: AppColors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 48),
-            const SizedBox(height: 16),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: AppColors.error,
+              size: AppSizes.touchTarget,
+            ),
+            const SizedBox(height: AppSpacing.lg),
             const Text(
               'Hapus Menu?',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.black),
+              style: AppTextStyle(
+                fontSize: AppTypography.titleLarge,
+                fontWeight: FontWeight.bold,
+                color: AppColors.black,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               'Yakin mau hapus "${widget.menuName}"? Data yang sudah dihapus tidak bisa dikembalikan.',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: AppColors.greyDark),
+              style: const AppTextStyle(
+                fontSize: AppTypography.bodyMedium,
+                color: AppColors.greyDark,
+              ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xxxl),
             Row(
               children: [
                 Expanded(
                   child: HapHapButton(
                     text: 'Batal',
                     isOutline: true,
-                    onPressed: _isDeleting ? () {} : () => Navigator.pop(context),
+                    onPressed: _isDeleting
+                        ? () {}
+                        : () => Navigator.pop(context),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: _isDeleting
                       ? const Center(
                           child: SizedBox(
-                            width: 24,
-                            height: 24,
+                            width: AppSizes.iconMd,
+                            height: AppSizes.iconMd,
                             child: CircularProgressIndicator(
                               color: AppColors.error,
                               strokeWidth: 2.5,

@@ -58,15 +58,16 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
         bottom: false,
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(color: AppColors.white))
+                child: CircularProgressIndicator(color: AppColors.white),
+              )
             : _errorMessage != null
-                ? Center(
-                    child: Text(
-                      'Error: $_errorMessage',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  )
-                : _buildContent(context),
+            ? Center(
+                child: Text(
+                  'Error: $_errorMessage',
+                  style: const AppTextStyle(color: AppColors.white),
+                ),
+              )
+            : _buildContent(context),
       ),
     );
   }
@@ -75,22 +76,22 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapPageHeader(
             title: 'Profil',
             showBackButton: false,
             titleColor: AppColors.white,
-            fontSize: 24,
+            fontSize: AppTypography.headlineSmall,
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
           child: HapHapProfileCard(
             name: _profile?.name ?? 'Admin',
             email: _profile?.email ?? '-',
@@ -99,7 +100,7 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         Expanded(
           child: Container(
@@ -107,13 +108,13 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
             decoration: const BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                topRight: Radius.circular(32),
+                topLeft: AppRadii.sheetRadius,
+                topRight: AppRadii.sheetRadius,
               ),
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 24.0),
+                padding: const EdgeInsets.only(top: AppSpacing.xxl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -126,12 +127,12 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
                       ),
                     ]),
 
-
-
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xxxl),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xxl,
+                      ),
                       child: HapHapButton(
                         text: 'Keluar',
                         isExpanded: true,
@@ -140,7 +141,7 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 100),
+                    const SizedBox(height: AppSpacing.bottomClearance),
                   ],
                 ),
               ),
@@ -153,11 +154,15 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 12.0),
+      padding: const EdgeInsets.only(
+        left: AppSpacing.xxl,
+        right: AppSpacing.xxl,
+        bottom: AppSpacing.md,
+      ),
       child: Text(
         title,
-        style: const TextStyle(
-          fontSize: 16,
+        style: const AppTextStyle(
+          fontSize: AppTypography.bodyLarge,
           fontWeight: FontWeight.bold,
           color: AppColors.black,
         ),
@@ -167,44 +172,46 @@ class _AkunAdminPageState extends State<AkunAdminPage> {
 
   Widget _buildMenuCard(List<_MenuItemData> items) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: AppRadii.lg,
+          boxShadow: AppShadows.card,
         ),
         child: Column(
           children: items.map((item) {
             return InkWell(
               onTap: item.onTap,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppRadii.lg,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.lg,
+                ),
                 child: Row(
                   children: [
-                    Icon(item.icon,
-                        size: 20, color: const Color(0xFF505050)),
-                    const SizedBox(width: 16),
+                    Icon(
+                      item.icon,
+                      size: AppSizes.iconSm,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: AppSpacing.lg),
                     Expanded(
                       child: Text(
                         item.title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyLarge,
                           fontWeight: FontWeight.w500,
                           color: AppColors.black,
                         ),
                       ),
                     ),
-                    const Icon(Icons.chevron_right,
-                        size: 24, color: AppColors.greyDark),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: AppSizes.iconMd,
+                      color: AppColors.greyDark,
+                    ),
                   ],
                 ),
               ),
@@ -221,9 +228,5 @@ class _MenuItemData {
   final String title;
   final VoidCallback onTap;
 
-  _MenuItemData({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
+  _MenuItemData({required this.icon, required this.title, required this.onTap});
 }

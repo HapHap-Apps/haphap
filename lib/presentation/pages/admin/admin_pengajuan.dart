@@ -61,8 +61,18 @@ class _PengajuanAdminPageState extends State<PengajuanAdminPage> {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agu',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -76,21 +86,21 @@ class _PengajuanAdminPageState extends State<PengajuanAdminPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapPageHeader(
                 title: 'Pengajuan',
                 showBackButton: false,
-                fontSize: 24,
+                fontSize: AppTypography.headlineSmall,
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: HapHapTabBar(
                 currentIndex: _currentTabIndex,
                 tabs: const ['Menunggu', 'Diterima', 'Ditolak'],
@@ -100,20 +110,22 @@ class _PengajuanAdminPageState extends State<PengajuanAdminPage> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
 
             Expanded(
               child: _isLoading
                   ? const Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     )
                   : _error != null
-                      ? Center(child: Text(_error!))
-                      : RefreshIndicator(
-                          onRefresh: _fetchApplications,
-                          color: AppColors.primary,
-                          child: _buildList(),
-                        ),
+                  ? Center(child: Text(_error!))
+                  : RefreshIndicator(
+                      onRefresh: _fetchApplications,
+                      color: AppColors.primary,
+                      child: _buildList(),
+                    ),
             ),
           ],
         ),
@@ -128,17 +140,22 @@ class _PengajuanAdminPageState extends State<PengajuanAdminPage> {
       return const Center(
         child: Text(
           'Tidak ada pengajuan di sini.',
-          style: TextStyle(color: AppColors.greyDark, fontSize: 14),
+          style: AppTextStyle(
+            color: AppColors.greyDark,
+            fontSize: AppTypography.bodyMedium,
+          ),
         ),
       );
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       itemCount: list.length + 1,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.md),
       itemBuilder: (context, index) {
-        if (index == list.length) return const SizedBox(height: 100);
+        if (index == list.length) {
+          return const SizedBox(height: AppSpacing.bottomClearance);
+        }
 
         final app = list[index];
         return AdminApplicationCard(

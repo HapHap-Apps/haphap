@@ -4,9 +4,9 @@ import 'package:haphap_fe/core/theme/app_colors.dart';
 
 class HapHapSearchBar extends StatelessWidget {
   final String hintText;
-  final String prefixIconPath; 
-  final String? suffixIconPath; 
-  final VoidCallback? onSuffixTap; 
+  final String prefixIconPath;
+  final String? suffixIconPath;
+  final VoidCallback? onSuffixTap;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
 
@@ -23,83 +23,88 @@ class HapHapSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderStyle = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(50),
-      borderSide: const BorderSide(color: Color(0xFFF1F1F1), width: 1), 
+      borderRadius: AppRadii.pill,
+      borderSide: const BorderSide(
+        color: AppColors.surfaceBorder,
+        width: AppSizes.hairline,
+      ),
     );
 
     return Container(
-      width: 354, 
-      height: 40, 
+      width: double.infinity,
+      constraints: const BoxConstraints(minHeight: AppSizes.compactControl),
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(50), 
+        boxShadow: AppShadows.card,
+        borderRadius: AppRadii.pill,
       ),
       child: TextField(
         controller: controller,
         onChanged: onChanged,
-        textAlignVertical: TextAlignVertical.center, 
-        style: const TextStyle(
-          fontSize: 16,
+        textAlignVertical: TextAlignVertical.center,
+        style: const AppTextStyle(
+          fontSize: AppTypography.bodyLarge,
           color: AppColors.black,
         ),
         decoration: InputDecoration(
-          isDense: true, 
+          isDense: true,
           filled: true,
           fillColor: AppColors.white,
           hintText: hintText,
-          hintStyle: const TextStyle(
-            color: AppColors.greyLight, 
-            fontSize: 16,
+          hintStyle: const AppTextStyle(
+            color: AppColors.greyLight,
+            fontSize: AppTypography.bodyLarge,
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-          
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: AppSpacing.none,
+            horizontal: AppSpacing.xl,
+          ),
+
           border: borderStyle,
           enabledBorder: borderStyle,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50),
-            borderSide: const BorderSide(color: AppColors.primary, width: 1),
+            borderRadius: AppRadii.pill,
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: AppSizes.hairline,
+            ),
           ),
-          
+
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 12),
+            padding: const EdgeInsets.only(
+              left: AppSpacing.lg,
+              right: AppSpacing.md,
+            ),
             child: SizedBox(
-              width: 20, 
-              height: 20,
-              child: Center(
-                child: SvgPicture.asset(prefixIconPath),
-              ),
+              width: AppSizes.iconSm,
+              height: AppSizes.iconSm,
+              child: Center(child: SvgPicture.asset(prefixIconPath)),
             ),
           ),
           prefixIconConstraints: const BoxConstraints(
-            minWidth: 52, 
-            minHeight: 40, 
+            minWidth: AppSizes.expandedButtonHeight,
+            minHeight: AppSizes.compactControl,
           ),
 
           suffixIcon: suffixIconPath != null
               ? GestureDetector(
                   onTap: onSuffixTap,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 16, left: 12),
+                    padding: const EdgeInsets.only(
+                      right: AppSpacing.lg,
+                      left: AppSpacing.md,
+                    ),
                     child: SizedBox(
-                      width: 20, 
-                      height: 20,
-                      child: Center(
-                        child: SvgPicture.asset(suffixIconPath!),
-                      ),
+                      width: AppSizes.iconSm,
+                      height: AppSizes.iconSm,
+                      child: Center(child: SvgPicture.asset(suffixIconPath!)),
                     ),
                   ),
                 )
               : null,
           suffixIconConstraints: suffixIconPath != null
               ? const BoxConstraints(
-                  minWidth: 52,
-                  minHeight: 40,
+                  minWidth: AppSizes.expandedButtonHeight,
+                  minHeight: AppSizes.compactControl,
                 )
               : null,
         ),

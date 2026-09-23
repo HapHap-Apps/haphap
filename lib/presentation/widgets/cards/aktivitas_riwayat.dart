@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haphap_fe/core/theme/app_colors.dart';
-import 'package:haphap_fe/presentation/widgets/buttons/button.dart'; 
+import 'package:haphap_fe/presentation/widgets/buttons/button.dart';
 
 class HapHapRiwayatCard extends StatelessWidget {
   final String imageUrl;
@@ -20,110 +20,119 @@ class HapHapRiwayatCard extends StatelessWidget {
     this.onButtonPressed,
   });
 
-  Widget _placeholder() {
+  Widget _placeholder([double extent = AppSizes.mediaLarge]) {
     return Container(
-      width: 128,
-      height: 128,
+      width: extent,
+      height: extent,
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F1F1),
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.surfaceBorder,
+        borderRadius: AppRadii.lg,
       ),
-      child: const Icon(Icons.storefront_outlined, size: 40, color: AppColors.greyDark),
+      child: const Icon(
+        Icons.storefront_outlined,
+        size: AppSizes.iconXl,
+        color: AppColors.greyDark,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 354,
-      height: 160,
-      padding: const EdgeInsets.all(16), 
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFF1F1F1),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final imageExtent = AppLayout.responsiveExtent(
+          constraints.maxWidth,
+          fraction: AppLayout.cardImageFraction,
+          min: AppSizes.thumbnailCompact,
+          max: AppSizes.mediaLarge,
+        );
+
+        return Container(
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: AppSizes.narrowPanel),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: AppRadii.lg,
+            border: Border.all(
+              color: AppColors.surfaceBorder,
+              width: AppSizes.hairline,
+            ),
+            boxShadow: AppShadows.card,
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: imageUrl.isNotEmpty
-                ? Image.network(
-                    imageUrl,
-                    width: 128,
-                    height: 128,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _placeholder(),
-                  )
-                : _placeholder(),
-          ),
-          
-          const SizedBox(width: 16), 
-          
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  dateStatusText,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.greyDark,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                
-                const SizedBox(height: 16), 
-                
-                Text(
-                  restaurantName,
-                  style: const TextStyle(
-                    fontSize: 18, 
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.black,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                
-                const SizedBox(height: 16), 
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: AppRadii.lg,
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        width: imageExtent,
+                        height: imageExtent,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _placeholder(imageExtent),
+                      )
+                    : _placeholder(imageExtent),
+              ),
+
+              const SizedBox(width: AppSpacing.lg),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      price,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      dateStatusText,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.labelMedium,
                         color: AppColors.greyDark,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    
-                    if (buttonText != null && onButtonPressed != null)
-                      HapHapButton(
-                        text: buttonText!,
-                        onPressed: onButtonPressed,
-                        size: HapHapButtonSize.tiny, 
+
+                    const SizedBox(height: AppSpacing.lg),
+
+                    Text(
+                      restaurantName,
+                      style: const AppTextStyle(
+                        fontSize: AppTypography.titleMedium,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.black,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: AppSpacing.lg),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          price,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
+                            color: AppColors.greyDark,
+                          ),
+                        ),
+
+                        if (buttonText != null && onButtonPressed != null)
+                          HapHapButton(
+                            text: buttonText!,
+                            onPressed: onButtonPressed,
+                            size: HapHapButtonSize.tiny,
+                          ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

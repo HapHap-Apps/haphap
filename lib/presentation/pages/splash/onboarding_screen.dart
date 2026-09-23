@@ -115,97 +115,127 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       backgroundColor: page.backgroundColor,
       body: SafeArea(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 21, right: 24),
-                child: HapHapSkipButton(
-                  onPressed: _onSkip,
-                  isWhiteVariant: page.backgroundColor == AppColors.primary,
+        bottom: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isShort = constraints.maxHeight < AppLayout.shortPhoneHeight;
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: AppSpacing.xl,
+                      right: AppSpacing.xxl,
+                    ),
+                    child: HapHapSkipButton(
+                      onPressed: _onSkip,
+                      isWhiteVariant: page.backgroundColor == AppColors.primary,
+                    ),
+                  ),
                 ),
-              ),
-            ),
 
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemCount: _pages.length,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: SizedBox(
-                      height: 402,
-                      child: Image.asset(
-                        _pages[index].imagePath,
-                        fit: BoxFit.contain,
+                Expanded(
+                  flex: isShort ? 1 : 3,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (index) =>
+                        setState(() => _currentPage = index),
+                    itemCount: _pages.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xxl,
+                          vertical: AppSpacing.sm,
+                        ),
+                        child: Image.asset(
+                          _pages[index].imagePath,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                Expanded(
+                  flex: isShort ? 5 : 4,
+                  child: Container(
+                    key: const Key('onboarding_bottom_panel'),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: AppRadii.sheetTop,
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.xxl,
+                          AppSpacing.xxl,
+                          AppSpacing.xxl,
+                          AppSpacing.lg,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              textAlign: TextAlign.left,
+                              text: TextSpan(
+                                children: page.titleParts.map((part) {
+                                  return TextSpan(
+                                    text: part.text,
+                                    style: AppTextStyle(
+                                      fontSize: AppTypography.headlineSmall,
+                                      fontWeight: FontWeight.bold,
+                                      color: part.isHighlighted
+                                          ? AppColors.primary
+                                          : AppColors.black,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+
+                            const SizedBox(height: AppSpacing.lg),
+
+                            Text(
+                              page.description,
+                              textAlign: TextAlign.left,
+                              style: const AppTextStyle(
+                                fontSize: AppTypography.bodyLarge,
+                                color: AppColors.greyLight,
+                                height: AppTypography.lineHeightLoose,
+                              ),
+                            ),
+
+                            SizedBox(
+                              height: isShort ? AppSpacing.lg : AppSpacing.xxl,
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: isShort ? AppSpacing.lg : AppSpacing.xxl,
+                                bottom: isShort
+                                    ? AppSpacing.lg
+                                    : AppSpacing.xxl,
+                              ),
+                              child: Center(
+                                child: HapHapOnboardingNextButton(
+                                  progress: _progress,
+                                  size: AppSizes.mediaLarge,
+                                  onPressed: _onNext,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-
-            Container(
-              width: double.infinity,
-              height: 358,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-              ),
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    textAlign: TextAlign.left,
-                    text: TextSpan(
-                      children: page.titleParts.map((part) {
-                        return TextSpan(
-                          text: part.text,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Plus Jakarta Sans',
-                            color: part.isHighlighted
-                                ? AppColors.primary
-                                : AppColors.black,
-                          ),
-                        );
-                      }).toList(),
-                    ),
                   ),
-
-                  const SizedBox(height: 16),
-
-                  Text(
-                    page.description,
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Plus Jakarta Sans',
-                      color: AppColors.greyLight,
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 32, bottom: 36),
-                    child: Center(
-                      child: HapHapOnboardingNextButton(
-                        progress: _progress,
-                        size: 128.0,
-                        onPressed: _onNext,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

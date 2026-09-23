@@ -69,8 +69,9 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
         _jamBukaController.text = merchant.openTime ?? '';
         _jamTutupController.text = merchant.closeTime ?? '';
         _avatarUrl = merchant.avatar;
-        _selectedCategory =
-            merchant.categories.isNotEmpty ? merchant.categories.first : null;
+        _selectedCategory = merchant.categories.isNotEmpty
+            ? merchant.categories.first
+            : null;
         _isLoading = false;
       });
     } on ApiException catch (e) {
@@ -168,7 +169,10 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
-      AppSnackbar.showError(context, 'Gagal menyimpan profil. Periksa koneksi internet.');
+      AppSnackbar.showError(
+        context,
+        'Gagal menyimpan profil. Periksa koneksi internet.',
+      );
     }
   }
 
@@ -190,16 +194,12 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: HapHapPageHeader(
-                title: 'Edit Profil Toko',
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+              child: HapHapPageHeader(title: 'Edit Profil Toko'),
             ),
-            Expanded(
-              child: _buildBodyContent(),
-            ),
+            Expanded(child: _buildBodyContent()),
           ],
         ),
       ),
@@ -209,7 +209,8 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
   Widget _buildBodyContent() {
     if (_isLoading) {
       return const Center(
-          child: CircularProgressIndicator(color: AppColors.primary));
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (_errorMessage != null) {
@@ -220,31 +221,31 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(AppSpacing.xxl),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(child: _buildProfilePicture()),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   const Text(
                     'Informasi Bisnis',
-                    style: TextStyle(
-                      fontSize: 18,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.titleMedium,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   HapHapTextField(
                     labelText: 'Nama Toko',
                     hintText: 'Masukkan nama toko',
                     controller: _namaTokoController,
                     isRequired: true,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   HapHapTextField(
                     labelText: 'Telepon Bisnis',
                     hintText: 'Masukkan nomor telepon bisnis',
@@ -252,20 +253,20 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
                     keyboardType: TextInputType.phone,
                     isRequired: true,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   HapHapTextField(
                     labelText: 'Alamat Bisnis',
                     hintText: 'Masukkan alamat lengkap',
                     controller: _alamatController,
                     isRequired: true,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   HapHapTextField(
                     labelText: 'Deskripsi',
                     hintText: 'Masukkan deskripsi bisnis (opsional)',
                     controller: _deskripsiController,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   HapHapDropdownField(
                     labelText: 'Kategori Merchant',
                     hintText: 'Masukkan kategori',
@@ -285,17 +286,17 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
                       });
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   const Text(
                     'Waktu Operasional',
-                    style: TextStyle(
-                      fontSize: 16,
+                    style: AppTextStyle(
+                      fontSize: AppTypography.bodyLarge,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   Row(
                     children: [
                       Expanded(
@@ -311,7 +312,7 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: AppSpacing.lg),
                       Expanded(
                         child: InkWell(
                           onTap: () => _selectTime(_jamTutupController),
@@ -327,7 +328,7 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: AppSpacing.huge),
                 ],
               ),
             ),
@@ -335,16 +336,13 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
         ),
 
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xxl,
+            vertical: AppSpacing.lg,
+          ),
           decoration: BoxDecoration(
             color: AppColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, -5),
-              ),
-            ],
+            boxShadow: AppShadows.surfaceTop,
           ),
           child: HapHapButton(
             text: 'Simpan',
@@ -360,25 +358,25 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
   Widget _buildErrorState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _isUnauthorized ? Icons.lock_outline : Icons.error_outline,
-              size: 48,
+              size: AppSizes.touchTarget,
               color: AppColors.greyDark,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               _errorMessage ?? 'Terjadi kesalahan.',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: const AppTextStyle(
                 color: AppColors.greyDark,
-                fontSize: 14,
+                fontSize: AppTypography.bodyMedium,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xxl),
             HapHapButton(
               text: _isUnauthorized ? 'Login Ulang' : 'Coba Lagi',
               onPressed: () {
@@ -403,19 +401,16 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
       child: Stack(
         children: [
           Container(
-            width: 100,
-            height: 100,
+            width: AppSizes.profileImage,
+            height: AppSizes.profileImage,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFFD9D9D9),
-              border: Border.all(color: AppColors.white, width: 4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              color: AppColors.divider,
+              border: Border.all(
+                color: AppColors.white,
+                width: AppSizes.progressIndicator,
+              ),
+              boxShadow: AppShadows.card,
               image: _avatarUrl != null && _avatarUrl!.isNotEmpty
                   ? DecorationImage(
                       image: isLocalPath
@@ -426,23 +421,30 @@ class _EditProfilMerchantPageState extends State<EditProfilMerchantPage> {
                   : null,
             ),
             child: _avatarUrl == null || _avatarUrl!.isEmpty
-                ? const Icon(Icons.store, size: 50, color: Colors.grey)
+                ? const Icon(
+                    Icons.store,
+                    size: AppSizes.emptyStateIcon,
+                    color: AppColors.grey,
+                  )
                 : null,
           ),
           Positioned(
             bottom: 0,
             right: 0,
             child: Container(
-              width: 32,
-              height: 32,
+              width: AppSizes.iconLg,
+              height: AppSizes.iconLg,
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 2),
+                border: Border.all(
+                  color: AppColors.white,
+                  width: AppSizes.indicator,
+                ),
               ),
               child: const Icon(
                 Icons.camera_alt,
-                size: 16,
+                size: AppSizes.iconXs,
                 color: AppColors.white,
               ),
             ),

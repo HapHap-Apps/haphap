@@ -43,3 +43,11 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // mobile_scanner 5.x requests CameraX 1.3.x, whose native image utility
+    // is only 4 KB aligned. CameraX 1.4.2 provides the compatible binary.
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+}

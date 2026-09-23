@@ -177,8 +177,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final uri = Uri.parse(payment.redirectUrl);
       try {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
-        if (mounted)
+        if (mounted) {
           setState(() => _pendingOrderId = order['orderId'] as String);
+        }
       } catch (e) {
         if (mounted) {
           setState(
@@ -228,8 +229,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
     } on ApiException catch (e) {
       if (mounted) setState(() => _errorMessage = e.message);
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(() => _errorMessage = 'Gagal mengecek status. Coba lagi.');
+      }
     } finally {
       if (mounted) setState(() => _isCheckingPayment = false);
     }
@@ -287,24 +289,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: HapHapPageHeader(title: _merchantName),
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSpacing.xxxl),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'Rangkuman Pesanan',
-                      style: TextStyle(
-                        fontSize: 20,
+                      style: AppTextStyle(
+                        fontSize: AppTypography.titleLarge,
                         fontWeight: FontWeight.bold,
                         color: AppColors.black,
                       ),
@@ -314,8 +316,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         onTap: () => context.pop(),
                         child: const Text(
                           'Tambah Pesanan',
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                             decoration: TextDecoration.underline,
@@ -327,55 +329,51 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               if (_errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xxl,
+                  ),
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    margin: const EdgeInsets.only(bottom: AppSpacing.md),
                     decoration: BoxDecoration(
-                      color: Colors.red.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.red.shade200),
+                      color: AppColors.errorLight,
+                      borderRadius: AppRadii.md,
+                      border: Border.all(color: AppColors.errorBorder),
                     ),
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(
-                        color: Colors.red.shade700,
-                        fontSize: 13,
+                      style: AppTextStyle(
+                        color: AppColors.errorDark,
+                        fontSize: AppTypography.labelMedium,
                       ),
                     ),
                   ),
                 ),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    borderRadius: AppRadii.lg,
+                    boxShadow: AppShadows.card,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (_activeItems.isEmpty)
                         const Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(AppSpacing.lg),
                           child: Text(
                             'Keranjang kosong.',
-                            style: TextStyle(
+                            style: AppTextStyle(
                               color: AppColors.greyDark,
-                              fontSize: 14,
+                              fontSize: AppTypography.bodyMedium,
                             ),
                           ),
                         )
@@ -385,8 +383,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             children: [
                               _buildCartItem(item),
                               const Divider(
-                                color: Color(0xFFF1F1F1),
-                                height: 1,
+                                color: AppColors.surfaceBorder,
+                                height: AppSizes.hairline,
                                 thickness: 1,
                               ),
                             ],
@@ -394,33 +392,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
 
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               'Rincian Pembayaran',
-                              style: TextStyle(
-                                fontSize: 14,
+                              style: AppTextStyle(
+                                fontSize: AppTypography.bodyMedium,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.black,
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: AppSpacing.md),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                   'Total',
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                  style: AppTextStyle(
+                                    fontSize: AppTypography.bodyMedium,
                                     color: AppColors.greyDark,
                                   ),
                                 ),
                                 Text(
                                   'Rp ${_formatPrice(_totalPrice)}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: const AppTextStyle(
+                                    fontSize: AppTypography.bodyMedium,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.black,
                                   ),
@@ -435,7 +433,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
 
-              const SizedBox(height: 140),
+              const SizedBox(height: AppSpacing.dialogClearance),
             ],
           ),
         ),
@@ -448,26 +446,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final qty = _cart[item.surplusItemId] ?? 0;
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadii.md,
             child: _isValidUrl(item.image)
                 ? Image.network(
                     item.image!,
-                    width: 80,
-                    height: 80,
+                    width: AppSizes.avatarMedium,
+                    height: AppSizes.avatarMedium,
                     fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => _placeholderBox(),
                   )
                 : _placeholderBox(),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: SizedBox(
-              height: 80,
+              height: AppSizes.avatarMedium,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -477,8 +475,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Text(
                         item.name,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
                           fontWeight: FontWeight.bold,
                           color: AppColors.black,
                         ),
@@ -487,11 +485,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       if (item.description != null &&
                           item.description!.isNotEmpty) ...[
-                        const SizedBox(height: 2),
+                        const SizedBox(height: AppSpacing.xxs),
                         Text(
                           item.description!,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
                             color: AppColors.greyDark,
                           ),
                           maxLines: 1,
@@ -505,8 +503,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Text(
                         'Rp ${_formatPrice(item.discountPrice)}',
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: const AppTextStyle(
+                          fontSize: AppTypography.bodyMedium,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),
@@ -514,8 +512,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       if (_pendingOrderId != null)
                         Text(
                           'x$qty',
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.bodyMedium,
                             fontWeight: FontWeight.bold,
                             color: AppColors.black,
                           ),
@@ -530,17 +528,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               child: const Icon(
                                 Icons.remove_circle,
                                 color: AppColors.primary,
-                                size: 24,
+                                size: AppSizes.iconMd,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
+                                horizontal: AppSpacing.md,
                               ),
                               child: Text(
                                 '$qty',
-                                style: const TextStyle(
-                                  fontSize: 14,
+                                style: const AppTextStyle(
+                                  fontSize: AppTypography.bodyMedium,
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.black,
                                 ),
@@ -552,7 +550,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               child: const Icon(
                                 Icons.add_circle,
                                 color: AppColors.primary,
-                                size: 24,
+                                size: AppSizes.iconMd,
                               ),
                             ),
                           ],
@@ -569,11 +567,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget _placeholderBox() => Container(
-    width: 80,
-    height: 80,
+    width: AppSizes.avatarMedium,
+    height: AppSizes.avatarMedium,
     decoration: BoxDecoration(
       color: AppColors.primary.withValues(alpha: 0.15),
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppRadii.md,
     ),
   );
 
@@ -582,21 +580,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     return Container(
       padding: EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: 20,
-        bottom: bottomSafeArea > 0 ? bottomSafeArea : 24,
+        left: AppSpacing.xxl,
+        right: AppSpacing.xxl,
+        top: AppSpacing.xl,
+        bottom: bottomSafeArea > AppSpacing.none
+            ? bottomSafeArea
+            : AppSpacing.xxl,
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        borderRadius: AppRadii.largeTop,
+        boxShadow: AppShadows.surfaceTop,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -608,17 +602,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Row(
                 children: [
                   _selectedPaymentMethod == 'QRIS'
-                      ? SvgPicture.asset(AppIcons.QRIS, height: 24)
+                      ? SvgPicture.asset(AppIcons.qris, height: AppSizes.iconMd)
                       : const Icon(
                           Icons.payments,
-                          color: Colors.green,
-                          size: 24,
+                          color: AppColors.success,
+                          size: AppSizes.iconMd,
                         ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   Text(
                     _selectedPaymentMethod,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: const AppTextStyle(
+                      fontSize: AppTypography.bodyLarge,
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
@@ -629,8 +623,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 onTap: _isSubmitting ? null : _showPaymentMethodDialog,
                 child: const Text(
                   'Ubah',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyle(
+                    fontSize: AppTypography.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
                     decoration: TextDecoration.underline,
@@ -641,7 +635,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.xl),
 
           if (_pendingOrderId != null) ...[
             HapHapButton(
@@ -650,12 +644,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
               isLoading: _isCheckingPayment,
               onPressed: _checkPaymentStatus,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             HapHapButton(
               text: 'Bayar Ulang',
               isExpanded: true,
               isOutline: true,
-              onPressed: (_isCheckingPayment || _isSubmitting) ? null : _bayarUlang,
+              onPressed: (_isCheckingPayment || _isSubmitting)
+                  ? null
+                  : _bayarUlang,
             ),
           ] else
             HapHapButton(
@@ -672,18 +668,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void _showPaymentMethodDialog() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.only(
-            top: 24,
-            left: 24,
-            right: 24,
-            bottom: 34,
+            top: AppSpacing.xxl,
+            left: AppSpacing.xxl,
+            right: AppSpacing.xxl,
+            bottom: AppSpacing.xxxl,
           ),
           decoration: const BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: AppRadii.largeTop,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -691,22 +687,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
             children: [
               const Text(
                 'Pilih Metode Pembayaran',
-                style: TextStyle(
-                  fontSize: 20,
+                style: AppTextStyle(
+                  fontSize: AppTypography.titleLarge,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
               _buildPaymentOption(
                 title: 'Cash',
-                icon: const Icon(Icons.payments, color: Colors.green, size: 24),
+                icon: const Icon(
+                  Icons.payments,
+                  color: AppColors.success,
+                  size: AppSizes.iconMd,
+                ),
                 value: 'Cash',
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
               _buildPaymentOption(
                 title: 'QRIS',
-                icon: SvgPicture.asset(AppIcons.QRIS, height: 24),
+                icon: SvgPicture.asset(AppIcons.qris, height: AppSizes.iconMd),
                 value: 'QRIS',
               ),
             ],
@@ -729,23 +729,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Navigator.pop(context);
       },
       child: Container(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: Row(
           children: [
             icon,
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.md),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 16,
+              style: const AppTextStyle(
+                fontSize: AppTypography.bodyLarge,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black,
               ),
             ),
             const Spacer(),
             Container(
-              width: 20,
-              height: 20,
+              width: AppSizes.iconSm,
+              height: AppSizes.iconSm,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
