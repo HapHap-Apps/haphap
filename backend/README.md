@@ -1,212 +1,114 @@
-<div align="center">
-	<a><img src="https://res.cloudinary.com/dmis04mcg/image/upload/logo-haphap_lzhi3n.png" alt="" width="35%"></a>
-</div>
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-</br>
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-<div align="center">
-	<a><img src="https://img.shields.io/badge/Node.js-16.x-339933?logo=nodedotjs"></a>
-	<a><img src="https://img.shields.io/badge/NestJS-11.x-E0234E?logo=nestjs"></a>
-	<a><img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript"></a>
-  <a><img src="https://img.shields.io/badge/Prisma-7.x-2D3748?logo=prisma"></a>
-  <a><img src="https://img.shields.io/badge/PostgreSQL-16.x-4169E1?logo=postgresql"></a>
-  <a><img src="https://img.shields.io/badge/Supabase-gray?logo=supabase"></a>
-  <a><img src="https://img.shields.io/badge/Midtrans-gray?logo=data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NS40MiA1OS43OTMiPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDojOWRkY2Y5O30uY2xzLTEsLmNscy0yLC5jbHMtM3tmaWxsLXJ1bGU6ZXZlbm9kZDt9LmNscy0ye2ZpbGw6IzAwYWNkYjt9LmNscy0ze2ZpbGw6IzAyNTZhNzt9PC9zdHlsZT48L2RlZnM+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMy45NTksNDguMjQzQTMuOTU4LDMuOTU4LDAsMCwxLDAsNDQuMjg1di0yOC44YTMuOTU5LDMuOTU5LDAsMSwxLDcuOTE3LDB2MjguOEEzLjk1OCwzLjk1OCwwLDAsMSwzLjk1OSw0OC4yNDNaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNTEuNDYxLDQ4LjI0M0EzLjk1OCwzLjk1OCwwLDAsMSw0Ny41LDQ0LjI4NVYxNS41MDhhMy45NTksMy45NTksMCwxLDEsNy45MTcsMFY0NC4yODVBMy45NTksMy45NTksMCwwLDEsNTEuNDYxLDQ4LjI0M1oiLz48cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yNy43MSw1OS43OTNhMy45NiwzLjk2LDAsMCwxLTMuOTU5LTMuOTU5VjMuOTU5YTMuOTU5LDMuOTU5LDAsMSwxLDcuOTE3LDBWNTUuODM0QTMuOTU5LDMuOTU5LDAsMCwxLDI3LjcxLDU5Ljc5M1oiLz48L3N2Zz4="></a>
-</div>
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[HapHap]() is a dual-sided surplus food marketplace app that connects local merchants with customers to rescue the day's unsold meals at discounted prices before they go to waste. By actively reducing food waste, the app directly supports [SDG 12](https://sdgs.un.org/goals/goal12) (Responsible Consumption and Production).
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Documentation
-
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Tech Stack](#tech-stack)
-- [Endpoints](#endpoints)
-- [Software Architecture](#software-architecture)
-
-## Features
-
-- **Authentication & Authorization**: JWT-based auth with three roles (Customer, Merchant, Admin).
-- **Merchant Registration**: Customers submit an application for Admin review.
-- **Menu Management**: Merchants manage a master menu as the base for all surplus listings.
-- **Surplus Listings**: Merchants create daily surplus listings from master menu with custom stock and discount price.
-- **Auto-Disable**: Unsold surplus listings are automatically disabled at the merchant's closing time.
-- **Checkout & Pickup**: Customers checkout cart and receive a QR code for onsite pickup.
-- **Order Completion**: Merchants scan the customer's QR code to mark an order as completed.
-- **Reviews & Reputation**: Customers leave one review per completed order.
-- **Gamification**: Customers track cumulative money saved and total food portions rescued across all orders.
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/en) (v16 or higher)
-- [npm](https://www.npmjs.com) or [yarn](https://yarnpkg.com) or [pnpm](https://pnpm.io/id)
-- [PostgreSQL](https://www.postgresql.org) (v16 or higher)
-
-### Installation
+## Project setup
 
 ```bash
-git clone https://github.com/charcg/haphap-be.git
-cd haphap-be
-
-npm install
-
-cp .env.example .env
-
-npx prisma generate
-npx prisma migrate dev
+$ npm install
 ```
 
-### Environment Variables
-
-```
-NODE_ENV=
-PORT=
-
-DATABASE_URL=
-
-JWT_SECRET=
-JWT_EXPIRES_IN=
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_CALLBACK_URL=
-
-SUPABASE_URL=
-SUPABASE_KEY=
-SUPABASE_USER_AVATAR_BUCKET=
-SUPABASE_MENU_IMAGE_BUCKET=
-SUPABASE_APPLICATION_AVATAR_BUCKET=
-SUPABASE_APPLICATION_DOCUMENT_BUCKET=
-SUPABASE_MERCHANT_AVATAR_BUCKET=
-
-MIDTRANS_SERVER_KEY=
-MIDTRANS_CLIENT_KEY=
-MIDTRANS_IS_PRODUCTION=
-```
-
-### Running
+## Compile and run the project
 
 ```bash
-# Development
-npm run start:dev
+# development
+$ npm run start
 
-# Production
-npm run build
-npm run start:prod
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-## Tech Stack
+## Run tests
 
-| Layer          | Technology            | Version |
-| -------------- | --------------------- | ------- |
-| Runtime        | Node.js               | 16.x    |
-| Framework      | NestJS                | 11.x    |
-| Language       | TypeScript            | 5.x     |
-| ORM            | Prisma                | 7.x     |
-| Database       | PostgreSQL (Supabase) | 16.x    |
-| Object Storage | Supabase Storage      | -       |
-| Payments       | Midtrans              | -       |
-| Documentation  | Swagger               | -       |
+```bash
+# unit tests
+$ npm run test
 
-###
+# e2e tests
+$ npm run test:e2e
 
-## Endpoints
-
-Base URL: `/api`
-
-All endpoints return responses using the following standardized format:
-
-```json
-{
-	"success": true,
-	"statusCode": 200,
-	"message": "...",
-	"data": { ... }
-}
+# test coverage
+$ npm run test:cov
 ```
 
-### Auth (`/auth`)
+## Deployment
 
-| Method | Endpoint         | Access |
-| ------ | ---------------- | ------ |
-| `POST` | `/auth/register` | PUBLIC |
-| `POST` | `/auth/login`    | PUBLIC |
-| `POST` | `/auth/google`   | PUBLIC |
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-### Users (`/users`)
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-| Method  | Endpoint             | Access             |
-| ------- | -------------------- | ------------------ |
-| `GET`   | `/users/me`          | CUSTOMER, MERCHANT |
-| `PATCH` | `/users/me`          | CUSTOMER, MERCHANT |
-| `PATCH` | `/users/me/password` | CUSTOMER, MERCHANT |
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
+```
 
-### Applications (`/applications`)
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-| Method  | Endpoint                              | Access   |
-| ------- | ------------------------------------- | -------- |
-| `GET`   | `/applications`                       | ADMIN    |
-| `POST`  | `/applications`                       | CUSTOMER |
-| `GET`   | `/applications/me`                    | CUSTOMER |
-| `PATCH` | `/applications/:applicationId/status` | ADMIN    |
+## Observability
 
-### Merchants (`/merchants`)
+In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
 
-| Method  | Endpoint                 | Access   |
-| ------- | ------------------------ | -------- |
-| `GET`   | `/merchants`             | PUBLIC   |
-| `GET`   | `/merchants/me`          | MERCHANT |
-| `PATCH` | `/merchants/me`          | MERCHANT |
-| `GET`   | `/merchants/:merchantId` | PUBLIC   |
+[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
 
-### Menus (`/menus`)
+- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
+- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
+- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
+- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
+- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
+- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
+- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
+- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
 
-| Method   | Endpoint             | Access   |
-| -------- | -------------------- | -------- |
-| `GET`    | `/menus`             | MERCHANT |
-| `POST`   | `/menus`             | MERCHANT |
-| `GET`    | `/menus/:menuItemId` | MERCHANT |
-| `PATCH`  | `/menus/:menuItemId` | MERCHANT |
-| `DELETE` | `/menus/:menuItemId` | MERCHANT |
+## Resources
 
-### Surplus (`/surplus`)
+Check out a few resources that may come in handy when working with NestJS:
 
-| Method  | Endpoint                  | Access   |
-| ------- | ------------------------- | -------- |
-| `GET`   | `/surplus`                | MERCHANT |
-| `POST`  | `/surplus`                | MERCHANT |
-| `PATCH` | `/surplus/:surplusItemId` | MERCHANT |
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-### Orders (`/orders`)
+## Support
 
-| Method  | Endpoint                  | Access             |
-| ------- | ------------------------- | ------------------ |
-| `POST`  | `/orders`                 | CUSTOMER           |
-| `GET`   | `/orders/me`              | CUSTOMER           |
-| `GET`   | `/orders/merchant`        | MERCHANT           |
-| `GET`   | `/orders/:orderId`        | CUSTOMER, MERCHANT |
-| `PATCH` | `/orders/:orderId/status` | MERCHANT           |
-| `PATCH` | `/orders/:orderId/scan`   | MERCHANT           |
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-### Payments (`/payments`)
+## Stay in touch
 
-| Method | Endpoint                    | Access   |
-| ------ | --------------------------- | -------- |
-| `POST` | `/payments/webhook`         | PUBLIC   |
-| `POST` | `/payments/:orderId`        | CUSTOMER |
-| `POST` | `/payments/:orderId/verify` | CUSTOMER |
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-### Reviews (`/reviews`)
+## License
 
-| Method | Endpoint                         | Access   |
-| ------ | -------------------------------- | -------- |
-| `POST` | `/reviews`                       | CUSTOMER |
-| `GET`  | `/merchants/:merchantId/reviews` | PUBLIC   |
-
-## Software Architecture
-
-<img src="https://res.cloudinary.com/dmis04mcg/image/upload/v1780150374/haphap-architecture_d4lia5.png">
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
