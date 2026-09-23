@@ -1,0 +1,257 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CUSTOMER
+  MERCHANT
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BankType {
+  BCA
+  BRI
+  MANDIRI
+  BNI
+  CIMB
+  DANAMON
+  PERMATA
+  BTN
+  MAYBANK
+  OCBC
+  PANIN
+  SINARMAS
+  BTPN
+  MEGA
+}
+
+enum MerchantCategory {
+  ROTI
+  RESTORAN
+  KAFE
+  KEBUTUHAN
+  JAJANAN
+  PENUTUP
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  EXPIRED
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  phone    String
+  avatar   String?
+  role     Role    @default(CUSTOMER)
+
+  totalSaved   Int @default(0)
+  totalPortion Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  merchant    Merchant?
+  application Application[]
+  orders      Order[]
+  reviews     Review[]
+
+  @@map("users")
+}
+
+model Application {
+  id            String             @id @default(uuid())
+  userId        String
+  merchantName  String
+  merchantOwner String
+  status        ApplicationStatus  @default(PENDING)
+  address       String
+  latitude      Float
+  longitude     Float
+  description   String?
+  openTime      String // "HH:mm"
+  closeTime     String // "HH:mm"
+  phone         String
+  avatar        String
+  categories    MerchantCategory[]
+  bankType      BankType
+  bankAccount   String
+  bankHolder    String
+  document      String
+  rejectNote    String?
+
+  reviewedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("applications")
+}
+
+model Merchant {
+  id           String             @id @default(uuid())
+  userId       String             @unique
+  merchantName String
+  address      String
+  latitude     Float
+  longitude    Float
+  description  String?
+  openTime     String // "HH:mm"
+  closeTime    String // "HH:mm"
+  phone        String
+  avatar       String
+  categories   MerchantCategory[]
+
+  rating       Float @default(0)
+  totalRevenue Int   @default(0)
+  totalPortion Int   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  menuItems    MenuItem[]
+  surplusItems SurplusItem[]
+  orders       Order[]
+  reviews      Review[]
+
+  @@map("merchants")
+}
+
+model MenuItem {
+  id            String  @id @default(uuid())
+  merchantId    String
+  name          String
+  description   String?
+  image         String?
+  originalPrice Int
+  isActive      Boolean @default(true) // soft-delete
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  merchant    Merchant      @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  surplusItem SurplusItem[]
+
+  @@map("menu_items")
+}
+
+model SurplusItem {
+  id            String   @id @default(uuid())
+  menuItemId    String
+  merchantId    String
+  discountPrice Int
+  originalPrice Int // snapshot
+  stock         Int
+  isActive      Boolean  @default(true) // auto-disabled at close time
+  date          DateTime @db.Date
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  menuItem   MenuItem    @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  merchant   Merchant    @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@map("surplus_items")
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  merchantId    String
+  status        OrderStatus @default(PENDING)
+  totalAmount   Int
+  totalOriginal Int
+  qrCode        String?     @unique
+  notes         String?
+
+  expiredAt   DateTime
+  paidAt      DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  merchant   Merchant    @relation(fields: [merchantId], references: [id], onDelete: Restrict)
+  orderItems OrderItem[]
+  payment    Payment?
+  review     Review?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String @id @default(uuid())
+  orderId       String
+  surplusItemId String
+  name          String // snapshot
+  quantity      Int
+  discountPrice Int // snapshot
+  originalPrice Int // snapshot
+
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  surplusItem SurplusItem @relation(fields: [surplusItemId], references: [id], onDelete: Restrict)
+
+  @@map("order_items")
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String        @unique
+  transactionId String?       @unique
+  status        PaymentStatus @default(PENDING)
+  amount        Int
+  snapToken     String?
+  redirectUrl   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Review {
+  id         String  @id @default(uuid())
+  userId     String
+  merchantId String
+  orderId    String  @unique
+  rating     Int
+  comment    String?
+
+  createdAt DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  merchant Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
