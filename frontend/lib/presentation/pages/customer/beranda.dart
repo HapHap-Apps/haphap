@@ -405,14 +405,14 @@ class _SekitarKamuSectionState extends State<_SekitarKamuSection> {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = AppLayout.pagePadding(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: _BerandaLayout.sectionHorizontalPadding,
-          ),
-          child: _SectionTitle(text: 'Sekitar Kamu'),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: const _SectionTitle(text: 'Sekitar Kamu'),
         ),
         const SizedBox(height: _BerandaLayout.sectionTitleToContent),
         _buildContent(context),
@@ -464,9 +464,7 @@ class _SekitarKamuSectionState extends State<_SekitarKamuSection> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(
-        horizontal: _BerandaLayout.sectionHorizontalPadding,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: AppLayout.pagePadding(context)),
       child: Row(
         children: _merchants.asMap().entries.map((entry) {
           final index = entry.key;

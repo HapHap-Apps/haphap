@@ -119,6 +119,7 @@ abstract final class AppSizes {
   static const double mediaMedium = 120;
   static const double mediaLarge = 128;
   static const double restaurantCardHeight = 132;
+  static const double restaurantCardMinWidth = 280;
   static const double qrCardSize = 145;
   static const double menuCardHeight = 144;
   static const double compactButtonWidth = 140;
@@ -284,6 +285,15 @@ abstract final class AppLayout {
         ? systemBottomInset
         : AppSpacing.md;
     return AppSizes.navBarItemHeight + navBarBottomInset;
+  }
+
+  static double restaurantCardWidth(BuildContext context) {
+    final availableWidth =
+        MediaQuery.sizeOf(context).width - (pagePadding(context) * 2);
+    return availableWidth.clamp(
+      AppSizes.restaurantCardMinWidth,
+      AppSizes.designContentWidth,
+    );
   }
 
   static double responsiveExtent(

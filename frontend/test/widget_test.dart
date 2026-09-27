@@ -112,6 +112,51 @@ void main() {
     });
   }
 
+  for (final size in const [Size(320, 568), Size(480, 800)]) {
+    testWidgets(
+      'restaurant carousel card has finite width at ${size.width}px',
+      (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = size;
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.view.resetPhysicalSize);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: MediaQuery(
+              data: MediaQueryData(
+                size: size,
+                textScaler: const TextScaler.linear(1.3),
+              ),
+              child: const Scaffold(
+                body: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: HapHapRestaurantCard(
+                    key: ValueKey('carousel_restaurant_card'),
+                    imageUrl: '',
+                    distanceTime: 'Alamat merchant yang cukup panjang',
+                    restaurantName: 'Nama Merchant yang Panjang',
+                    ratingText: '4.9 rating',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        final card = find.byKey(const ValueKey('carousel_restaurant_card'));
+        final expectedWidth = AppLayout.restaurantCardWidth(
+          tester.element(card),
+        );
+        expect(tester.getSize(card).width, expectedWidth);
+        expect(expectedWidth.isFinite, isTrue);
+        expect(expectedWidth, lessThanOrEqualTo(size.width));
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('navigation icons load and tab taps report the correct index', (
     tester,
   ) async {

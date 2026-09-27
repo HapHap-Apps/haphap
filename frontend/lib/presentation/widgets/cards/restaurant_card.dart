@@ -19,88 +19,95 @@ class HapHapRestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final cardWidth = constraints.hasBoundedWidth
+            ? constraints.maxWidth
+            : AppLayout.restaurantCardWidth(context);
         final imageWidth = AppLayout.responsiveExtent(
-          constraints.maxWidth,
+          cardWidth,
           fraction: AppLayout.cardImageFraction,
           min: AppSizes.thumbnailCompact,
           max: AppSizes.mediaLarge,
         );
 
-        return Container(
-          width: double.infinity,
-          constraints: const BoxConstraints(
-            minHeight: AppSizes.restaurantCardHeight,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: AppRadii.lg,
-            border: Border.all(
-              color: AppColors.surfaceBorder,
-              width: AppSizes.hairline,
+        return SizedBox(
+          width: cardWidth,
+          child: Container(
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.restaurantCardHeight,
             ),
-            boxShadow: AppShadows.card,
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: AppRadii.lgRadius,
-                  bottomLeft: AppRadii.lgRadius,
-                ),
-                child: _buildImage(imageWidth),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: AppRadii.lg,
+              border: Border.all(
+                color: AppColors.surfaceBorder,
+                width: AppSizes.hairline,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        distanceTime,
-                        style: const AppTextStyle(
-                          fontSize: AppTypography.labelMedium,
-                          color: AppColors.greyDark,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        restaurantName,
-                        style: const AppTextStyle(
-                          fontSize: AppTypography.bodyLarge,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.star,
-                            color: AppColors.warning,
-                            size: AppSizes.iconXs,
+              boxShadow: AppShadows.card,
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: AppRadii.lgRadius,
+                    bottomLeft: AppRadii.lgRadius,
+                  ),
+                  child: _buildImage(imageWidth),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          distanceTime,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.labelMedium,
+                            color: AppColors.greyDark,
                           ),
-                          const SizedBox(width: AppSpacing.xs),
-                          Flexible(
-                            child: Text(
-                              ratingText,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const AppTextStyle(
-                                fontSize: AppTypography.labelMedium,
-                                color: AppColors.greyDark,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          restaurantName,
+                          style: const AppTextStyle(
+                            fontSize: AppTypography.bodyLarge,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: AppColors.warning,
+                              size: AppSizes.iconXs,
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Flexible(
+                              child: Text(
+                                ratingText,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const AppTextStyle(
+                                  fontSize: AppTypography.labelMedium,
+                                  color: AppColors.greyDark,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
